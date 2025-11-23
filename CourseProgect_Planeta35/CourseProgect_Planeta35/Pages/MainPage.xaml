@@ -1,0 +1,79 @@
+﻿<!-- MainPage.xaml -->
+<Page x:Class="CourseProgect_Planeta35.Pages.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="clr-namespace:CourseProgect_Planeta35.Pages"
+      xmlns:controls="clr-namespace:CourseProgect_Planeta35"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      mc:Ignorable="d"
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="MainPage">
+
+    <Page.Resources>
+        <Style TargetType="ToggleButton" x:Key="MenuButtonStyle">
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Background" Value="#5A4630"/>
+            <Setter Property="Foreground" Value="#F5F1E9"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="8" Padding="10">
+                            <ContentPresenter HorizontalAlignment="Left"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Background" Value="#8B9B4C"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="240"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Sidebar -->
+        <StackPanel Background="#3C2F1F" Grid.Column="0">
+            <!-- Заголовок -->
+            <StackPanel Margin="15" Orientation="Horizontal">
+                <Border Width="40" Height="40" Background="#8B9B4C" CornerRadius="10">
+                    <TextBlock Text="📦" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+                <StackPanel Margin="10,0,0,0">
+                    <TextBlock Text="Учёт имущества" Foreground="#F5F1E9" FontSize="16"/>
+                    <TextBlock Text="v1.0" Foreground="#C5C895" FontSize="12"/>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- Меню -->
+            <ToggleButton x:Name="BtnDashboard" Content="Главная" Style="{StaticResource MenuButtonStyle}" Checked="MenuButton_Checked"/>
+            <ToggleButton x:Name="BtnInventory" Content="Инвентарь" Style="{StaticResource MenuButtonStyle}" Checked="MenuButton_Checked"/>
+            <ToggleButton x:Name="BtnCheck" Content="Инвентаризация" Style="{StaticResource MenuButtonStyle}" Checked="MenuButton_Checked"/>
+            <ToggleButton x:Name="BtnReports" Content="Отчёты" Style="{StaticResource MenuButtonStyle}" Checked="MenuButton_Checked"/>
+
+            <!-- Только для админа -->
+            <StackPanel x:Name="AdminPanel" Margin="10,20,10,0" Visibility="Collapsed">
+                <TextBlock Text="Администрирование" Foreground="#C5C895" FontSize="12" Margin="5"/>
+                <ToggleButton x:Name="BtnCategories" Content="Категории" Style="{StaticResource MenuButtonStyle}" Checked="MenuButton_Checked"/>
+                <ToggleButton x:Name="BtnDepartments" Content="Подразделения" Style="{StaticResource MenuButtonStyle}" Checked="MenuButton_Checked"/>
+                <ToggleButton x:Name="BtnUsers" Content="Пользователи" Style="{StaticResource MenuButtonStyle}" Checked="MenuButton_Checked"/>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Контент -->
+        <Frame x:Name="ContentFrame"
+               Grid.Column="1"
+               Margin="10"
+               NavigationUIVisibility="Hidden"/>
+    </Grid>
+</Page>
