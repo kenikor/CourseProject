@@ -123,18 +123,6 @@ namespace CourseProgect_Planeta35.Controls
             }
         }
 
-        private void EditButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (((FrameworkElement)sender).DataContext is InventoryItem item && item.Asset != null)
-                MessageBox.Show($"Редактирование: {item.Asset.Name ?? "Не указано"}");
-        }
-
-        private void ViewButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (((FrameworkElement)sender).DataContext is InventoryItem item && item.Asset != null)
-                MessageBox.Show($"Просмотр: {item.Asset.Name ?? "Не указано"}");
-        }
-
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
             if (((FrameworkElement)sender).DataContext is InventoryItem item && item.Asset != null)

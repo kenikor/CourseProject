@@ -172,7 +172,7 @@ namespace CourseProgect_Planeta35 {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/CourseProgect_Planeta35;V1.0.0.0;component/pages/maincontrol.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/CourseProgect_Planeta35;component/pages/maincontrol.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\Pages\MainControl.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
