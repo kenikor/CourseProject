@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "FtyanLl6P0p73nkZG0BBlGTbR263DuDsDn7WL1TK6cZyqqpB/EO1DIv7CepUHqJmROYZgQAtZvCZlXML9si3kg==",
+  "dgSpecHash": "tpbgwut/HZHJSf1qm4GLphqeyPb6jGEhxujspsJftGZVGmNTlC40JeHSPyp8/BX7LfJLldL/nfpOSOIxp9hazA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Azerty\\source\\repos\\CourseProject\\CourseProgect_Planeta35\\CourseProgect_Planeta35\\CourseProgect_Planeta35.csproj",
+  "projectFilePath": "C:\\MDK\\CourseProject\\CourseProgect_Planeta35\\CourseProgect_Planeta35\\CourseProgect_Planeta35.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Azerty\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\Azerty\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

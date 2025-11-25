@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Azerty\\source\\repos\\CourseProject\\CourseProgect_Planeta35\\CourseProgect_Planeta35\\CourseProgect_Planeta35.csproj": {}
+    "C:\\MDK\\CourseProject\\CourseProgect_Planeta35\\CourseProgect_Planeta35\\CourseProgect_Planeta35.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Azerty\\source\\repos\\CourseProject\\CourseProgect_Planeta35\\CourseProgect_Planeta35\\CourseProgect_Planeta35.csproj": {
+    "C:\\MDK\\CourseProject\\CourseProgect_Planeta35\\CourseProgect_Planeta35\\CourseProgect_Planeta35.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Azerty\\source\\repos\\CourseProject\\CourseProgect_Planeta35\\CourseProgect_Planeta35\\CourseProgect_Planeta35.csproj",
+        "projectUniqueName": "C:\\MDK\\CourseProject\\CourseProgect_Planeta35\\CourseProgect_Planeta35\\CourseProgect_Planeta35.csproj",
         "projectName": "CourseProgect_Planeta35",
-        "projectPath": "C:\\Users\\Azerty\\source\\repos\\CourseProject\\CourseProgect_Planeta35\\CourseProgect_Planeta35\\CourseProgect_Planeta35.csproj",
+        "projectPath": "C:\\MDK\\CourseProject\\CourseProgect_Planeta35\\CourseProgect_Planeta35\\CourseProgect_Planeta35.csproj",
         "packagesPath": "C:\\Users\\Azerty\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Azerty\\source\\repos\\CourseProject\\CourseProgect_Planeta35\\CourseProgect_Planeta35\\obj\\",
+        "outputPath": "C:\\MDK\\CourseProject\\CourseProgect_Planeta35\\CourseProgect_Planeta35\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

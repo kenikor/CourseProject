@@ -1,130 +1,212 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using CourseProgect_Planeta35.Models;
+using CourseProgect_Planeta35.Services;
+using Microsoft.Win32;
 using System.IO;
+using System.Linq;
+using System.Text.Json;
 using System.Windows;
-using OfficeOpenXml;
-using PdfSharp.Pdf;
-using PdfSharp.Drawing;
+using System.Windows.Controls;
 
 namespace CourseProgect_Planeta35.Controls
 {
-    public partial class ReportsControl : Window
+    public partial class ReportsControl : UserControl
     {
-        public ReportsControl()
+        private readonly User _currentUser;
+
+        private List<InventoryItem> _allItems;
+        private List<AssetCategory> _categories;
+        private List<Department> _departments;
+        private List<User> _users;
+        private List<InventoryCheck> _checks;
+        private List<Role> _roles;
+
+        public string PreviewInfo { get; set; }
+
+        public ReportsControl(User currentUser)
         {
             InitializeComponent();
+            _currentUser = currentUser;
+
+            LoadData();
+            DataContext = this;
+
+            CbReportType.SelectedIndex = 0;
+            CbStatus.SelectedIndex = 0;
+
+            RefreshPreview();
         }
 
-        private void ExportToExcel(List<Dictionary<string, string>> reportData, string fileName)
+        private void LoadData()
         {
-            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            _allItems = StorageService.GetInventoryItems();
+            _categories = StorageService.GetCategories();
+            _departments = StorageService.GetDepartments();
+            _users = StorageService.GetUsers();
+            _checks = StorageService.GetInventoryChecks();
+            _roles = StorageService.GetRoles();
 
-            using var package = new ExcelPackage();
-            var sheet = package.Workbook.Worksheets.Add("Отчёт");
+            CbCategory.ItemsSource = new[] { new { Id = 0, Name = "Все категории" } }
+                .Concat(_categories.Select(c => new { Id = c.Id, Name = c.Name }))
+                .ToList();
 
-            if (reportData.Count == 0) return;
+            CbCategory.SelectedValuePath = "Id";
+            CbCategory.DisplayMemberPath = "Name";
+            CbCategory.SelectedValue = 0;
 
-            // Заголовки
-            int colIndex = 1;
-            foreach (var header in reportData[0].Keys)
-            {
-                sheet.Cells[1, colIndex].Value = header;
-                colIndex++;
-            }
+            CbDepartment.ItemsSource = new[] { new { Id = 0, Name = "Все подразделения" } }
+                .Concat(_departments.Select(d => new { Id = d.Id, Name = d.Name }))
+                .ToList();
 
-            // Данные
-            for (int row = 0; row < reportData.Count; row++)
-            {
-                colIndex = 1;
-                foreach (var value in reportData[row].Values)
-                {
-                    sheet.Cells[row + 2, colIndex].Value = value;
-                    colIndex++;
-                }
-            }
-
-            // Сохраняем
-            var savePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), fileName);
-            File.WriteAllBytes(savePath, package.GetAsByteArray());
-            MessageBox.Show($"Отчёт сохранён: {savePath}");
+            CbDepartment.SelectedValuePath = "Id";
+            CbDepartment.DisplayMemberPath = "Name";
+            CbDepartment.SelectedValue = 0;
         }
 
-        private void ExportToPdf(List<Dictionary<string, string>> reportData, string fileName)
+        private IEnumerable<Dictionary<string, string>> PrepareReportData()
         {
-            if (reportData.Count == 0) return;
+            var reportType = ((ComboBoxItem)CbReportType.SelectedItem)?.Content?.ToString() ?? "inventory";
+            var categoryFilter = (CbCategory.SelectedValue as int?) ?? 0;
+            var departmentFilter = (CbDepartment.SelectedValue as int?) ?? 0;
+            var statusFilter = ((ComboBoxItem)CbStatus.SelectedItem)?.Content?.ToString() ?? "all";
 
-            PdfDocument pdf = new PdfDocument();
-            pdf.Info.Title = "Отчёт";
+            bool isAdmin = false;
 
-            PdfPage page = pdf.AddPage();
-            XGraphics gfx = XGraphics.FromPdfPage(page);
-            XFont font = new XFont("Arial", 12);
-
-            double y = 20;
-            double x = 20;
-
-            // Заголовки
-            foreach (var header in reportData[0].Keys)
+            if (_currentUser.Role != null)
+                isAdmin = _currentUser.Role.Name.Equals("admin", StringComparison.OrdinalIgnoreCase);
+            else
             {
-                gfx.DrawString(header, font, XBrushes.Black, x, y);
-                x += 100; // ширина колонки
+                var role = _roles.FirstOrDefault(r => r.Id == _currentUser.RoleId);
+                isAdmin = role != null && role.Name.Equals("admin", StringComparison.OrdinalIgnoreCase);
             }
 
-            y += 20;
+            var baseItems = isAdmin
+                ? _allItems
+                : _allItems.Where(i => i.ResponsiblePersonId == _currentUser.Id).ToList();
 
-            // Данные
-            foreach (var row in reportData)
+            var filtered = baseItems.Where(item =>
             {
-                x = 20;
-                foreach (var value in row.Values)
-                {
-                    gfx.DrawString(value, font, XBrushes.Black, x, y);
-                    x += 100;
-                }
-                y += 20;
+                bool matchCategory = categoryFilter == 0 || item.Asset?.CategoryId == categoryFilter;
+                bool matchDepartment = departmentFilter == 0 || item.Asset?.DepartmentId == departmentFilter;
+                bool matchStatus = statusFilter == "all" || item.Status == statusFilter;
 
-                // Если страница заполнена, добавляем новую
-                if (y > page.Height - 50)
+                return matchCategory && matchDepartment && matchStatus;
+            }).ToList();
+
+            if (reportType == "inventory")
+            {
+                return filtered.Select(item =>
                 {
-                    page = pdf.AddPage();
-                    gfx = XGraphics.FromPdfPage(page);
-                    y = 20;
-                }
+                    var category = _categories.FirstOrDefault(c => c.Id == item.Asset?.CategoryId)?.Name ?? "-";
+                    var department = _departments.FirstOrDefault(d => d.Id == item.Asset?.DepartmentId)?.Name ?? "-";
+                    var responsible = _users.FirstOrDefault(u => u.Id == item.ResponsiblePersonId)?.FullName ?? "-";
+
+                    return new Dictionary<string, string>
+                    {
+                        ["Название"] = item.Asset?.Name ?? "-",
+                        ["Категория"] = category,
+                        ["Подразделение"] = department,
+                        ["Статус"] = item.Status ?? "-",
+                        ["Ответственный"] = responsible,
+                        ["Описание"] = item.Note ?? "-"
+                    };
+                }).ToList();
+            }
+            else
+            {
+                return filtered.Select(item =>
+                {
+                    var checks = _checks.Where(c => c.ItemId == item.Id)
+                        .OrderByDescending(c => c.CheckDate)
+                        .ToList();
+
+                    var last = checks.FirstOrDefault();
+                    var checker = last != null
+                        ? _users.FirstOrDefault(u => u.Id == last.CheckedById)?.FullName ?? "-"
+                        : "-";
+
+                    return new Dictionary<string, string>
+                    {
+                        ["Название"] = item.Asset?.Name ?? "-",
+                        ["Последняя проверка"] = last?.CheckDate.ToString("g") ?? "Не проверялось",
+                        ["Результат"] = last?.Status switch
+                        {
+                            "present" => "Присутствует",
+                            "absent" => "Отсутствует",
+                            "damaged" => "Повреждено",
+                            _ => "-"
+                        },
+                        ["Проверял"] = checker,
+                        ["Примечания"] = last?.Notes ?? "-"
+                    };
+                }).ToList();
+            }
+        }
+
+        private void RefreshPreview()
+        {
+            var data = PrepareReportData().ToList();
+
+            if (data.Count == 0)
+            {
+                DataGridPreview.ItemsSource = null;
+                PreviewInfo = "Нет данных для отчёта";
+            }
+            else
+            {
+                var headers = data.SelectMany(d => d.Keys).Distinct().ToList();
+
+                var rows = data.Select(d =>
+                {
+                    var row = new Dictionary<string, object>();
+                    foreach (var h in headers)
+                        row[h] = d.ContainsKey(h) ? d[h] : "";
+                    return row;
+                }).ToList();
+
+                DataGridPreview.ItemsSource = rows;
+                PreviewInfo = $"{rows.Count} записей будет включено в отчёт";
             }
 
-            var savePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), fileName);
-            pdf.Save(savePath);
-            MessageBox.Show($"PDF сохранён: {savePath}");
+            DataContext = this;
         }
 
-        // Пример вызова
-        private void ExportButton_Click(object sender, RoutedEventArgs e)
-        {
-            var reportData = GetReportData(); // Получаем данные отчёта как List<Dictionary<string,string>>
+        private void BtnRefresh_Click(object sender, RoutedEventArgs e) => RefreshPreview();
 
-            ExportToExcel(reportData, "report.xlsx");
-            ExportToPdf(reportData, "report.pdf");
-        }
-
-        private List<Dictionary<string, string>> GetReportData()
+        private void BtnExportJson_Click(object sender, RoutedEventArgs e)
         {
-            return new List<Dictionary<string, string>>()
+            var data = PrepareReportData();
+            var json = JsonSerializer.Serialize(data, new JsonSerializerOptions
             {
-                new Dictionary<string, string>
-                {
-                    {"Название","Ноутбук"},
-                    {"Категория","Электроника"},
-                    {"Статус","В эксплуатации"},
-                    {"Примечания","Без замечаний"}
-                },
-                new Dictionary<string, string>
-                {
-                    {"Название","Проектор"},
-                    {"Категория","Оборудование"},
-                    {"Статус","На обслуживании"},
-                    {"Примечания","Не работает лампа"}
-                }
+                WriteIndented = true
+            });
+
+            var dlg = new SaveFileDialog
+            {
+                Filter = "JSON files (*.json)|*.json",
+                FileName = $"report-{DateTime.Now:yyyyMMddHHmmss}.json"
             };
+
+            if (dlg.ShowDialog() == true)
+            {
+                File.WriteAllText(dlg.FileName, json);
+                MessageBox.Show("JSON отчёт сохранён!", "Экспорт", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+
+        private void CbReportType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            RefreshPreview();
+        }
+
+        private void Filters_Changed(object sender, SelectionChangedEventArgs e)
+        {
+            RefreshPreview();
+        }
+
+        private void ExportPdf_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("PDF экспорт пока не прикручен 😎");
         }
     }
 }

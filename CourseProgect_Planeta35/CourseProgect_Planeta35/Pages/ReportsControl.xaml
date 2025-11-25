@@ -4,39 +4,57 @@
              xmlns:models="clr-namespace:CourseProgect_Planeta35.Models"
              Background="#F5F1E9">
 
-    <Grid Margin="20">
-        <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Stretch" >
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
-            <!-- Заголовок -->
-            <TextBlock Text="Отчёты" FontSize="24" FontWeight="Bold" Margin="0,0,0,5"/>
-            <TextBlock Text="Формирование отчётов по имуществу и инвентаризации" Foreground="Gray" Margin="0,0,0,15"/>
-
-            <!-- Фильтры -->
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,10" HorizontalAlignment="Left" VerticalAlignment="Center" >
-                <TextBlock Text="Тип отчёта:" VerticalAlignment="Center"/>
-                <ComboBox x:Name="ReportTypeCombo" Width="200" SelectionChanged="ReportTypeCombo_SelectionChanged">
-                    <ComboBoxItem Content="Имущество" Tag="inventory"/>
-                    <ComboBoxItem Content="Инвентаризация" Tag="inventory-check"/>
-                </ComboBox>
-
-                <TextBlock Text="Категория:" VerticalAlignment="Center"/>
-                <ComboBox x:Name="CategoryFilterCombo" Width="150" SelectionChanged="Filters_Changed"/>
-
-                <TextBlock Text="Подразделение:" VerticalAlignment="Center"/>
-                <ComboBox x:Name="DepartmentFilterCombo" Width="150" SelectionChanged="Filters_Changed"/>
-
-                <TextBlock Text="Статус:" VerticalAlignment="Center"/>
-                <ComboBox x:Name="StatusFilterCombo" Width="150" SelectionChanged="Filters_Changed"/>
-            </StackPanel>
-
-            <!-- Кнопки экспорта -->
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,10" >
-                <Button Content="Экспорт в PDF" Click="ExportPdf_Click" Width="120"/>
-                <Button Content="Экспорт в Excel" Click="ExportExcel_Click" Width="120"/>
-            </StackPanel>
-
-            <!-- DataGrid -->
-            <DataGrid x:Name="ReportDataGrid" AutoGenerateColumns="True" Height="400"/>
+        <StackPanel Orientation="Vertical" Grid.Row="0" Margin="0,0,0,12">
+            <TextBlock Text="Отчёты" FontSize="18" FontWeight="Bold"/>
+            <TextBlock Text="Формирование отчётов по имуществу и результатам инвентаризации" Foreground="#666"/>
         </StackPanel>
+
+        <!-- Настройки отчёта -->
+        <Border Grid.Row="1" Background="White" Padding="12" BorderBrush="#DDD" BorderThickness="1" CornerRadius="6" Margin="0,0,0,12">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,8">
+                    <TextBlock Text="Тип отчёта" Width="140" VerticalAlignment="Center"/>
+                    <ComboBox x:Name="CbReportType" Width="240" SelectionChanged="CbReportType_SelectionChanged">
+                        <ComboBoxItem Content="inventory" />
+                        <ComboBoxItem Content="inventory-check" />
+                    </ComboBox>
+
+                    <TextBlock Text="Категория" Width="100" Margin="16,0,0,0" VerticalAlignment="Center"/>
+                    <ComboBox x:Name="CbCategory" Width="200" DisplayMemberPath="Name" SelectedValuePath="Id"/>
+
+                    <TextBlock Text="Подразделение" Width="120" Margin="16,0,0,0" VerticalAlignment="Center"/>
+                    <ComboBox x:Name="CbDepartment" Width="200" DisplayMemberPath="Name" SelectedValuePath="Id"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                    <TextBlock Text="Статус" Width="140" VerticalAlignment="Center"/>
+                    <ComboBox x:Name="CbStatus" Width="200">
+                        <ComboBoxItem Content="all" />
+                        <ComboBoxItem Content="active" />
+                        <ComboBoxItem Content="maintenance" />
+                        <ComboBoxItem Content="retired" />
+                        <ComboBoxItem Content="missing" />
+                    </ComboBox>
+
+                    <Button Content="Обновить" Width="110" Margin="12,0,0,0" Click="BtnRefresh_Click"/>
+                    <Button Content="Экспорт JSON" Width="120" Margin="8,0,0,0" Click="BtnExportJson_Click"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <!-- Предпросмотр -->
+        <Border Grid.Row="2" Background="White" Padding="12" BorderBrush="#DDD" BorderThickness="1" CornerRadius="6">
+            <DataGrid x:Name="DataGridPreview" AutoGenerateColumns="True" IsReadOnly="True"/>
+        </Border>
+
+        <TextBlock Grid.Row="3" Text="{Binding PreviewInfo}" Margin="0,8,0,0" Foreground="#666"/>
     </Grid>
 </UserControl>
