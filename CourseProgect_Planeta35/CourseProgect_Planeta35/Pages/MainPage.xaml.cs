@@ -105,7 +105,10 @@ namespace CourseProgect_Planeta35.Pages
             {
                 ContentFrame.Content = new InventoryCheckControl(CurrentUser);
             }
-            else if (clicked == BtnReports) MessageBox.Show("Отчёты открыты");
+            else if (clicked == BtnReports)
+            {
+                ContentFrame.Content = new ReportsControl(CurrentUser);
+            }
             else if (clicked == BtnCategories) MessageBox.Show("Категории доступны админу");
             else if (clicked == BtnDepartments) MessageBox.Show("Подразделения доступны админу");
             else if (clicked == BtnUsers) MessageBox.Show("Пользователи доступны админу");
