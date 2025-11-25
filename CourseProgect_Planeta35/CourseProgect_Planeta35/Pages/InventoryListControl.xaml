@@ -74,7 +74,7 @@
                    FontSize="30"
                    FontWeight="Bold"
                    Foreground="#3C2F1F"
-                   Margin="30,30,0,20"
+                   Margin="30,30,424,0"
                    VerticalAlignment="Top"/>
 
         <!-- Верхняя фиксированная панель поиска и фильтров -->
@@ -83,8 +83,11 @@
             <TextBox x:Name="SearchBox"
                      Style="{StaticResource SearchBox}"
                      TextChanged="SearchBox_TextChanged"
-                     Width="350"
-                     DockPanel.Dock="Top"/>
+                     Width="560"
+                     DockPanel.Dock="Top"
+                     FontSize="16"
+                     Padding="0,5,0,0"
+                     Margin="0,0,0,10"/>
 
             <!-- Фильтры и кнопка добавить -->
             <StackPanel Orientation="Horizontal" Margin="0,15,0,0" DockPanel.Dock="Top">
@@ -129,7 +132,7 @@
         </DockPanel>
 
         <!-- Карточки инвентаря под панелью -->
-        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="30,180,30,30">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="30,188,30,22">
             <StackPanel>
                 <TextBlock x:Name="SubTitleText"
                            Text="0 объектов найдено"
@@ -165,8 +168,6 @@
                                                FontSize="15"
                                                Margin="0,0,0,15"/>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                        <Button Content="📄 Просмотр" Style="{StaticResource CardButton}" Click="ViewButton_Click"/>
-                                        <Button Content="✏ Редактировать" Style="{StaticResource CardButton}" Click="EditButton_Click"/>
                                         <Button Content="🗑 Удалить" Style="{StaticResource CardButton}" Click="DeleteButton_Click"/>
                                     </StackPanel>
                                 </StackPanel>

@@ -10,6 +10,9 @@
     <Compile Update="Pages\AddAssetWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Pages\InventoryCheckControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Pages\InventoryListControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -22,12 +25,15 @@
     <Compile Update="Pages\MainPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\ViewAssetWindow.xaml.cs">
+    <Compile Update="Pages\ReportsControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Pages\AddAssetWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\InventoryCheckControl.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Pages\InventoryListControl.xaml">
@@ -45,7 +51,7 @@
     <Page Update="Pages\MainPage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\ViewAssetWindow.xaml">
+    <Page Update="Pages\ReportsControl.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

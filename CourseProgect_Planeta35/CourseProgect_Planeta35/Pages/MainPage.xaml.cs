@@ -2,6 +2,7 @@
 using CourseProgect_Planeta35.Controls;
 using CourseProgect_Planeta35.Data;
 using CourseProgect_Planeta35.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -39,32 +40,33 @@ namespace CourseProgect_Planeta35.Pages
 
         private void LoadDataFromDb()
         {
-            using (var db = new AppDbContext())
+            try
             {
-                // Загружаем все категории вместе с активами
+                using var db = new AppDbContext();
+
+                // Загружаем все категории с активами и ответственными
                 AllCategories = db.AssetCategories
-                                  .Where(c => c.Assets.Any()) // только категории с активами
-                                  .ToList();
+                    .Include(c => c.Assets)
+                        .ThenInclude(a => a.Responsible)
+                    .Where(c => c.Assets.Any()) // только категории с активами
+                    .AsNoTracking()
+                    .ToList();
 
                 // Загружаем все InventoryItems
-                AllInventoryItems = new List<InventoryItem>();
-
-                foreach (var category in AllCategories)
-                {
-                    db.Entry(category).Collection(c => c.Assets).Load(); // загружаем активы категории
-                    foreach (var asset in category.Assets)
+                AllInventoryItems = AllCategories
+                    .SelectMany(c => c.Assets, (c, asset) => new InventoryItem
                     {
-                        // Если у тебя в InventoryItem нужны другие поля, заполняем их
-                        AllInventoryItems.Add(new InventoryItem
-                        {
-                            Asset = asset,
-                            // Например, ResponsiblePersonId = asset.ResponsibleId ?? 0
-                        });
-                    }
-                }
+                        Asset = asset,
+                    })
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка загрузки из БД: " + ex.Message);
+                AllCategories = new List<AssetCategory>();
+                AllInventoryItems = new List<InventoryItem>();
             }
         }
-
 
         private void LoadInventory()
         {
@@ -76,13 +78,11 @@ namespace CourseProgect_Planeta35.Pages
             var clicked = sender as ToggleButton;
             if (clicked == null) return;
 
-            // Сброс всех кнопок, кроме той, которую выбрали
             var allButtons = new ToggleButton[]
             {
                 BtnDashboard, BtnInventory, BtnCheck, BtnReports
             };
 
-            // Если админ, добавляем админские кнопки
             if (CurrentUser.RoleId == 1)
             {
                 allButtons = new ToggleButton[]
@@ -101,7 +101,10 @@ namespace CourseProgect_Planeta35.Pages
             // Загружаем соответствующий контент
             if (clicked == BtnDashboard) LoadDashboard();
             else if (clicked == BtnInventory) LoadInventory();
-            else if (clicked == BtnCheck) MessageBox.Show("Инвентаризация открыта");
+            else if (clicked == BtnCheck)
+            {
+                ContentFrame.Content = new InventoryCheckControl(CurrentUser);
+            }
             else if (clicked == BtnReports) MessageBox.Show("Отчёты открыты");
             else if (clicked == BtnCategories) MessageBox.Show("Категории доступны админу");
             else if (clicked == BtnDepartments) MessageBox.Show("Подразделения доступны админу");

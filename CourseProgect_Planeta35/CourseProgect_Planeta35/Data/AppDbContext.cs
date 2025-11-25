@@ -18,6 +18,7 @@ namespace CourseProgect_Planeta35.Data
         public DbSet<InventoryItem> InventoryItems { get; set; }
         public DbSet<ChangeLog> ChangeLogs { get; set; }
         public DbSet<Report> Reports { get; set; }
+        public DbSet<InventoryCheck> InventoryChecks { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

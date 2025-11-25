@@ -21,14 +21,16 @@ namespace CourseProgect_Planeta35
             CurrentUser = user;
             _db = new AppDbContext();
 
-            // Загружаем данные
+            // ВСЕГДА показываем полный инвентарь
+            Items = _db.Assets.ToList();
+
+            // Категории
             Categories = _db.AssetCategories.ToList();
-            Items = user.RoleId == 1 ? _db.Assets.ToList() : _db.Assets.Where(a => a.ResponsibleId == user.Id).ToList();
 
             LoadStats();
             LoadCategories();
 
-            // Показываем админ-кнопки только для админа
+            // Админ-кнопки только для админа
             AdminButtonsPanel.Visibility = CurrentUser.RoleId == 1 ? Visibility.Visible : Visibility.Collapsed;
         }
 
@@ -84,21 +86,8 @@ namespace CourseProgect_Planeta35
 
         private void Inventory_Click(object sender, RoutedEventArgs e)
         {
-            using (var db = new AppDbContext())
-            {
-                var categories = db.AssetCategories.ToList();
-                foreach (var category in categories)
-                    db.Entry(category).Collection(c => c.Assets).Load();
-
-                var inventoryItems = new List<InventoryItem>();
-                foreach (var category in categories)
-                    foreach (var asset in category.Assets)
-                        inventoryItems.Add(new InventoryItem { Asset = asset });
-
-                ContentFrame.Content = new InventoryListControl(CurrentUser);
-            }
+            ContentFrame.Content = new InventoryListControl(CurrentUser);
         }
-
 
         private void Check_Click(object sender, RoutedEventArgs e) => MessageBox.Show("Провести инвентаризацию");
         private void Reports_Click(object sender, RoutedEventArgs e) => MessageBox.Show("Открыть отчёты");

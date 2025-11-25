@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\MDK\CourseProgect_Planeta35\CourseProgect_Planeta35\obj\Debug\net8.0-windows\
+C:\Users\Azerty\source\repos\CourseProject\CourseProgect_Planeta35\CourseProgect_Planeta35\obj\Debug\net8.0-windows\
 CourseProgect_Planeta35
 none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP
-C:\MDK\CourseProgect_Planeta35\CourseProgect_Planeta35\App.xaml
-7-929716774
+C:\Users\Azerty\source\repos\CourseProject\CourseProgect_Planeta35\CourseProgect_Planeta35\App.xaml
+822667214
 
-22439021931
-229831941446
-MainWindow.xaml;Pages\AddAssetWindow.xaml;Pages\AuthorizationPage.xaml;Pages\InventoryListControl.xaml;Pages\MainControl.xaml;Pages\MainPage.xaml;Pages\ViewAssetWindow.xaml;
+24686094627
+2471258353590
+MainWindow.xaml;Pages\AddAssetWindow.xaml;Pages\AuthorizationPage.xaml;Pages\InventoryCheckControl.xaml;Pages\InventoryListControl.xaml;Pages\MainControl.xaml;Pages\MainPage.xaml;Pages\ReportsControl.xaml;
 
-True
+False
 
