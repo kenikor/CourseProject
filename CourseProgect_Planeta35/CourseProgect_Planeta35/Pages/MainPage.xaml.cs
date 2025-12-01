@@ -107,11 +107,17 @@ namespace CourseProgect_Planeta35.Pages
             }
             else if (clicked == BtnReports)
             {
-                ContentFrame.Content = new ReportsControl(CurrentUser);
+                ContentFrame.Content = new ReportsControl(CurrentUser, new AppDbContext());
             }
-            else if (clicked == BtnCategories) MessageBox.Show("Категории доступны админу");
+            else if (clicked == BtnCategories)
+            {
+                ContentFrame.Content = new CategoriesControl(CurrentUser);
+            }
             else if (clicked == BtnDepartments) MessageBox.Show("Подразделения доступны админу");
-            else if (clicked == BtnUsers) MessageBox.Show("Пользователи доступны админу");
+            else if (clicked == BtnUsers)
+            {
+                ContentFrame.Content = new UserAddControl(CurrentUser);
+            };
         }
     }
 }

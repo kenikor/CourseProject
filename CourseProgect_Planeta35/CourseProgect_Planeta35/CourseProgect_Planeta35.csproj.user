@@ -10,10 +10,13 @@
     <Compile Update="Pages\AddAssetWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\AddUserControl.xaml.cs">
+    <Compile Update="Pages\AddCategoryWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\AddUserWindow.xaml.cs">
+    <Compile Update="Pages\AssetCheckWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\CategoriesControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Pages\InventoryCheckControl.xaml.cs">
@@ -34,15 +37,21 @@
     <Compile Update="Pages\ReportsControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Pages\UserAddControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Pages\AddAssetWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\AddUserControl.xaml">
+    <Page Update="Pages\AddCategoryWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\AddUserWindow.xaml">
+    <Page Update="Pages\AssetCheckWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\CategoriesControl.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Pages\InventoryCheckControl.xaml">
@@ -64,6 +73,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Pages\ReportsControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\UserAddControl.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

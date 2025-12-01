@@ -45,9 +45,20 @@ namespace CourseProgect_Planeta35.Models
         [Column("cost")]
         public decimal? Cost { get; set; }
 
+        public bool IsChecked { get; set; } = false;
+
         [MaxLength(50)]
         [Column("status")]
-        public string Status { get; set; } = "В эксплуатации";
+        public string? Status { get; set; } = "В эксплуатации";
+
+        public string? Notes { get; set; }
+
+        [Column("description")]
+        public string? Description { get; set; }
+
+        [MaxLength(300)]
+        [Column("image_path")]
+        public string? ImagePath { get; set; }    // путь к изображению
 
         public ICollection<InventoryItem> InventoryItems { get; set; }
         public ICollection<ChangeLog> ChangeLogs { get; set; }

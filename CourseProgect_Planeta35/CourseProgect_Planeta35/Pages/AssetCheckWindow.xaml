@@ -1,0 +1,78 @@
+﻿<Window x:Class="CourseProgect_Planeta35.Pages.AssetCheckWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Проверка объекта"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Width="480" Height="732"
+        Background="#F5F1E9">
+
+    <Border Margin="20" Padding="20" CornerRadius="14" Background="White">
+
+        <StackPanel>
+
+            <!-- Название -->
+            <TextBlock x:Name="TitleText"
+                       FontSize="22"
+                       FontWeight="Bold"
+                       Foreground="#2C2C2C"
+                       Margin="0 0 0 10"/>
+
+            <!-- Фото -->
+            <Border Height="180" Background="#F0F0F0" CornerRadius="10" Margin="0 10 0 10">
+                <Image x:Name="AssetImage"
+                       Stretch="UniformToFill"
+                       Margin="4"/>
+            </Border>
+
+            <!-- Категория -->
+            <StackPanel Orientation="Horizontal" Margin="0 5">
+                <TextBlock Text="Категория: " FontWeight="Bold"/>
+                <TextBlock x:Name="CategoryText"/>
+            </StackPanel>
+
+            <!-- Серийник -->
+            <StackPanel Orientation="Horizontal" Margin="0 5">
+                <TextBlock Text="Серийный номер: " FontWeight="Bold"/>
+                <TextBlock x:Name="SerialText"/>
+            </StackPanel>
+
+            <!-- Ответственный -->
+            <StackPanel Orientation="Horizontal" Margin="0 5">
+                <TextBlock Text="Ответственный: " FontWeight="Bold"/>
+                <TextBlock x:Name="ResponsibleText"/>
+            </StackPanel>
+
+            <!-- Статус -->
+            <StackPanel Orientation="Horizontal" Margin="0 10">
+                <TextBlock Text="Статус: " FontWeight="Bold"/>
+                <TextBlock x:Name="StatusText"/>
+            </StackPanel>
+
+            <!-- Проверено -->
+            <CheckBox x:Name="CheckedBox"
+                      Content="Объект проверен"
+                      Margin="0 15 0 5"
+                      FontSize="15"
+                      Checked="Checked_Changed"
+                      Unchecked="Checked_Changed"/>
+
+            <!-- Заметки -->
+            <TextBlock Text="Заметки:" FontWeight="Bold" Margin="0 10 0 5"/>
+            <TextBox x:Name="NotesBox"
+                     Height="80"
+                     TextWrapping="Wrap"
+                     AcceptsReturn="True"
+                     VerticalScrollBarVisibility="Auto"/>
+
+            <!-- Кнопка сохранить -->
+            <Button Content="Сохранить"
+                    Height="40"
+                    Background="#8B9B4C"
+                    Foreground="White"
+                    FontWeight="SemiBold"
+                    Margin="0 20 0 0"
+                    Click="Save_Click"/>
+        </StackPanel>
+    </Border>
+</Window>

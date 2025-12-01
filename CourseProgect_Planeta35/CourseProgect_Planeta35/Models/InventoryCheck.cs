@@ -32,6 +32,5 @@ namespace CourseProgect_Planeta35.Models
 
         [ForeignKey("CheckedById")]
         public User CheckedBy { get; set; }
-
     }
 }

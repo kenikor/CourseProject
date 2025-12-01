@@ -1,67 +1,100 @@
-﻿using System;
+﻿using CourseProgect_Planeta35.Data;
+using CourseProgect_Planeta35.Models;
+using CourseProgect_Planeta35.Pages;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using CourseProgect_Planeta35.Data;
-using CourseProgect_Planeta35.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace CourseProgect_Planeta35.Controls
 {
     public partial class InventoryCheckControl : UserControl
     {
         private readonly User CurrentUser;
-        private List<InventoryItem> InventoryItems;
-        private InventoryItem _selectedItem;
-        private string _checkStatus = "present";
+        private List<InventoryItem> AllItems = new();
 
         public InventoryCheckControl(User currentUser)
         {
             InitializeComponent();
-            CurrentUser = currentUser ?? throw new ArgumentNullException(nameof(currentUser));
-            LoadDataFromDB();
+            LoadData();
             LoadItems();
+            UpdateProgress(); // сразу показать 0/total
+            CurrentUser = currentUser;
         }
 
-        private void LoadDataFromDB()
+        private void LoadData()
         {
             try
             {
-                using var db = new AppDbContext();
+                using (var db = new AppDbContext())
+                {
+                    var assets = db.Assets
+                        .AsNoTracking()
+                        .Include(x => x.Category)
+                        .Include(x => x.Responsible)
+                        .ToList();
 
-                // Подгружаем Assets с категориями и ответственными
-                var assets = db.Assets
-                    .Include(a => a.Category)
-                    .Include(a => a.Responsible)
-                    .ToList();
-
-                InventoryItems = assets
-                    .Where(a => CurrentUser.RoleId == 1 || a.ResponsibleId == CurrentUser.Id)
-                    .Select(a => new InventoryItem { Asset = a })
-                    .ToList();
+                    AllItems = assets.Select(a => new InventoryItem { Asset = a }).ToList();
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ошибка загрузки из БД: " + ex.Message);
-                InventoryItems = new List<InventoryItem>();
+                MessageBox.Show("Ошибка загрузки: " + ex.Message);
+                AllItems = new();
             }
         }
 
         private void LoadItems()
         {
-            if (InventoryItems == null) return;
+            string search = SearchBox.Text?.ToLower() ?? "";
 
-            string query = SearchBox.Text?.ToLower() ?? "";
+            var filtered = AllItems.Where(x =>
+                x.Asset != null &&
+                (string.IsNullOrEmpty(search) ||
+                 (x.Asset.Name?.ToLower().Contains(search) ?? false) ||
+                 (x.Asset.InventoryNumber?.ToLower().Contains(search) ?? false))
+            ).ToList();
 
-            var filtered = InventoryItems
-                .Where(i => string.IsNullOrEmpty(query) ||
-                            (i.Asset.Name?.ToLower().Contains(query) ?? false))
-                .ToList();
+            ItemsList.ItemsSource = filtered;
 
-            ItemsGrid.ItemsSource = filtered;
-            SubTitleText.Text = $"{filtered.Count} объектов найдено";
+            FoundCountText.Text = $"Найдено объектов: {filtered.Count}";
+            UpdateProgress();
+        }
+
+        private void Item_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.DataContext is InventoryItem item && item.Asset != null)
+            {
+                var win = new AssetCheckWindow(item.Asset)
+                {
+                    Owner = Window.GetWindow(this)
+                };
+
+                if (win.ShowDialog() == true)
+                {
+                    LoadData();
+                    LoadItems();
+                }
+            }
+        }
+
+        private void UpdateProgress()
+        {
+            int total = AllItems.Count;
+            int checkedCount = AllItems.Count(x => x.Asset != null && x.Asset.IsChecked);
+
+            // raw numbers
+            double progress = total == 0 ? 0 : (double)checkedCount / total;
+            int percent = (int)(progress * 100);
+
+            ProgressPercentText.Text = $"{percent}%";
+
+            // анимация прогресс-бара
+            double targetWidth = 140 * progress;
+
+            ProgressBarFill.Width = targetWidth;
         }
 
         private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -69,59 +102,41 @@ namespace CourseProgect_Planeta35.Controls
             LoadItems();
         }
 
-        private void Card_MouseDown(object sender, MouseButtonEventArgs e)
+        // При смене чекбокса — сохраняем в БД
+        private void CheckBox_CheckedUnchecked(object sender, RoutedEventArgs e)
         {
-            if (sender is Border border && border.DataContext is InventoryItem item)
-            {
-                _selectedItem = item;
-                DetailPanel.Visibility = Visibility.Visible;
-                ItemNameText.Text = item.Asset.Name;
-                ItemCategoryText.Text = item.Asset.Category?.Name ?? "";
-                NotesBox.Text = "";
-                _checkStatus = "present";
-            }
-        }
-
-        private void Status_Checked(object sender, RoutedEventArgs e)
-        {
-            if (sender is RadioButton rb && rb.Tag is string status)
-                _checkStatus = status;
-        }
-
-        private void SaveButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (_selectedItem == null) return;
-
             try
             {
-                using var db = new AppDbContext();
-                var check = new InventoryCheck
+                if (sender is CheckBox cb)
                 {
-                    ItemId = _selectedItem.Asset.Id,
-                    Status = _checkStatus,
-                    Notes = string.IsNullOrWhiteSpace(NotesBox.Text) ? null : NotesBox.Text,
-                    CheckDate = DateTime.Now,
-                    CheckedById = CurrentUser.Id
-                };
-                db.InventoryChecks.Add(check);
-                db.SaveChanges();
+                    if (cb.DataContext is InventoryItem item && item?.Asset != null)
+                    {
+                        bool newValue = cb.IsChecked == true;
 
-                MessageBox.Show($"Объект \"{_selectedItem.Asset.Name}\" отмечен как {_checkStatus}!");
+                        // Сохраняем прямо в БД
+                        using (var db = new AppDbContext())
+                        {
+                            var asset = db.Assets.FirstOrDefault(a => a.Id == item.Asset.Id);
+                            if (asset != null)
+                            {
+                                asset.IsChecked = newValue;
+                                db.SaveChanges();
+                            }
+                        }
+
+                        // Обновляем локальную модель (чтобы UI и расчет прогресса были корректны)
+                        var local = AllItems.FirstOrDefault(x => x.Asset.Id == item.Asset.Id);
+                        if (local != null)
+                            local.Asset.IsChecked = newValue;
+
+                        UpdateProgress();
+                    }
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ошибка сохранения: " + ex.Message);
+                MessageBox.Show("Ошибка при сохранении статуса: " + ex.Message);
             }
-
-            DetailPanel.Visibility = Visibility.Collapsed;
-            _selectedItem = null;
-            LoadItems();
-        }
-
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
-        {
-            DetailPanel.Visibility = Visibility.Collapsed;
-            _selectedItem = null;
         }
     }
 }

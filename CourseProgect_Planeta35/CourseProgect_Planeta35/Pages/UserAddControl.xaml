@@ -1,0 +1,169 @@
+﻿<UserControl x:Class="CourseProgect_Planeta35.Pages.UserAddControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <!-- Стили оставляем как есть -->
+        <Style x:Key="RoleBadge" TargetType="Border">
+            <Setter Property="Padding" Value="6 2"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Background" Value="#8B9B4C"/>
+        </Style>
+
+        <Style x:Key="PrimaryButton" TargetType="Button">
+            <Setter Property="Background" Value="#8B9B4C"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="10 6"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#7F8C45"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="SecondaryButton" TargetType="Button">
+            <Setter Property="Background" Value="#F5F5F5"/>
+            <Setter Property="Foreground" Value="#333"/>
+            <Setter Property="Padding" Value="10 6"/>
+            <Setter Property="BorderBrush" Value="#D0D0D0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <DropShadowEffect x:Key="DropShadow" Color="#000000" ShadowDepth="4" BlurRadius="12" Opacity="0.25"/>
+
+        <!-- Карточка пользователя -->
+        <DataTemplate x:Key="UserCardTemplate">
+            <Border Width="900"
+                    Background="White"
+                    CornerRadius="12"
+                    Padding="16"
+                    Margin="0 0 0 10"
+                    BorderBrush="#E2E2E2"
+                    BorderThickness="1"
+                    HorizontalAlignment="Center">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="120"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Левая часть -->
+                    <StackPanel HorizontalAlignment="Stretch">
+
+                        <!-- Имя + роль -->
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+                            <TextBlock Text="{Binding FullName}" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                            <Border Style="{StaticResource RoleBadge}" Margin="10 0">
+                                <TextBlock Text="{Binding Role.Name}" Foreground="White" FontSize="12" FontWeight="SemiBold"/>
+                            </Border>
+                        </StackPanel>
+
+                        <!-- Email + отдел -->
+                        <StackPanel Orientation="Horizontal" Margin="0 4 0 0">
+                            <TextBlock Text="{Binding Username}" Foreground="#707070" FontSize="13" TextTrimming="CharacterEllipsis"/>
+                            <TextBlock Text=" • " Margin="6 0" Foreground="#707070"/>
+                            <TextBlock Text="{Binding Department.Name}" Foreground="#707070" FontSize="13" TextTrimming="CharacterEllipsis"/>
+                        </StackPanel>
+
+                    </StackPanel>
+
+                    <!-- Правая часть -->
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                        <Button Width="36" Height="36" Margin="0 0 6 0" Background="#F5F5F5" BorderBrush="#DADADA" Cursor="Hand" ToolTip="Редактировать" Click="EditUser_Click">
+                            <TextBlock Text="✏" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Button>
+                        <Button Width="36" Height="36" Background="#F5F5F5" BorderBrush="#DADADA" Cursor="Hand" ToolTip="Удалить" Click="DeleteUser_Click">
+                            <TextBlock Text="🗑" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </DataTemplate>
+
+    </UserControl.Resources>
+
+    <!-- Основная разметка -->
+    <DockPanel LastChildFill="True" Margin="16">
+
+        <!-- Заголовок -->
+        <StackPanel DockPanel.Dock="Top" Margin="0 0 0 12">
+            <TextBlock Text="Управление пользователями" FontSize="24" FontWeight="Bold" Margin="0 0 0 4"/>
+            <TextBlock Text="{Binding Users.Count, StringFormat='{}{0} пользователей'}" FontSize="14" Foreground="#777"/>
+        </StackPanel>
+
+        <!-- Кнопка добавления -->
+        <Button DockPanel.Dock="Top" Content="Добавить пользователя" Width="220" Height="42" Margin="0 0 0 16"
+                Style="{StaticResource PrimaryButton}" Click="AddUser_Click"/>
+
+        <!-- Список пользователей -->
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel HorizontalAlignment="Center">
+                <ListBox x:Name="UsersList"
+                         ItemTemplate="{StaticResource UserCardTemplate}"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         HorizontalContentAlignment="Stretch"/>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Всплывающее окно -->
+        <Border x:Name="AddPanel"
+                Background="White"
+                CornerRadius="14"
+                Padding="24"
+                BorderBrush="#DDD"
+                BorderThickness="1"
+                Visibility="Collapsed"
+                Width="420"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Margin="0 80 0 0"
+                Panel.ZIndex="999"
+                Effect="{DynamicResource DropShadow}">
+            <StackPanel>
+                <TextBlock Text="Имя" Margin="0 0 0 4"/>
+                <TextBox x:Name="NameBox" Margin="0 0 0 12"/>
+                <TextBlock Text="Email" Margin="0 0 0 4"/>
+                <TextBox x:Name="EmailBox" Margin="0 0 0 12"/>
+                <TextBlock Text="Роль" Margin="0 0 0 4"/>
+                <ComboBox x:Name="RoleBox" Margin="0 0 0 12"/>
+                <TextBlock Text="Отдел" Margin="0 0 0 4"/>
+                <ComboBox x:Name="DepartmentBox" Margin="0 0 0 12"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 12 0 0">
+                    <Button Content="Сохранить" Width="130" Margin="0 0 8 0" Style="{StaticResource PrimaryButton}" Click="SaveNewUser_Click"/>
+                    <Button Content="Отмена" Width="110" Style="{StaticResource SecondaryButton}" Click="CancelAdd_Click"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+    </DockPanel>
+</UserControl>

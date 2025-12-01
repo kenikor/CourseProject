@@ -1,0 +1,71 @@
+﻿<Window x:Class="CourseProgect_Planeta35.Pages.AddCategoryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CourseProgect_Planeta35.Pages"
+        mc:Ignorable="d"
+        Title="AddCategoryWindow" Height="450" Width="800">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel>
+            <TextBlock Text="Название категории *"
+                       Margin="0 0 0 6"/>
+            <TextBox x:Name="NameBox"
+                     Height="32"
+                     Margin="0 0 0 16"
+                     />
+
+            <TextBlock Text="Описание"
+                       Margin="0 0 0 6"/>
+            <TextBox x:Name="DescriptionBox"
+                     Height="80"
+                     Margin="0 0 0 16"
+                     TextWrapping="Wrap"
+                     AcceptsReturn="True"/>
+
+            <TextBlock Text="Цвет"
+                       Margin="0 0 0 6"/>
+
+            <StackPanel Orientation="Horizontal">
+                <TextBox x:Name="ColorBox"
+                         Width="120"
+                         Height="32"
+                         Text="#366B2B"/>
+
+                <Rectangle x:Name="ColorPreview"
+                           Width="32" Height="32"
+                           Margin="10 0 0 0"
+                           Stroke="#aaa"
+                           Fill="#8B9B4C"/>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- BOTTOM BUTTONS -->
+        <StackPanel Grid.Row="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="0 20 0 0"
+                    >
+
+            <Button Content="Отмена"
+                    Width="90"
+                    Height="32"
+                    Background="#F5F1E9"
+                    Margin="0 0 10 0"
+                    Click="Cancel_Click"/>
+
+            <Button Content="Добавить"
+                    Width="100"
+                    Height="32"
+                    Background="#8B9B4C"
+                    Foreground="#F5F1E9"
+                    Click="Add_Click"/>
+        </StackPanel>
+
+    </Grid>
+</Window>
