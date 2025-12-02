@@ -13,10 +13,16 @@
     <Compile Update="Pages\AddCategoryWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Pages\AddDepartmentWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Pages\AssetCheckWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Pages\CategoriesControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\DepartmentsControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Pages\InventoryCheckControl.xaml.cs">
@@ -48,10 +54,16 @@
     <Page Update="Pages\AddCategoryWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Pages\AddDepartmentWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Pages\AssetCheckWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Pages\CategoriesControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\DepartmentsControl.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Pages\InventoryCheckControl.xaml">

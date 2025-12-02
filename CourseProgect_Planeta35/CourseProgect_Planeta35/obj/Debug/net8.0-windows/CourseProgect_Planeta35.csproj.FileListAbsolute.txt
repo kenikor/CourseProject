@@ -515,3 +515,7 @@ C:\MDK\CourseProject\CourseProgect_Planeta35\CourseProgect_Planeta35\obj\Debug\n
 C:\MDK\CourseProject\CourseProgect_Planeta35\CourseProgect_Planeta35\obj\Debug\net8.0-windows\CourseProgect_Planeta35.pdb
 C:\MDK\CourseProject\CourseProgect_Planeta35\CourseProgect_Planeta35\obj\Debug\net8.0-windows\CourseProgect_Planeta35.genruntimeconfig.cache
 C:\MDK\CourseProject\CourseProgect_Planeta35\CourseProgect_Planeta35\obj\Debug\net8.0-windows\ref\CourseProgect_Planeta35.dll
+C:\MDK\CourseProject\CourseProgect_Planeta35\CourseProgect_Planeta35\obj\Debug\net8.0-windows\Pages\DepartmentsControl.baml
+C:\MDK\CourseProject\CourseProgect_Planeta35\CourseProgect_Planeta35\obj\Debug\net8.0-windows\Pages\DepartmentsControl.g.cs
+C:\MDK\CourseProject\CourseProgect_Planeta35\CourseProgect_Planeta35\obj\Debug\net8.0-windows\Pages\AddDepartmentWindow.baml
+C:\MDK\CourseProject\CourseProgect_Planeta35\CourseProgect_Planeta35\obj\Debug\net8.0-windows\Pages\AddDepartmentWindow.g.cs

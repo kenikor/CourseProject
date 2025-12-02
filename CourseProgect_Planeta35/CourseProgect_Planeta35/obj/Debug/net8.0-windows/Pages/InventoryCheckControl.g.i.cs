@@ -92,7 +92,7 @@ namespace CourseProgect_Planeta35.Controls {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/CourseProgect_Planeta35;component/pages/inventorycheckcontrol.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/CourseProgect_Planeta35;V1.0.0.0;component/pages/inventorycheckcontrol.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\Pages\InventoryCheckControl.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

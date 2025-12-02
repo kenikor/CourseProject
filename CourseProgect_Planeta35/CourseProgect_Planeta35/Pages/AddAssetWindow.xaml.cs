@@ -18,15 +18,11 @@ namespace CourseProgect_Planeta35.Controls
             {
                 CategoryBox.ItemsSource = db.AssetCategories.Select(c => c.Name).ToList();
                 LocationBox.ItemsSource = db.Departments.Select(d => d.Id).ToList();
-                ResponsibleBox.ItemsSource = db.Users.Select(u => new { u.Id, u.Username }).ToList();
-                ResponsibleBox.DisplayMemberPath = "Name";
-                ResponsibleBox.SelectedValuePath = "Id";
             }
 
             CategoryBox.SelectedIndex = 0;
             StatusBox.SelectedIndex = 0;
             LocationBox.SelectedIndex = 0;
-            ResponsibleBox.SelectedIndex = 0;
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)
@@ -65,6 +61,16 @@ namespace CourseProgect_Planeta35.Controls
             }
 
             DialogResult = true;
+        }
+
+        private void BrowseImage_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new Microsoft.Win32.OpenFileDialog();
+            dialog.Filter = "Изображения|*.png;*.jpg;*.jpeg;*.bmp|Все файлы|*.*";
+            if (dialog.ShowDialog() == true)
+            {
+                ImagePathBox.Text = dialog.FileName;
+            }
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)

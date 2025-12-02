@@ -64,9 +64,6 @@
         <StackPanel>
             <TextBlock Text="Добавить объект" FontSize="24" FontWeight="Bold" Margin="0,0,0,20" Foreground="White"/>
 
-            <TextBlock Text="Ответственное лицо" Foreground="White"/>
-            <ComboBox x:Name="ResponsibleBox"/>
-            
             <TextBlock Text="Название" Foreground="White"/>
             <TextBox x:Name="NameBox"/>
 
@@ -92,6 +89,12 @@
 
             <TextBlock Text="Местоположение (Отдел)" Foreground="White"/>
             <ComboBox x:Name="LocationBox"/>
+
+            <TextBlock Text="Изображение" Foreground="White"/>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBox x:Name="ImagePathBox" Width="230"/>
+                <Button Content="Обзор" Width="60" Margin="5,0,0,0" Style="{StaticResource MainButton}" Click="BrowseImage_Click"/>
+            </StackPanel>
 
             <!-- Кнопки -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">

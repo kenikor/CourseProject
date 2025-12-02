@@ -1,10 +1,10 @@
-﻿using CourseProgect_Planeta35.Data;
-using CourseProgect_Planeta35.Models;
-using System;
+﻿using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using CourseProgect_Planeta35.Data;
+using CourseProgect_Planeta35.Models;
 
 namespace CourseProgect_Planeta35.Pages
 {
@@ -90,7 +90,16 @@ namespace CourseProgect_Planeta35.Pages
         // ==========================================
         private void AddCategoryCard(int id, string name, string colorHex)
         {
-            Color color = (Color)ColorConverter.ConvertFromString(colorHex);
+            Color color;
+            try
+            {
+                color = (Color)ColorConverter.ConvertFromString(colorHex);
+            }
+            catch
+            {
+                color = Color.FromRgb(54, 107, 43); // fallback
+            }
+
             Color lightColor = Color.FromArgb(40, color.R, color.G, color.B);
 
             Border card = new Border
@@ -139,8 +148,8 @@ namespace CourseProgect_Planeta35.Pages
             left.Children.Add(colorOuter);
 
             StackPanel text = new StackPanel { Margin = new Thickness(12, 0, 0, 0) };
-            text.Children.Add(new TextBlock { Text = name, FontWeight = FontWeights.Bold });
-            text.Children.Add(new TextBlock { Text = colorHex.ToUpper(), Foreground = Brushes.Gray });
+            text.Children.Add(new TextBlock { Text = name, FontWeight = FontWeights.Bold, FontSize = 16 });
+            text.Children.Add(new TextBlock { Text = colorHex?.ToUpper(), Foreground = Brushes.Gray, FontSize = 12 });
 
             left.Children.Add(text);
 
@@ -173,22 +182,47 @@ namespace CourseProgect_Planeta35.Pages
                 Margin = new Thickness(4)
             };
 
-            delete.Click += (s, e) =>
+            // Редактирование
+            edit.Click += (s, e) =>
             {
-                int categoryId = (int)card.Tag;
-
                 using (var db = new AppDbContext())
                 {
-                    var entity = db.AssetCategories.FirstOrDefault(x => x.Id == categoryId);
-                    if (entity != null)
+                    var entity = db.AssetCategories.FirstOrDefault(x => x.Id == id);
+                    if (entity == null) return;
+
+                    var win = new AddCategoryWindow(entity.Name, entity.Color);
+                    if (win.ShowDialog() == true)
                     {
-                        db.AssetCategories.Remove(entity);
+                        entity.Name = win.CategoryName;
+                        entity.Color = win.ColorHex;
                         db.SaveChanges();
+
+                        // Обновляем UI
+                        text.Children.Clear();
+                        text.Children.Add(new TextBlock { Text = entity.Name, FontWeight = FontWeights.Bold, FontSize = 16 });
+                        text.Children.Add(new TextBlock { Text = entity.Color?.ToUpper(), Foreground = Brushes.Gray, FontSize = 12 });
                     }
                 }
+            };
 
-                CategoryPanel.Children.Remove(card);
-                UpdateCount();
+            // Удаление
+            delete.Click += (s, e) =>
+            {
+                if (MessageBox.Show("Удалить категорию?", "Подтверждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    using (var db = new AppDbContext())
+                    {
+                        var entity = db.AssetCategories.FirstOrDefault(x => x.Id == id);
+                        if (entity != null)
+                        {
+                            db.AssetCategories.Remove(entity);
+                            db.SaveChanges();
+                        }
+                    }
+
+                    CategoryPanel.Children.Remove(card);
+                    UpdateCount();
+                }
             };
 
             right.Children.Add(edit);

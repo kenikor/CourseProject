@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP
 C:\MDK\CourseProject\CourseProgect_Planeta35\CourseProgect_Planeta35\App.xaml
-12-1021547207
+14597279999
 
-301056209588
+32-1869461983
 251-895008759
-MainWindow.xaml;Pages\AddAssetWindow.xaml;Pages\AddCategoryWindow.xaml;Pages\AssetCheckWindow.xaml;Pages\AuthorizationPage.xaml;Pages\CategoriesControl.xaml;Pages\InventoryCheckControl.xaml;Pages\InventoryListControl.xaml;Pages\MainControl.xaml;Pages\MainPage.xaml;Pages\ReportsControl.xaml;Pages\UserAddControl.xaml;
+MainWindow.xaml;Pages\AddAssetWindow.xaml;Pages\AddCategoryWindow.xaml;Pages\AddDepartmentWindow.xaml;Pages\AssetCheckWindow.xaml;Pages\AuthorizationPage.xaml;Pages\CategoriesControl.xaml;Pages\DepartmentsControl.xaml;Pages\InventoryCheckControl.xaml;Pages\InventoryListControl.xaml;Pages\MainControl.xaml;Pages\MainPage.xaml;Pages\ReportsControl.xaml;Pages\UserAddControl.xaml;
 
 False
 

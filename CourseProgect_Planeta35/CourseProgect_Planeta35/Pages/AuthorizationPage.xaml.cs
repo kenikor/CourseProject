@@ -122,5 +122,26 @@ namespace CourseProgect_Planeta35.Pages
                 return builder.ToString();
             }
         }
+
+        private void GuestLogin_Click(object sender, RoutedEventArgs e)
+        {
+            var guestUser = new User
+            {
+                Username = "guest",
+                FullName = "Гость",
+                RoleId = 3 // допустим, роль гостя
+            };
+
+            var mainPage = new MainPage(guestUser);
+
+            if (this.NavigationService != null)
+            {
+                NavigationService.Navigate(mainPage);
+            }
+            else
+            {
+                Window.GetWindow(this).Content = mainPage;
+            }
+        }
     }
 }

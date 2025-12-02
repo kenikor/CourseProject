@@ -55,7 +55,7 @@ namespace CourseProgect_Planeta35.Controls
                 (string.IsNullOrEmpty(search) ||
                  (x.Asset.Name?.ToLower().Contains(search) ?? false) ||
                  (x.Asset.InventoryNumber?.ToLower().Contains(search) ?? false))
-            ).ToList();
+                ).ToList();
 
             ItemsList.ItemsSource = filtered;
 

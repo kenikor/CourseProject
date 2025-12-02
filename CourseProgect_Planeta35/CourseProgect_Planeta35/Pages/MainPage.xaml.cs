@@ -22,7 +22,7 @@ namespace CourseProgect_Planeta35.Pages
             CurrentUser = user;
 
             SetupAdminPanel();
-            LoadDataFromDb();  
+            LoadDataFromDb();
             LoadDashboard();
 
             BtnDashboard.IsChecked = true;
@@ -91,6 +91,14 @@ namespace CourseProgect_Planeta35.Pages
                     BtnCategories, BtnDepartments, BtnUsers
                 };
             }
+            if (CurrentUser.RoleId == 3)
+            {
+                allButtons = new ToggleButton[]
+                {
+                    BtnDashboard, BtnInventory, BtnCheck, BtnReports,
+                    BtnCategories, BtnDepartments, BtnUsers
+                };
+            }
 
             foreach (var btn in allButtons)
             {
@@ -113,7 +121,10 @@ namespace CourseProgect_Planeta35.Pages
             {
                 ContentFrame.Content = new CategoriesControl(CurrentUser);
             }
-            else if (clicked == BtnDepartments) MessageBox.Show("Подразделения доступны админу");
+            else if (clicked == BtnDepartments)
+            {
+                ContentFrame.Content = new DepartmentsControl(CurrentUser);
+            }
             else if (clicked == BtnUsers)
             {
                 ContentFrame.Content = new UserAddControl(CurrentUser);

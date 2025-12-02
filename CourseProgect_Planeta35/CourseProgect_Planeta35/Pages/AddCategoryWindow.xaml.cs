@@ -1,22 +1,28 @@
 ﻿using CourseProgect_Planeta35.Data;
 using CourseProgect_Planeta35.Models;
+using System;
 using System.Windows;
 using System.Windows.Media;
 
 namespace CourseProgect_Planeta35.Pages
 {
-    /// <summary>
-    /// Логика взаимодействия для AddCategoryWindow.xaml
-    /// </summary>
     public partial class AddCategoryWindow : Window
     {
         public string CategoryName { get; private set; }
         public string ColorHex { get; private set; }
 
+        // Конструктор для добавления новой категории
         public AddCategoryWindow()
         {
             InitializeComponent();
             ColorBox.TextChanged += (s, e) => UpdateColorPreview();
+        }
+
+        // Конструктор для редактирования существующей категории
+        public AddCategoryWindow(string name, string color) : this()
+        {
+            NameBox.Text = name;
+            ColorBox.Text = color;
         }
 
         private void UpdateColorPreview()
@@ -26,42 +32,27 @@ namespace CourseProgect_Planeta35.Pages
                 ColorPreview.Fill = new SolidColorBrush(
                     (Color)ColorConverter.ConvertFromString(ColorBox.Text));
             }
-            catch { }
+            catch
+            {
+                ColorPreview.Fill = Brushes.Transparent;
+            }
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
-            // Мини-валидация, чтобы не было пустого имени
+            // Мини-валидация
             if (string.IsNullOrWhiteSpace(NameBox.Text))
             {
                 MessageBox.Show("Название категории обязательно!");
                 return;
             }
 
-            try
-            {
-                using (var db = new AppDbContext()) 
-                {
-                    var newCategory = new AssetCategory
-                    {
-                        Name = NameBox.Text.Trim(),
-                        Description = DescriptionBox.Text.Trim(),
-                        Color = ColorBox.Text.Trim()
-                    };
+            // Устанавливаем публичные свойства, чтобы их можно было получить снаружи
+            CategoryName = NameBox.Text.Trim();
+            ColorHex = ColorBox.Text.Trim();
 
-                    db.AssetCategories.Add(newCategory);
-                    db.SaveChanges();
-                }
-
-                MessageBox.Show("Категория добавлена!");
-                this.Close();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка при добавлении категории:\n{ex.Message}");
-            }
+            DialogResult = true; // окно закрывается, возвращая true
         }
-
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
