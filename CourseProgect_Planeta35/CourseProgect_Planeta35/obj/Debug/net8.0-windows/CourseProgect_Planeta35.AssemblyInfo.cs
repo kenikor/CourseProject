@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CourseProgect_Planeta35")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+37b0cc045fab5788da088af63c9d7405448e56fd")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
 [assembly: System.Reflection.AssemblyProductAttribute("CourseProgect_Planeta35")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CourseProgect_Planeta35")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
