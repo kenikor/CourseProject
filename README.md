@@ -47,7 +47,7 @@
 - **Dapper / ADO.NET**
 
 ### UI
-- **WPF (MVVM)**  
+- **WPF**  
 - *Material Design in XAML* (опционально)
 
 ### Средства разработки
