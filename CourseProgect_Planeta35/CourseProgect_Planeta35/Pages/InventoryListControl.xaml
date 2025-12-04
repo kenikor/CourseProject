@@ -150,6 +150,12 @@
                         <DataTemplate DataType="{x:Type models:InventoryItem}">
                             <Border Style="{StaticResource CardStyle}">
                                 <StackPanel Margin="12">
+
+                                    <Image Source="{Binding ImagePathToShow}" 
+                                           Width="150" Height="100" 
+                                           Stretch="UniformToFill"
+                                           Margin="0,0,0,10"/>
+                                    
                                     <TextBlock Text="{Binding Asset.Name}"
                                                FontSize="18"
                                                FontWeight="Bold"

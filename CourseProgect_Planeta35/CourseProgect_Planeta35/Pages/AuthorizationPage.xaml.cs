@@ -1,5 +1,6 @@
 ﻿using CourseProgect_Planeta35.Data;
 using CourseProgect_Planeta35.Models;
+using DocumentFormat.OpenXml.Spreadsheet;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows;
@@ -7,7 +8,7 @@ using System.Windows.Controls;
 
 namespace CourseProgect_Planeta35.Pages
 {
-    public partial class AuthorizationPage : Page
+    public partial class AuthorizationPage : System.Windows.Controls.Page
     {
         private bool IsLogin = true;
 
@@ -52,8 +53,9 @@ namespace CourseProgect_Planeta35.Pages
             }
 
             using var db = new AppDbContext();
-
             string passwordHash = ComputeSha256Hash(password);
+
+            System.Windows.Controls.Page mainPage = null;
 
             if (IsLogin)
             {
@@ -64,16 +66,11 @@ namespace CourseProgect_Planeta35.Pages
                     return;
                 }
 
-                var mainPage = new MainPage(user);
+                // Устанавливаем текущего пользователя
+                App.CurrentUser = user;
 
-                if (this.NavigationService != null)
-                {
-                    NavigationService.Navigate(mainPage);
-                }
-                else
-                {
-                    Window.GetWindow(this).Content = mainPage;
-                }
+                // Создаём страницу
+                mainPage = new MainPage(user);
             }
             else
             {
@@ -100,9 +97,28 @@ namespace CourseProgect_Planeta35.Pages
                 db.Users.Add(newUser);
                 db.SaveChanges();
 
+                // Авторизуем сразу после регистрации
+                App.CurrentUser = newUser;
+
                 MessageBox.Show($"Пользователь {name} успешно зарегистрирован!");
+
+                mainPage = new MainPage(newUser);
+            }
+
+            // Навигация на главную страницу
+            if (mainPage != null)
+            {
+                if (this.NavigationService != null)
+                {
+                    NavigationService.Navigate(mainPage);
+                }
+                else
+                {
+                    Window.GetWindow(this).Content = mainPage;
+                }
             }
         }
+
 
         private void ShowError(string message)
         {

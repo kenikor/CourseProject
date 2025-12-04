@@ -22,9 +22,8 @@ namespace CourseProgect_Planeta35.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            // Подключение к твоей SQL Server
-            optionsBuilder.UseSqlServer(@"Server=.\SQLEXPRESS;Database=Planet35;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;"
-);
+            // Подключение к SQL Server
+            optionsBuilder.UseSqlServer(@"Server=.\SQLEXPRESS;Database=Planet35;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;");
         }
     }
 }

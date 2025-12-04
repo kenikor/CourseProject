@@ -33,6 +33,12 @@ namespace CourseProgect_Planeta35.Controls
                 return;
             }
 
+            if (App.CurrentUser == null)
+            {
+                MessageBox.Show("Ошибка: пользователь не авторизован.");
+                return;
+            }
+
             if (!int.TryParse(LocationBox.SelectedItem?.ToString(), out int departmentId))
             {
                 MessageBox.Show("Выберите корректный отдел");
@@ -41,7 +47,8 @@ namespace CourseProgect_Planeta35.Controls
 
             using (var db = new AppDbContext())
             {
-                var category = db.AssetCategories.FirstOrDefault(c => c.Name == CategoryBox.SelectedItem.ToString());
+                var category = db.AssetCategories
+                    .FirstOrDefault(c => c.Name == CategoryBox.SelectedItem.ToString());
 
                 NewAsset = new Asset
                 {
@@ -53,7 +60,17 @@ namespace CourseProgect_Planeta35.Controls
                     InventoryNumber = SerialBox.Text,
                     PurchaseDate = PurchaseDateBox.SelectedDate,
                     Cost = decimal.TryParse(CostBox.Text, out var cost) ? cost : 0,
-                    DepartmentId = departmentId
+                    DepartmentId = departmentId,
+
+                    // 🎯 Описание
+                    Description = DescriptionBox.Text,
+
+                    // 🎯 Самое главное — сохраняем кто добавил
+                    ResponsibleId = App.CurrentUser.Id,
+
+                    ImagePath = string.IsNullOrWhiteSpace(ImagePathBox.Text)
+                        ? null
+                        : ImagePathBox.Text
                 };
 
                 db.Assets.Add(NewAsset);

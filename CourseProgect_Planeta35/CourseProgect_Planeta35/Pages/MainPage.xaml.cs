@@ -13,7 +13,7 @@ namespace CourseProgect_Planeta35.Pages
     {
         private readonly User CurrentUser;
         private List<AssetCategory> AllCategories;
-        private List<InventoryItem> AllInventoryItems;
+        private List<CourseProgect_Planeta35.Controls.InventoryItem> AllInventoryItems;
 
 
         public MainPage(User user)
@@ -52,9 +52,8 @@ namespace CourseProgect_Planeta35.Pages
                     .AsNoTracking()
                     .ToList();
 
-                // Загружаем все InventoryItems
                 AllInventoryItems = AllCategories
-                    .SelectMany(c => c.Assets, (c, asset) => new InventoryItem
+                    .SelectMany(c => c.Assets, (c, asset) => new CourseProgect_Planeta35.Controls.InventoryItem
                     {
                         Asset = asset,
                     })
@@ -64,7 +63,7 @@ namespace CourseProgect_Planeta35.Pages
             {
                 MessageBox.Show("Ошибка загрузки из БД: " + ex.Message);
                 AllCategories = new List<AssetCategory>();
-                AllInventoryItems = new List<InventoryItem>();
+                AllInventoryItems = new List<CourseProgect_Planeta35.Controls.InventoryItem>();
             }
         }
 
@@ -91,14 +90,64 @@ namespace CourseProgect_Planeta35.Pages
                     BtnCategories, BtnDepartments, BtnUsers
                 };
             }
+
+            // Для гостя показываем только Dashboard и Inventory
             if (CurrentUser.RoleId == 3)
             {
-                allButtons = new ToggleButton[]
+                allButtons = new ToggleButton[] { BtnDashboard, BtnInventory, BtnCheck, BtnReports };
+
+                // Снимаем отметку с неактивных кнопок
+                foreach (var btn in allButtons)
                 {
-                    BtnDashboard, BtnInventory, BtnCheck, BtnReports,
-                    BtnCategories, BtnDepartments, BtnUsers
-                };
+                    if (btn != clicked)
+                        btn.IsChecked = false;
+                }
+
+                // Загружаем только допустимый контент
+                if (clicked == BtnDashboard) LoadDashboard();
+                else if (clicked == BtnInventory) LoadInventory();
+
+                return; // выходим, чтобы остальной контент не загружался
             }
+
+            // Для остальных пользователей показываем все кнопки
+            allButtons = new ToggleButton[]
+            {
+                BtnDashboard, BtnInventory, BtnCheck, BtnReports,
+                BtnCategories, BtnDepartments, BtnUsers
+            };
+
+            // Снимаем отметку с неактивных кнопок
+            foreach (var btn in allButtons)
+            {
+                if (btn != clicked)
+                    btn.IsChecked = false;
+            }
+
+            // Загружаем контент для остальных
+            if (clicked == BtnDashboard) LoadDashboard();
+            else if (clicked == BtnInventory) LoadInventory();
+            else if (clicked == BtnCheck)
+            {
+                ContentFrame.Content = new InventoryCheckControl(CurrentUser);
+            }
+            else if (clicked == BtnReports)
+            {
+                ContentFrame.Content = new ReportsControl(CurrentUser, new AppDbContext());
+            }
+            else if (clicked == BtnCategories)
+            {
+                ContentFrame.Content = new CategoriesControl(CurrentUser);
+            }
+            else if (clicked == BtnDepartments)
+            {
+                ContentFrame.Content = new DepartmentsControl(CurrentUser);
+            }
+            else if (clicked == BtnUsers)
+            {
+                ContentFrame.Content = new UserAddControl(CurrentUser);
+            }
+
 
             foreach (var btn in allButtons)
             {

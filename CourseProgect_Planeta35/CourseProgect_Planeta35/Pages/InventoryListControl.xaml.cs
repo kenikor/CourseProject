@@ -1,11 +1,11 @@
-﻿using System;
+﻿using CourseProgect_Planeta35.Data;
+using CourseProgect_Planeta35.Models;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using CourseProgect_Planeta35.Data;
-using CourseProgect_Planeta35.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace CourseProgect_Planeta35.Controls
 {
@@ -13,8 +13,8 @@ namespace CourseProgect_Planeta35.Controls
     {
         private readonly User CurrentUser;
 
-        private List<InventoryItem> InventoryItems;   // теперь НЕ readonly
-        private List<AssetCategory> Categories;       // тоже не readonly
+        private List<InventoryItem> InventoryItems;
+        private List<AssetCategory> Categories;
 
         public InventoryListControl(User user)
         {
@@ -27,33 +27,30 @@ namespace CourseProgect_Planeta35.Controls
             LoadItems();
         }
 
-        /// <summary>
-        /// Загружаем реальные данные из БД
-        /// </summary>
         private void LoadDataFromDB()
         {
             try
             {
                 using (var db = new AppDbContext())
                 {
-                    // Загружаем категории
                     Categories = db.AssetCategories
                         .AsNoTracking()
                         .Include(c => c.Assets)
                         .ToList();
 
-                    // Загружаем все Assets + Category + Responsible
                     var assets = db.Assets
                         .AsNoTracking()
                         .Include(a => a.Category)
                         .Include(a => a.Responsible)
+                        .Include(a => a.Department)
                         .ToList();
 
-                    // Конвертируем в InventoryItem
                     InventoryItems = assets
                         .Select(a => new InventoryItem
                         {
-                            Asset = a
+                            Asset = a,
+                            // Если нет картинки, показываем плейсхолдер
+                            ImagePathToShow = string.IsNullOrEmpty(a.ImagePath) ? "Images/placeholder.png" : a.ImagePath
                         })
                         .ToList();
                 }
@@ -65,7 +62,6 @@ namespace CourseProgect_Planeta35.Controls
                 InventoryItems = new List<InventoryItem>();
             }
         }
-
 
         private void LoadFilters()
         {
@@ -81,12 +77,10 @@ namespace CourseProgect_Planeta35.Controls
             CategoryFilter.SelectedIndex = 0;
         }
 
-
         private void LoadItems()
         {
             if (InventoryItems == null) return;
 
-            // ВСЕГДА показываем весь инвентарь
             var items = InventoryItems;
 
             string searchText = SearchBox.Text?.ToLower() ?? "";
@@ -117,7 +111,12 @@ namespace CourseProgect_Planeta35.Controls
             };
             if (addWindow.ShowDialog() == true)
             {
-                var newItem = new InventoryItem { Asset = addWindow.NewAsset };
+                var newItem = new InventoryItem
+                {
+                    Asset = addWindow.NewAsset,
+                    ImagePathToShow = string.IsNullOrEmpty(addWindow.NewAsset.ImagePath) ? "Images/placeholder.png" : addWindow.NewAsset.ImagePath
+                };
+
                 InventoryItems.Add(newItem);
                 LoadItems();
             }
@@ -125,6 +124,12 @@ namespace CourseProgect_Planeta35.Controls
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
+            if (App.CurrentUser == null)
+            {
+                MessageBox.Show("Пользователь не авторизован.");
+                return;
+            }
+
             if (((FrameworkElement)sender).DataContext is InventoryItem item && item.Asset != null)
             {
                 if (MessageBox.Show($"Удалить {item.Asset.Name ?? "Не указано"}?", "Удаление", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
@@ -155,5 +160,12 @@ namespace CourseProgect_Planeta35.Controls
         private void SearchBox_TextChanged(object sender, TextChangedEventArgs e) => LoadItems();
         private void CategoryFilter_SelectionChanged(object sender, SelectionChangedEventArgs e) => LoadItems();
         private void StatusFilter_SelectionChanged(object sender, SelectionChangedEventArgs e) => LoadItems();
+    }
+
+    // Добавляем новое свойство для отображения картинки
+    public class InventoryItem
+    {
+        public Asset Asset { get; set; }
+        public string ImagePathToShow { get; set; }
     }
 }

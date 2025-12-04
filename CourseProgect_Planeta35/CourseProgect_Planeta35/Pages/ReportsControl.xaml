@@ -61,7 +61,7 @@
                     <DataGridTextColumn Header="Категория" Binding="{Binding Asset.Category.Name}" Width="*"/>
                     <DataGridTextColumn Header="Подразделение" Binding="{Binding Asset.Department.Name}" Width="*"/>
                     <DataGridTextColumn Header="Ответственное лицо" Binding="{Binding Asset.Responsible.FullName}" Width="*"/>
-                    <DataGridTextColumn Header="Серийный номер" Binding="{Binding Asset.SerialNumber}" Width="*"/>
+                    <DataGridTextColumn Header="Серийный номер" Binding="{Binding Asset.InventoryNumber}" Width="*"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Border>

@@ -4,75 +4,99 @@
         Title="Проверка объекта"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
-        Width="480" Height="732"
-        Background="#F5F1E9">
+        Width="480" Height="650"
+        Background="#F5F1E9"
+        WindowStyle="None"
+        AllowsTransparency="True">
 
-    <Border Margin="20" Padding="20" CornerRadius="14" Background="White">
+    <Window.Resources>
+        <!-- Общий стиль TextBox -->
+        <Style TargetType="TextBox">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
+            <Setter Property="BorderBrush" Value="#D2D5C4"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
 
+        <!-- Стиль кнопок -->
+        <Style x:Key="MainButton" TargetType="Button">
+            <Setter Property="BorderBrush" Value="#D2D5C4"/>
+            <Setter Property="Background" Value="#8B9B4C"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Стиль кнопки отмены -->
+        <Style x:Key="CancelButton" TargetType="Button" BasedOn="{StaticResource MainButton}">
+            <Setter Property="Background" Value="#EFEFEF"/>
+            <Setter Property="Foreground" Value="#3C2F1F"/>
+        </Style>
+    </Window.Resources>
+
+    <Border CornerRadius="16" Background="White" Padding="20" Margin="10">
         <StackPanel>
-
-            <!-- Название -->
             <TextBlock x:Name="TitleText"
+                       Text="Проверка объекта"
                        FontSize="22"
                        FontWeight="Bold"
                        Foreground="#2C2C2C"
                        Margin="0 0 0 10"/>
 
-            <!-- Фото -->
             <Border Height="180" Background="#F0F0F0" CornerRadius="10" Margin="0 10 0 10">
-                <Image x:Name="AssetImage"
-                       Stretch="UniformToFill"
-                       Margin="4"/>
+                <Image x:Name="AssetImage" Stretch="UniformToFill" Margin="4"/>
             </Border>
 
-            <!-- Категория -->
             <StackPanel Orientation="Horizontal" Margin="0 5">
                 <TextBlock Text="Категория: " FontWeight="Bold"/>
                 <TextBlock x:Name="CategoryText"/>
             </StackPanel>
 
-            <!-- Серийник -->
             <StackPanel Orientation="Horizontal" Margin="0 5">
                 <TextBlock Text="Серийный номер: " FontWeight="Bold"/>
                 <TextBlock x:Name="SerialText"/>
             </StackPanel>
 
-            <!-- Ответственный -->
             <StackPanel Orientation="Horizontal" Margin="0 5">
                 <TextBlock Text="Ответственный: " FontWeight="Bold"/>
                 <TextBlock x:Name="ResponsibleText"/>
             </StackPanel>
 
-            <!-- Статус -->
             <StackPanel Orientation="Horizontal" Margin="0 10">
                 <TextBlock Text="Статус: " FontWeight="Bold"/>
                 <TextBlock x:Name="StatusText"/>
             </StackPanel>
 
-            <!-- Проверено -->
             <CheckBox x:Name="CheckedBox"
                       Content="Объект проверен"
-                      Margin="0 15 0 5"
+                      Margin="0 10 0 5"
                       FontSize="15"
                       Checked="Checked_Changed"
                       Unchecked="Checked_Changed"/>
 
-            <!-- Заметки -->
             <TextBlock Text="Заметки:" FontWeight="Bold" Margin="0 10 0 5"/>
-            <TextBox x:Name="NotesBox"
-                     Height="80"
-                     TextWrapping="Wrap"
-                     AcceptsReturn="True"
-                     VerticalScrollBarVisibility="Auto"/>
+            <TextBox x:Name="NotesBox" Height="80" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
 
             <!-- Кнопка сохранить -->
-            <Button Content="Сохранить"
-                    Height="40"
-                    Background="#8B9B4C"
-                    Foreground="White"
-                    FontWeight="SemiBold"
-                    Margin="0 20 0 0"
-                    Click="Save_Click"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+                <Button Content="Сохранить" Width="100" Style="{StaticResource MainButton}" Click="Save_Click"/>
+                <Button Content="Отмена" Width="100" Style="{StaticResource CancelButton}" Click="Cancel_Click"/>
+            </StackPanel>
         </StackPanel>
     </Border>
 </Window>
