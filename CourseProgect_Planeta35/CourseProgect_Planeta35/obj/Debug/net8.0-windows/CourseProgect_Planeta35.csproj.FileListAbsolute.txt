@@ -519,3 +519,5 @@ C:\MDK\CourseProject\CourseProgect_Planeta35\CourseProgect_Planeta35\obj\Debug\n
 C:\MDK\CourseProject\CourseProgect_Planeta35\CourseProgect_Planeta35\obj\Debug\net8.0-windows\Pages\DepartmentsControl.g.cs
 C:\MDK\CourseProject\CourseProgect_Planeta35\CourseProgect_Planeta35\obj\Debug\net8.0-windows\Pages\AddDepartmentWindow.baml
 C:\MDK\CourseProject\CourseProgect_Planeta35\CourseProgect_Planeta35\obj\Debug\net8.0-windows\Pages\AddDepartmentWindow.g.cs
+C:\MDK\CourseProject\CourseProgect_Planeta35\CourseProgect_Planeta35\obj\Debug\net8.0-windows\Pages\UserAddWindow.baml
+C:\MDK\CourseProject\CourseProgect_Planeta35\CourseProgect_Planeta35\obj\Debug\net8.0-windows\Pages\UserAddWindow.g.cs

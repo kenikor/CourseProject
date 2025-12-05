@@ -46,9 +46,29 @@ namespace CourseProgect_Planeta35.Pages
 
         private void AddUser_Click(object sender, RoutedEventArgs e)
         {
-            ClearAddForm();
-            editingUser = null;
-            AddPanel.Visibility = Visibility.Visible;
+            var addWindow = new UserAddWindow(_dbContext);
+            addWindow.Owner = Window.GetWindow(this);
+
+            if (addWindow.ShowDialog() == true)
+            {
+                Users.Add(addWindow.ResultUser);
+            }
+        }
+
+        private void EditUser_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.DataContext is User user)
+            {
+                var editWindow = new UserAddWindow(_dbContext, user);
+                editWindow.Owner = Window.GetWindow(this);
+
+                if (editWindow.ShowDialog() == true)
+                {
+                    // Обновляем отображаемый список
+                    int idx = Users.IndexOf(user);
+                    Users[idx] = editWindow.ResultUser;
+                }
+            }
         }
 
         private void CancelAdd_Click(object sender, RoutedEventArgs e)
@@ -102,22 +122,6 @@ namespace CourseProgect_Planeta35.Pages
             ClearAddForm();
             AddPanel.Visibility = Visibility.Collapsed;
             editingUser = null;
-        }
-
-        private void EditUser_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button btn && btn.DataContext is User user)
-            {
-                editingUser = user;
-
-                NameBox.Text = user.FullName;
-                EmailBox.Text = user.Username;
-
-                RoleBox.SelectedItem = _dbContext.Roles.FirstOrDefault(r => r.Id == user.RoleId);
-                DepartmentBox.SelectedValue = user.DepartmentId;
-
-                AddPanel.Visibility = Visibility.Visible;
-            }
         }
 
         private void DeleteUser_Click(object sender, RoutedEventArgs e)

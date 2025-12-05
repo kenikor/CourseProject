@@ -46,6 +46,9 @@
     <Compile Update="Pages\UserAddControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Pages\UserAddWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Pages\AddAssetWindow.xaml">
@@ -88,6 +91,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Pages\UserAddControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\UserAddWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
