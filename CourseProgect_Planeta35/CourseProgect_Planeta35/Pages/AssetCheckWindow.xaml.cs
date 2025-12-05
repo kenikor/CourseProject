@@ -65,5 +65,11 @@ namespace CourseProgect_Planeta35.Pages
                 MessageBox.Show("Ошибка при сохранении: " + ex.Message);
             }
         }
+
+        private void Cancel_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
+            Close();
+        }
     }
 }

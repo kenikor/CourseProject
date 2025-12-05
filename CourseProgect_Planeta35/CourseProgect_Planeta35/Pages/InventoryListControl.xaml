@@ -27,6 +27,86 @@
             </Setter>
         </Style>
 
+        <Style TargetType="ComboBox" x:Key="LiveComboBox">
+            <Setter Property="Foreground" Value="#3C2F1F"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#8B9B4C"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="4"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <!-- Основная рамка -->
+                            <Border x:Name="Border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6"
+                                SnapsToDevicePixels="True">
+                                <DockPanel LastChildFill="True">
+                                    <!-- Контент выбранного элемента -->
+                                    <ContentPresenter x:Name="ContentSite"
+                                                  Margin="4,2,0,2"
+                                                  VerticalAlignment="Center"
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  Content="{TemplateBinding SelectionBoxItem}"
+                                                  ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                  ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                                  RecognizesAccessKey="True"/>
+                                    <!-- Стрелка -->
+                                    <ToggleButton DockPanel.Dock="Right"
+                                              x:Name="DropDownToggle"
+                                              Focusable="False"
+                                              IsChecked="{Binding Path=IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                              ClickMode="Press"
+                                              Background="#8B9B4C"
+                                              BorderThickness="0"
+                                              Width="26"
+                                              HorizontalAlignment="Right"
+                                              Content="▼"
+                                              Foreground="White"
+                                              FontWeight="Bold"/>
+                                </DockPanel>
+                            </Border>
+
+                            <!-- Выпадающий список -->
+                            <Popup x:Name="Popup"
+                               Placement="Bottom"
+                               IsOpen="{TemplateBinding IsDropDownOpen}"
+                               AllowsTransparency="True"
+                               Focusable="False"
+                               PopupAnimation="Slide">
+                                <Border Background="White"
+                                    BorderBrush="#8B9B4C"
+                                    BorderThickness="1"
+                                    CornerRadius="6"
+                                    SnapsToDevicePixels="True">
+                                    <ScrollViewer Margin="0" SnapsToDevicePixels="True">
+                                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <!-- Наведение на рамку -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="BorderBrush" Value="#8B9B4C"/>
+                                <Setter TargetName="Border" Property="Background" Value="#F5F1E9"/>
+                            </Trigger>
+                            <!-- Выбор элемента -->
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="#888"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <!-- Кнопки в карточках -->
         <Style x:Key="CardButton" TargetType="Button">
             <Setter Property="Background" Value="#EFEFEF"/>
@@ -94,13 +174,15 @@
                 <StackPanel Width="200">
                     <TextBlock Text="Категория" Margin="0,0,0,4"/>
                     <ComboBox x:Name="CategoryFilter"
-                              SelectionChanged="CategoryFilter_SelectionChanged"/>
+                              SelectionChanged="CategoryFilter_SelectionChanged"
+                              Style="{StaticResource LiveComboBox}"/>
                 </StackPanel>
 
                 <StackPanel Width="200" Margin="20,0,0,0">
                     <TextBlock Text="Статус" Margin="0,0,0,4"/>
                     <ComboBox x:Name="StatusFilter"
-                              SelectionChanged="StatusFilter_SelectionChanged">
+                              SelectionChanged="StatusFilter_SelectionChanged"
+                              Style="{StaticResource LiveComboBox}">
                         <ComboBoxItem Content="Все"/>
                         <ComboBoxItem Content="В эксплуатации"/>
                         <ComboBoxItem Content="На обслуживании"/>

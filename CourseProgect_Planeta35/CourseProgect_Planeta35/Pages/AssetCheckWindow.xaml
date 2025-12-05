@@ -53,6 +53,7 @@
         <StackPanel>
             <TextBlock x:Name="TitleText"
                        Text="Проверка объекта"
+                       HorizontalAlignment="Center"
                        FontSize="22"
                        FontWeight="Bold"
                        Foreground="#2C2C2C"

@@ -179,5 +179,21 @@ namespace CourseProgect_Planeta35.Pages
                 ContentFrame.Content = new UserAddControl(CurrentUser);
             };
         }
+
+        private void BtnLogout_Checked(object sender, RoutedEventArgs e)
+        {
+            App.CurrentUser = null;
+
+            var authPage = new AuthorizationPage();
+
+            if (this.NavigationService != null)
+            {
+                NavigationService.Navigate(authPage);
+            }
+            else
+            {
+                Window.GetWindow(this).Content = authPage;
+            }
+        }
     }
 }

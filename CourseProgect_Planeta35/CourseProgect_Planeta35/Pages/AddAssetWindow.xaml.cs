@@ -14,10 +14,17 @@ namespace CourseProgect_Planeta35.Controls
         public AddAssetWindow()
         {
             InitializeComponent();
+
             using (var db = new AppDbContext())
             {
+                // Заполняем категории
                 CategoryBox.ItemsSource = db.AssetCategories.Select(c => c.Name).ToList();
-                LocationBox.ItemsSource = db.Departments.Select(d => d.Id).ToList();
+
+                // Заполняем подразделения
+                var departments = db.Departments.ToList();
+                LocationBox.ItemsSource = departments;
+                LocationBox.DisplayMemberPath = "Name";  // показываем имя
+                LocationBox.SelectedValuePath = "Id";    // сохраняем Id
             }
 
             CategoryBox.SelectedIndex = 0;
@@ -39,7 +46,7 @@ namespace CourseProgect_Planeta35.Controls
                 return;
             }
 
-            if (!int.TryParse(LocationBox.SelectedItem?.ToString(), out int departmentId))
+            if (!(LocationBox.SelectedValue is int departmentId))
             {
                 MessageBox.Show("Выберите корректный отдел");
                 return;
@@ -61,13 +68,8 @@ namespace CourseProgect_Planeta35.Controls
                     PurchaseDate = PurchaseDateBox.SelectedDate,
                     Cost = decimal.TryParse(CostBox.Text, out var cost) ? cost : 0,
                     DepartmentId = departmentId,
-
-                    // 🎯 Описание
                     Description = DescriptionBox.Text,
-
-                    // 🎯 Самое главное — сохраняем кто добавил
                     ResponsibleId = App.CurrentUser.Id,
-
                     ImagePath = string.IsNullOrWhiteSpace(ImagePathBox.Text)
                         ? null
                         : ImagePathBox.Text
@@ -82,8 +84,11 @@ namespace CourseProgect_Planeta35.Controls
 
         private void BrowseImage_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new Microsoft.Win32.OpenFileDialog();
-            dialog.Filter = "Изображения|*.png;*.jpg;*.jpeg;*.bmp|Все файлы|*.*";
+            var dialog = new Microsoft.Win32.OpenFileDialog
+            {
+                Filter = "Изображения|*.png;*.jpg;*.jpeg;*.bmp|Все файлы|*.*"
+            };
+
             if (dialog.ShowDialog() == true)
             {
                 ImagePathBox.Text = dialog.FileName;

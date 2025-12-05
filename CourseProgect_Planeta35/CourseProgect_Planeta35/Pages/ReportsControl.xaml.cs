@@ -1,18 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using CourseProgect_Planeta35.Data;
+using CourseProgect_Planeta35.Models;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using Microsoft.Win32;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
-using OfficeOpenXml;
-using OfficeOpenXml.Style;
-using System.IO;
-using System.Windows.Data;
-using CourseProgect_Planeta35.Models;
-using System.Drawing;
-using Microsoft.EntityFrameworkCore;
-using CourseProgect_Planeta35.Data;
+using System.Collections.Generic;
 
 namespace CourseProgect_Planeta35.Controls
 {
@@ -41,11 +40,9 @@ namespace CourseProgect_Planeta35.Controls
 
         private void LoadData()
         {
-            // Загружаем категории и отделы из базы
             CbCategory.ItemsSource = _db.AssetCategories.ToList();
             CbDepartment.ItemsSource = _db.Departments.ToList();
 
-            // Загружаем все активы с подгрузкой связанных данных
             _allAssets = _db.Assets
                 .Include(a => a.Category)
                 .Include(a => a.Department)
@@ -78,6 +75,15 @@ namespace CourseProgect_Planeta35.Controls
             UpdatePreview();
         }
 
+        private void BtnResetFilters_Click(object sender, RoutedEventArgs e)
+        {
+            CbCategory.SelectedItem = null;
+            CbDepartment.SelectedItem = null;
+            CbStatus.SelectedIndex = 0; // Сбрасываем на "Все"
+            CbReportType.SelectedIndex = 0;
+            UpdatePreview();
+        }
+
         private void CbReportType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             UpdatePreview();
@@ -88,7 +94,7 @@ namespace CourseProgect_Planeta35.Controls
             var dlg = new SaveFileDialog
             {
                 Filter = "PDF files (*.pdf)|*.pdf",
-                FileName = "Report.pdf"
+                FileName = "Отчёт.pdf"
             };
 
             if (dlg.ShowDialog() != true)
@@ -96,6 +102,12 @@ namespace CourseProgect_Planeta35.Controls
 
             try
             {
+                var assetsForPdf = _db.Assets
+                    .Include(a => a.Category)
+                    .Include(a => a.Department)
+                    .Include(a => a.Responsible)
+                    .ToList();
+
                 using (var fs = new FileStream(dlg.FileName, FileMode.Create, FileAccess.Write, FileShare.None))
                 {
                     var doc = new Document(PageSize.A4, 25, 25, 25, 25);
@@ -104,21 +116,22 @@ namespace CourseProgect_Planeta35.Controls
 
                     var font = FontFactory.GetFont(FontFactory.HELVETICA, 10, BaseColor.BLACK);
 
-                    PdfPTable table = new PdfPTable(6); // Количество колонок
+                    PdfPTable table = new PdfPTable(7); // 7 колонок
                     table.WidthPercentage = 100;
 
-                    string[] headers = { "Название", "Описание", "Категория", "Отдел", "Ответственный", "Статус" };
+                    string[] headers = { "Название", "Описание", "Категория", "Подразделение", "Ответственный", "Серийный номер", "Статус" };
                     foreach (var h in headers)
                         table.AddCell(new PdfPCell(new Phrase(h, font)) { BackgroundColor = BaseColor.LIGHT_GRAY });
 
-                    foreach (var item in _allAssets)
+                    foreach (var item in assetsForPdf)
                     {
-                        table.AddCell(new PdfPCell(new Phrase(item.Asset.Name, font)));
-                        table.AddCell(new PdfPCell(new Phrase(item.Asset.Notes, font)));
-                        table.AddCell(new PdfPCell(new Phrase(item.Asset.Category?.Name ?? "", font)));
-                        table.AddCell(new PdfPCell(new Phrase(item.Asset.Department?.Name ?? "", font)));
-                        table.AddCell(new PdfPCell(new Phrase(item.Asset.Responsible?.FullName ?? "", font)));
-                        table.AddCell(new PdfPCell(new Phrase(item.Asset.Status, font)));
+                        table.AddCell(new PdfPCell(new Phrase(item.Name ?? "", font)));
+                        table.AddCell(new PdfPCell(new Phrase(item.Description ?? "", font)));
+                        table.AddCell(new PdfPCell(new Phrase(item.Category?.Name ?? "", font)));
+                        table.AddCell(new PdfPCell(new Phrase(item.Department?.Name ?? "", font)));
+                        table.AddCell(new PdfPCell(new Phrase(item.Responsible?.FullName ?? "", font)));
+                        table.AddCell(new PdfPCell(new Phrase(item.InventoryNumber ?? "", font)));
+                        table.AddCell(new PdfPCell(new Phrase(item.Status ?? "", font)));
                     }
 
                     doc.Add(table);
@@ -152,7 +165,7 @@ namespace CourseProgect_Planeta35.Controls
                 {
                     var worksheet = package.Workbook.Worksheets.Add("Report");
 
-                    string[] headers = { "Название", "Описание", "Категория", "Отдел", "Ответственный", "Статус" };
+                    string[] headers = { "Название", "Описание", "Категория", "Подразделение", "Ответственный", "Серийный номер", "Статус" };
                     for (int i = 0; i < headers.Length; i++)
                     {
                         worksheet.Cells[1, i + 1].Value = headers[i];
@@ -169,7 +182,8 @@ namespace CourseProgect_Planeta35.Controls
                         worksheet.Cells[row, 3].Value = item.Asset.Category?.Name ?? "";
                         worksheet.Cells[row, 4].Value = item.Asset.Department?.Name ?? "";
                         worksheet.Cells[row, 5].Value = item.Asset.Responsible?.FullName ?? "";
-                        worksheet.Cells[row, 6].Value = item.Asset.Status;
+                        worksheet.Cells[row, 6].Value = item.Asset.InventoryNumber ?? "";
+                        worksheet.Cells[row, 7].Value = item.Asset.Status ?? "";
                         row++;
                     }
 

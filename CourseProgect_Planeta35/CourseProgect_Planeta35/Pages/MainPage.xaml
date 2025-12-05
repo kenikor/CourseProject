@@ -40,6 +40,11 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
         <!-- Sidebar -->
         <StackPanel Background="#3C2F1F" Grid.Column="0">
             <!-- Заголовок -->
@@ -58,16 +63,24 @@
             <ToggleButton x:Name="BtnInventory" Content="Инвентарь" Style="{StaticResource MenuButtonStyle}" Checked="MenuButton_Checked"/>
             <ToggleButton x:Name="BtnCheck" Content="Инвентаризация" Style="{StaticResource MenuButtonStyle}" Checked="MenuButton_Checked"/>
             <ToggleButton x:Name="BtnReports" Content="Отчёты" Style="{StaticResource MenuButtonStyle}" Checked="MenuButton_Checked"/>
+            
 
             <!-- Только для админа -->
-            <StackPanel x:Name="AdminPanel" Margin="10,20,10,0" Visibility="Collapsed">
+            <StackPanel x:Name="AdminPanel" Margin="0,20,0,0" Visibility="Collapsed">
                 <TextBlock Text="Администрирование" Foreground="#C5C895" FontSize="12" Margin="5"/>
                 <ToggleButton x:Name="BtnCategories" Content="Категории" Style="{StaticResource MenuButtonStyle}" Checked="MenuButton_Checked"/>
                 <ToggleButton x:Name="BtnDepartments" Content="Подразделения" Style="{StaticResource MenuButtonStyle}" Checked="MenuButton_Checked"/>
-                <ToggleButton x:Name="BtnUsers" Content="Пользователи" Style="{StaticResource MenuButtonStyle}" Checked="MenuButton_Checked"/>
+                <ToggleButton x:Name="BtnUsers" Content="Пользователи" Style="{StaticResource MenuButtonStyle}" Checked="MenuButton_Checked"/>               
+
             </StackPanel>
         </StackPanel>
-
+        <ToggleButton x:Name="BtnLogout" 
+                      Grid.Row="1"
+                      Background="#8B9B4C"
+                      Content="Выйти"
+                      Style="{StaticResource MenuButtonStyle}" 
+                      Checked="BtnLogout_Checked"
+                      Margin="10"/>
         <!-- Контент -->
         <Frame x:Name="ContentFrame"
                Grid.Column="1"

@@ -39,13 +39,14 @@
                     <TextBlock Text="Статус" Width="140" VerticalAlignment="Center"/>
                     <ComboBox x:Name="CbStatus" Width="200">
                         <ComboBoxItem Content="Все" />
-                        <ComboBoxItem Content="Активные" />
+                        <ComboBoxItem Content="В эксплуатации" />
                         <ComboBoxItem Content="На обслуживании" />
-                        <ComboBoxItem Content="Списанные" />
-                        <ComboBoxItem Content="Отсутствуют" />
+                        <ComboBoxItem Content="Списано" />
+                        <ComboBoxItem Content="Отсутствует" />
                     </ComboBox>
 
                     <Button Content="Обновить" Width="110" Margin="12,0,0,0" Click="BtnRefresh_Click"/>
+                    <Button Content="Сбросить" Width="110" Margin="8,0,0,0" Click="BtnResetFilters_Click"/>
                     <Button Content="Экспорт PDF" Width="120" Margin="8,0,0,0" Click="BtnExportPdf_Click"/>
                     <Button Content="Экспорт XLSX" Width="120" Margin="8,0,0,0" Click="BtnExportXlsx_Click"/>
                 </StackPanel>
@@ -62,6 +63,7 @@
                     <DataGridTextColumn Header="Подразделение" Binding="{Binding Asset.Department.Name}" Width="*"/>
                     <DataGridTextColumn Header="Ответственное лицо" Binding="{Binding Asset.Responsible.FullName}" Width="*"/>
                     <DataGridTextColumn Header="Серийный номер" Binding="{Binding Asset.InventoryNumber}" Width="*"/>
+                    <DataGridTextColumn Header="Статус" Binding="{Binding Asset.Status}" Width="*"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Border>
