@@ -12,9 +12,9 @@ TRACE;DEBUG;NET;NET8_0;NETCOREAPP
 C:\MDK\CourseProject\CourseProgect_Planeta35\CourseProgect_Planeta35\App.xaml
 15-442914534
 
-35469784309
+36-222852825
 251-895008759
 MainWindow.xaml;Pages\AddAssetWindow.xaml;Pages\AddCategoryWindow.xaml;Pages\AddDepartmentWindow.xaml;Pages\AssetCheckWindow.xaml;Pages\AuthorizationPage.xaml;Pages\CategoriesControl.xaml;Pages\DepartmentsControl.xaml;Pages\InventoryCheckControl.xaml;Pages\InventoryListControl.xaml;Pages\MainControl.xaml;Pages\MainPage.xaml;Pages\ReportsControl.xaml;Pages\UserAddControl.xaml;Pages\UserAddWindow.xaml;
 
-False
+True
 

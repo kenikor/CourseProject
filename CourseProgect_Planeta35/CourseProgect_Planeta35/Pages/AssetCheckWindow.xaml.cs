@@ -3,6 +3,7 @@ using CourseProgect_Planeta35.Models;
 using System.Windows;
 using System;
 using System.Windows.Media.Imaging;
+using System.Windows.Media;
 
 
 namespace CourseProgect_Planeta35.Pages
@@ -33,14 +34,23 @@ namespace CourseProgect_Planeta35.Pages
             ResponsibleText.Text = Asset.Responsible?.FullName ?? "—";
             StatusText.Text = Asset.Status ?? "—";
 
-            CheckedBox.IsChecked = Asset.IsChecked;
+            if (Asset.IsChecked)
+            {
+                BtnMarkChecked.Background = new SolidColorBrush(System.Windows.Media.Colors.Gray);
+                BtnMarkChecked.Content = "Проверено";
+            }
+
             NotesBox.Text = Asset.Notes ?? "";
         }
 
-        private void Checked_Changed(object sender, RoutedEventArgs e)
+        private void BtnMarkChecked_Click(object sender, RoutedEventArgs e)
         {
-            Asset.IsChecked = CheckedBox.IsChecked == true;
+            Asset.IsChecked = true;
+
+            BtnMarkChecked.Background = new SolidColorBrush(System.Windows.Media.Colors.Gray);
+            BtnMarkChecked.Content = "Проверено";
         }
+
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {

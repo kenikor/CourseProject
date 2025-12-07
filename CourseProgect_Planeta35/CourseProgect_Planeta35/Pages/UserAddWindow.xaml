@@ -6,8 +6,7 @@
         WindowStartupLocation="CenterOwner"
         WindowStyle="None"
         AllowsTransparency="True"
-        Background="Transparent"
-        Loaded="Window_Loaded">
+        Background="Transparent">
 
     <Window.Resources>
         <Style x:Key="PrimaryButton" TargetType="Button">
@@ -56,8 +55,7 @@
         </Style>
     </Window.Resources>
 
-    <Border CornerRadius="16" Background="#8B9B4C" Padding="20" Margin="10"
-            MouseDown="Window_MouseDown">
+    <Border CornerRadius="16" Background="#8B9B4C" Padding="20" Margin="10">
         <StackPanel>
             <TextBlock Text="Добавить / Редактировать" 
                        FontSize="24" FontWeight="Bold" 
