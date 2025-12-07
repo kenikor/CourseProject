@@ -94,49 +94,44 @@ namespace CourseProgect_Planeta35.Controls
             var dlg = new SaveFileDialog
             {
                 Filter = "PDF files (*.pdf)|*.pdf",
-                FileName = "Отчёт.pdf"
+                FileName = "Отчет.pdf"
             };
 
-            if (dlg.ShowDialog() != true)
-                return;
+            if (dlg.ShowDialog() != true) return;
 
             try
             {
-                var assetsForPdf = _db.Assets
-                    .Include(a => a.Category)
-                    .Include(a => a.Department)
-                    .Include(a => a.Responsible)
-                    .ToList();
+                var assets = _allAssets.Select(a => a.Asset).ToList();
 
-                using (var fs = new FileStream(dlg.FileName, FileMode.Create, FileAccess.Write, FileShare.None))
+                using var fs = new FileStream(dlg.FileName, FileMode.Create, FileAccess.Write, FileShare.None);
+                var doc = new Document(PageSize.A4.Rotate(), 25, 25, 25, 25);
+                PdfWriter.GetInstance(doc, fs);
+                doc.Open();
+
+                string fontPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "arial.ttf");
+                var baseFont = BaseFont.CreateFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+                var font = new iTextSharp.text.Font(baseFont, 10, iTextSharp.text.Font.NORMAL, BaseColor.BLACK);
+
+                PdfPTable table = new PdfPTable(7) { WidthPercentage = 100 };
+                table.SetWidths(new float[] { 2f, 2f, 2f, 2f, 3f, 2f, 2f });
+
+                string[] headers = { "Название", "Описание", "Категория", "Подразделение", "Ответственный", "Серийный номер", "Статус" };
+                foreach (var h in headers)
+                    table.AddCell(new PdfPCell(new Phrase(h, font)) { BackgroundColor = BaseColor.LIGHT_GRAY, HorizontalAlignment = Element.ALIGN_CENTER });
+
+                foreach (var asset in assets)
                 {
-                    var doc = new Document(PageSize.A4, 25, 25, 25, 25);
-                    PdfWriter.GetInstance(doc, fs);
-                    doc.Open();
-
-                    var font = FontFactory.GetFont(FontFactory.HELVETICA, 10, BaseColor.BLACK);
-
-                    PdfPTable table = new PdfPTable(7); // 7 колонок
-                    table.WidthPercentage = 100;
-
-                    string[] headers = { "Название", "Описание", "Категория", "Подразделение", "Ответственный", "Серийный номер", "Статус" };
-                    foreach (var h in headers)
-                        table.AddCell(new PdfPCell(new Phrase(h, font)) { BackgroundColor = BaseColor.LIGHT_GRAY });
-
-                    foreach (var item in assetsForPdf)
-                    {
-                        table.AddCell(new PdfPCell(new Phrase(item.Name ?? "", font)));
-                        table.AddCell(new PdfPCell(new Phrase(item.Description ?? "", font)));
-                        table.AddCell(new PdfPCell(new Phrase(item.Category?.Name ?? "", font)));
-                        table.AddCell(new PdfPCell(new Phrase(item.Department?.Name ?? "", font)));
-                        table.AddCell(new PdfPCell(new Phrase(item.Responsible?.FullName ?? "", font)));
-                        table.AddCell(new PdfPCell(new Phrase(item.InventoryNumber ?? "", font)));
-                        table.AddCell(new PdfPCell(new Phrase(item.Status ?? "", font)));
-                    }
-
-                    doc.Add(table);
-                    doc.Close();
+                    table.AddCell(Cell(asset.Name, font));
+                    table.AddCell(Cell(asset.Description, font));
+                    table.AddCell(Cell(asset.Category?.Name, font));
+                    table.AddCell(Cell(asset.Department?.Name, font));
+                    table.AddCell(Cell(asset.Responsible?.FullName, font));
+                    table.AddCell(Cell(asset.InventoryNumber, font));
+                    table.AddCell(Cell(asset.Status, font));
                 }
+
+                doc.Add(table);
+                doc.Close();
 
                 MessageBox.Show("PDF сохранён!");
             }
@@ -146,6 +141,15 @@ namespace CourseProgect_Planeta35.Controls
             }
         }
 
+        private PdfPCell Cell(string text, iTextSharp.text.Font font) =>
+            new PdfPCell(new Phrase(text ?? "", font))
+            {
+                NoWrap = false,
+                MinimumHeight = 20,
+                HorizontalAlignment = Element.ALIGN_LEFT,
+                VerticalAlignment = Element.ALIGN_MIDDLE
+            };
+
         private void BtnExportXlsx_Click(object sender, RoutedEventArgs e)
         {
             var dlg = new SaveFileDialog
@@ -154,44 +158,37 @@ namespace CourseProgect_Planeta35.Controls
                 FileName = "Report.xlsx"
             };
 
-            if (dlg.ShowDialog() != true)
-                return;
+            if (dlg.ShowDialog() != true) return;
 
             try
             {
-                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                using var package = new ExcelPackage();
+                var sheet = package.Workbook.Worksheets.Add("Report");
 
-                using (var package = new ExcelPackage())
+                string[] headers = { "Название", "Описание", "Категория", "Подразделение", "Ответственный", "Серийный номер", "Статус" };
+                for (int i = 0; i < headers.Length; i++)
                 {
-                    var worksheet = package.Workbook.Worksheets.Add("Report");
-
-                    string[] headers = { "Название", "Описание", "Категория", "Подразделение", "Ответственный", "Серийный номер", "Статус" };
-                    for (int i = 0; i < headers.Length; i++)
-                    {
-                        worksheet.Cells[1, i + 1].Value = headers[i];
-                        worksheet.Cells[1, i + 1].Style.Font.Bold = true;
-                        worksheet.Cells[1, i + 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                        worksheet.Cells[1, i + 1].Style.Fill.BackgroundColor.SetColor(Color.LightGray);
-                    }
-
-                    int row = 2;
-                    foreach (var item in _allAssets)
-                    {
-                        worksheet.Cells[row, 1].Value = item.Asset.Name;
-                        worksheet.Cells[row, 2].Value = item.Asset.Description;
-                        worksheet.Cells[row, 3].Value = item.Asset.Category?.Name ?? "";
-                        worksheet.Cells[row, 4].Value = item.Asset.Department?.Name ?? "";
-                        worksheet.Cells[row, 5].Value = item.Asset.Responsible?.FullName ?? "";
-                        worksheet.Cells[row, 6].Value = item.Asset.InventoryNumber ?? "";
-                        worksheet.Cells[row, 7].Value = item.Asset.Status ?? "";
-                        row++;
-                    }
-
-                    worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
-
-                    using (var stream = new FileStream(dlg.FileName, FileMode.Create, FileAccess.Write))
-                        package.SaveAs(stream);
+                    sheet.Cells[1, i + 1].Value = headers[i];
+                    sheet.Cells[1, i + 1].Style.Font.Bold = true;
+                    sheet.Cells[1, i + 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    sheet.Cells[1, i + 1].Style.Fill.BackgroundColor.SetColor(Color.LightGray);
                 }
+
+                int row = 2;
+                foreach (var asset in _allAssets.Select(a => a.Asset))
+                {
+                    sheet.Cells[row, 1].Value = asset.Name;
+                    sheet.Cells[row, 2].Value = asset.Description;
+                    sheet.Cells[row, 3].Value = asset.Category?.Name ?? "";
+                    sheet.Cells[row, 4].Value = asset.Department?.Name ?? "";
+                    sheet.Cells[row, 5].Value = asset.Responsible?.FullName ?? "";
+                    sheet.Cells[row, 6].Value = asset.InventoryNumber ?? "";
+                    sheet.Cells[row, 7].Value = asset.Status ?? "";
+                    row++;
+                }
+
+                sheet.Cells[sheet.Dimension.Address].AutoFitColumns();
+                package.SaveAs(new FileInfo(dlg.FileName));
 
                 MessageBox.Show("Excel файл сохранён!");
             }
