@@ -1,6 +1,7 @@
 ﻿using CourseProgect_Planeta35.Controls;
 using CourseProgect_Planeta35.Data;
 using CourseProgect_Planeta35.Models;
+using CourseProgect_Planeta35.Pages;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -89,10 +90,25 @@ namespace CourseProgect_Planeta35
             ContentFrame.Content = new InventoryListControl(CurrentUser);
         }
 
-        private void Check_Click(object sender, RoutedEventArgs e) => MessageBox.Show("Провести инвентаризацию");
-        private void Reports_Click(object sender, RoutedEventArgs e) => MessageBox.Show("Открыть отчёты");
-        private void Categories_Click(object sender, RoutedEventArgs e) => MessageBox.Show("Админ: Категории");
-        private void Departments_Click(object sender, RoutedEventArgs e) => MessageBox.Show("Админ: Подразделения");
-        private void Users_Click(object sender, RoutedEventArgs e) => MessageBox.Show("Админ: Пользователи");
+        private void Check_Click(object sender, RoutedEventArgs e)
+        {
+            ContentFrame.Content = new InventoryCheckControl(CurrentUser);
+        }
+        private void Reports_Click(object sender, RoutedEventArgs e)
+        {
+            ContentFrame.Content = new ReportsControl(CurrentUser, new AppDbContext());
+        }
+        private void Categories_Click(object sender, RoutedEventArgs e)
+        {
+            ContentFrame.Content = new CategoriesControl(CurrentUser);
+        }
+        private void Departments_Click(object sender, RoutedEventArgs e)
+        {
+            ContentFrame.Content = new DepartmentsControl(CurrentUser);
+        }
+        private void Users_Click(object sender, RoutedEventArgs e)
+        {
+            ContentFrame.Content = new UserAddControl(CurrentUser);
+        }
     }
 }
