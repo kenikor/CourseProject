@@ -20,9 +20,6 @@ namespace CourseProgect_Planeta35.Pages
             LoadCategoriesFromDb();
         }
 
-        // ============================
-        // ЗАГРУЗКА КАТЕГОРИЙ ИЗ БД
-        // ============================
         private void LoadCategoriesFromDb()
         {
             try
@@ -51,9 +48,6 @@ namespace CourseProgect_Planeta35.Pages
             }
         }
 
-        // =======================
-        // ДОБАВЛЕНИЕ КАТЕГОРИИ
-        // =======================
         private void AddCategory_Click(object sender, RoutedEventArgs e)
         {
             var win = new AddCategoryWindow();
@@ -85,9 +79,6 @@ namespace CourseProgect_Planeta35.Pages
             CountText.Text = $"{CategoryPanel.Children.Count} категорий";
         }
 
-        // ==========================================
-        // СОЗДАНИЕ КАРТОЧКИ КАТЕГОРИИ (UI элемент)
-        // ==========================================
         private void AddCategoryCard(int id, string name, string colorHex)
         {
             Color color;
