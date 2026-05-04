@@ -1,4 +1,5 @@
-﻿using CourseProgect_Planeta35.Pages;
+﻿using CourseProgect_Planeta35.Models;
+using CourseProgect_Planeta35.Pages;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,9 +18,12 @@ namespace CourseProgect_Planeta35
     /// </summary>
     public partial class MainWindow : Window
     {
+        public MainPage MainPageInstance { get; set; }
+        public User CurrentUser { get; set; }
         public MainWindow()
         {
             InitializeComponent();
+
             MainFrame.Navigate(new AuthorizationPage());
         }
     }

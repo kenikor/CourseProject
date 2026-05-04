@@ -19,11 +19,18 @@ namespace CourseProgect_Planeta35.Data
         public DbSet<ChangeLog> ChangeLogs { get; set; }
         public DbSet<Report> Reports { get; set; }
         public DbSet<InventoryCheck> InventoryChecks { get; set; }
+        public DbSet<ProcurementItem> ProcurementItems { get; set; }
+        public DbSet<CartRecord> CartRecords { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            // Подключение к SQL Server
             optionsBuilder.UseSqlServer(@"Server=.\SQLEXPRESS;Database=Planet35;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;");
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ProcurementItem>()
+                .Property(p => p.Price)
+                .HasPrecision(18, 2);
         }
     }
 }

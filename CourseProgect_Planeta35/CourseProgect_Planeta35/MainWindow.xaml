@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CourseProgect_Planeta35"
         mc:Ignorable="d"
-        Title="Инвентаризация" Height="450" Width="800">
+        Title="Инвентаризация" Height="480" Width="400">
     <Grid>
         <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>
     </Grid>

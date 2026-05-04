@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\MDK\CourseProject\CourseProgect_Planeta35\CourseProgect_Planeta35\obj\Debug\net8.0-windows\
+C:\CourseProject\CourseProject\CourseProgect_Planeta35\CourseProgect_Planeta35\obj\Debug\net8.0-windows\
 CourseProgect_Planeta35
 none
 false
-TRACE;DEBUG;NET;NET8_0;NETCOREAPP
-C:\MDK\CourseProject\CourseProgect_Planeta35\CourseProgect_Planeta35\App.xaml
-15-442914534
+TRACE;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
+C:\CourseProject\CourseProject\CourseProgect_Planeta35\CourseProgect_Planeta35\App.xaml
+17-1489581758
 
-35469784309
-251-895008759
-MainWindow.xaml;Pages\AddAssetWindow.xaml;Pages\AddCategoryWindow.xaml;Pages\AddDepartmentWindow.xaml;Pages\AssetCheckWindow.xaml;Pages\AuthorizationPage.xaml;Pages\CategoriesControl.xaml;Pages\DepartmentsControl.xaml;Pages\InventoryCheckControl.xaml;Pages\InventoryListControl.xaml;Pages\MainControl.xaml;Pages\MainPage.xaml;Pages\ReportsControl.xaml;Pages\UserAddControl.xaml;Pages\UserAddWindow.xaml;
+43-1875322056
+251-1646227126
+MainWindow.xaml;Pages\AddAssetWindow.xaml;Pages\AddCategoryWindow.xaml;Pages\AddDepartmentWindow.xaml;Pages\AssetCheckWindow.xaml;Pages\AuthorizationPage.xaml;Pages\CategoriesControl.xaml;Pages\CheckoutPage.xaml;Pages\DepartmentsControl.xaml;Pages\InventoryCheckControl.xaml;Pages\InventoryListControl.xaml;Pages\MainControl.xaml;Pages\MainPage.xaml;Pages\ProcurementPage.xaml;Pages\ReportsControl.xaml;Pages\UserAddControl.xaml;Pages\UserAddWindow.xaml;
 
-False
+True
 

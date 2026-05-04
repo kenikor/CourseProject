@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Добавить / Редактировать пользователя"
         Height="380" Width="420"
-        WindowStartupLocation="CenterOwner"
+        WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent">
@@ -55,7 +55,11 @@
         </Style>
     </Window.Resources>
 
-    <Border CornerRadius="16" Background="#8B9B4C" Padding="20" Margin="10">
+    <Border CornerRadius="16"
+            Background="#8B9B4C"
+            Padding="20"
+            Margin="10"
+            MouseLeftButtonDown="Border_MouseLeftButtonDown">
         <StackPanel>
             <TextBlock Text="Добавить / Редактировать" 
                        FontSize="24" FontWeight="Bold" 

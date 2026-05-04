@@ -21,4 +21,8 @@
     <PackageReference Include="PDFsharp" Version="6.2.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+
 </Project>

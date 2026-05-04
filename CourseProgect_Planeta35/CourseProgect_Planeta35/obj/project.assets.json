@@ -5776,11 +5776,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\MDK\\CourseProject\\CourseProgect_Planeta35\\CourseProgect_Planeta35\\CourseProgect_Planeta35.csproj",
+      "projectUniqueName": "C:\\CourseProject\\CourseProject\\CourseProgect_Planeta35\\CourseProgect_Planeta35\\CourseProgect_Planeta35.csproj",
       "projectName": "CourseProgect_Planeta35",
-      "projectPath": "C:\\MDK\\CourseProject\\CourseProgect_Planeta35\\CourseProgect_Planeta35\\CourseProgect_Planeta35.csproj",
+      "projectPath": "C:\\CourseProject\\CourseProject\\CourseProgect_Planeta35\\CourseProgect_Planeta35\\CourseProgect_Planeta35.csproj",
       "packagesPath": "C:\\Users\\Azerty\\.nuget\\packages\\",
-      "outputPath": "C:\\MDK\\CourseProject\\CourseProgect_Planeta35\\CourseProgect_Planeta35\\obj\\",
+      "outputPath": "C:\\CourseProject\\CourseProject\\CourseProgect_Planeta35\\CourseProgect_Planeta35\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -5808,7 +5808,13 @@
         "warnAsError": [
           "NU1605"
         ]
-      }
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      },
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net8.0-windows7.0": {
@@ -5864,7 +5870,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.312/PortableRuntimeIdentifierGraph.json"
       }
     }
   },

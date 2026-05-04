@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Добавить объект"
         Height="730" Width="400"
-        WindowStartupLocation="CenterOwner"
+        WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent">
@@ -60,7 +60,11 @@
 
     </Window.Resources>
 
-    <Border CornerRadius="16" Background="#8B9B4C" Padding="20" Margin="10">
+    <Border CornerRadius="16"
+            Background="#8B9B4C"
+            Padding="20"
+            Margin="10"
+            MouseLeftButtonDown="Border_MouseLeftButtonDown">
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <StackPanel>
 

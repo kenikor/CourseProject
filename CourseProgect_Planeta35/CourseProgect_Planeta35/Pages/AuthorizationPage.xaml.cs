@@ -5,6 +5,9 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+
 
 namespace CourseProgect_Planeta35.Pages
 {
@@ -16,6 +19,39 @@ namespace CourseProgect_Planeta35.Pages
         {
             InitializeComponent();
             LoginTab.IsChecked = true;
+
+            StartLiquidAnimation();
+        }
+
+        private void StartLiquidAnimation()
+        {
+            AnimateBrush(Brush1, 12, 0.0, 1.0);
+            AnimateBrush(Brush2, 16, 1.0, 0.0);
+            AnimateBrush(Brush3, 9, 0.2, 0.9);
+        }
+
+        private void AnimateBrush(RadialGradientBrush brush, double seconds, double from, double to)
+        {
+            var originAnim = new PointAnimation
+            {
+                From = new Point(from, from),
+                To = new Point(to, to),
+                Duration = TimeSpan.FromSeconds(seconds),
+                AutoReverse = true,
+                RepeatBehavior = RepeatBehavior.Forever
+            };
+
+            var centerAnim = new PointAnimation
+            {
+                From = new Point(0.4, 0.4),
+                To = new Point(0.6, 0.6),
+                Duration = TimeSpan.FromSeconds(seconds * 1.3),
+                AutoReverse = true,
+                RepeatBehavior = RepeatBehavior.Forever
+            };
+
+            brush.BeginAnimation(RadialGradientBrush.GradientOriginProperty, originAnim);
+            brush.BeginAnimation(RadialGradientBrush.CenterProperty, centerAnim);
         }
 
         private void LoginTab_Checked(object sender, RoutedEventArgs e)

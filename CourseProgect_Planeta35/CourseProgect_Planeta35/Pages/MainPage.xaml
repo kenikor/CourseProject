@@ -63,7 +63,11 @@
             <ToggleButton x:Name="BtnInventory" Content="Инвентарь" Style="{StaticResource MenuButtonStyle}" Checked="MenuButton_Checked"/>
             <ToggleButton x:Name="BtnCheck" Content="Инвентаризация" Style="{StaticResource MenuButtonStyle}" Checked="MenuButton_Checked"/>
             <ToggleButton x:Name="BtnReports" Content="Отчёты" Style="{StaticResource MenuButtonStyle}" Checked="MenuButton_Checked"/>
-            
+            <ToggleButton x:Name="BtnProcurement" 
+                          Content="Закупки" 
+                          Style="{StaticResource MenuButtonStyle}" 
+                          Checked="MenuButton_Checked"
+                          Visibility="Collapsed"/>
 
             <!-- Только для админа -->
             <StackPanel x:Name="AdminPanel" Margin="0,20,0,0" Visibility="Collapsed">
@@ -81,6 +85,7 @@
                       Style="{StaticResource MenuButtonStyle}" 
                       Checked="BtnLogout_Checked"
                       Margin="10"/>
+        
         <!-- Контент -->
         <Frame x:Name="ContentFrame"
                Grid.Column="1"

@@ -26,6 +26,7 @@ namespace CourseProgect_Planeta35.Pages
             LoadDashboard();
 
             BtnDashboard.IsChecked = true;
+            ConfigureInterface(user);
         }
 
         private void SetupAdminPanel()
@@ -44,11 +45,10 @@ namespace CourseProgect_Planeta35.Pages
             {
                 using var db = new AppDbContext();
 
-                // Загружаем все категории с активами и ответственными
                 AllCategories = db.AssetCategories
                     .Include(c => c.Assets)
                         .ThenInclude(a => a.Responsible)
-                    .Where(c => c.Assets.Any()) // только категории с активами
+                    .Where(c => c.Assets.Any()) 
                     .AsNoTracking()
                     .ToList();
 
@@ -71,6 +71,25 @@ namespace CourseProgect_Planeta35.Pages
         {
             ContentFrame.Content = new InventoryListControl(CurrentUser);
         }
+        private void ConfigureInterface(User user)
+        {
+            if (user == null) return;
+
+            BtnProcurement.Visibility = Visibility.Collapsed;
+            AdminPanel.Visibility = Visibility.Collapsed;
+
+            switch (user.RoleId)
+            {
+                case 1: // admin
+                    BtnProcurement.Visibility = Visibility.Visible;
+                    AdminPanel.Visibility = Visibility.Visible;
+                    break;
+
+                case 2: // manager
+                    BtnProcurement.Visibility = Visibility.Visible;
+                    break;
+            }
+        }
 
         private void MenuButton_Checked(object sender, RoutedEventArgs e)
         {
@@ -79,7 +98,7 @@ namespace CourseProgect_Planeta35.Pages
 
             var allButtons = new ToggleButton[]
             {
-                BtnDashboard, BtnInventory, BtnCheck, BtnReports
+                BtnDashboard, BtnInventory, BtnCheck, BtnReports, BtnProcurement
             };
 
             if (CurrentUser.RoleId == 1)
@@ -87,44 +106,38 @@ namespace CourseProgect_Planeta35.Pages
                 allButtons = new ToggleButton[]
                 {
                     BtnDashboard, BtnInventory, BtnCheck, BtnReports,
-                    BtnCategories, BtnDepartments, BtnUsers
+                    BtnCategories, BtnDepartments, BtnUsers, BtnProcurement
                 };
             }
 
-            // Для гостя показываем только Dashboard и Inventory
             if (CurrentUser.RoleId == 3)
             {
                 allButtons = new ToggleButton[] { BtnDashboard, BtnInventory, BtnCheck, BtnReports };
 
-                // Снимаем отметку с неактивных кнопок
                 foreach (var btn in allButtons)
                 {
                     if (btn != clicked)
                         btn.IsChecked = false;
                 }
 
-                // Загружаем только допустимый контент
                 if (clicked == BtnDashboard) LoadDashboard();
                 else if (clicked == BtnInventory) LoadInventory();
 
-                return; // выходим, чтобы остальной контент не загружался
+                return;
             }
 
-            // Для остальных пользователей показываем все кнопки
             allButtons = new ToggleButton[]
             {
                 BtnDashboard, BtnInventory, BtnCheck, BtnReports,
-                BtnCategories, BtnDepartments, BtnUsers
+                BtnCategories, BtnDepartments, BtnUsers, BtnProcurement
             };
 
-            // Снимаем отметку с неактивных кнопок
             foreach (var btn in allButtons)
             {
                 if (btn != clicked)
                     btn.IsChecked = false;
             }
 
-            // Загружаем контент для остальных
             if (clicked == BtnDashboard) LoadDashboard();
             else if (clicked == BtnInventory) LoadInventory();
             else if (clicked == BtnCheck)
@@ -147,7 +160,10 @@ namespace CourseProgect_Planeta35.Pages
             {
                 ContentFrame.Content = new UserAddControl(CurrentUser);
             }
-
+            else if (clicked == BtnProcurement)
+            {
+                ContentFrame.Content = new ProcurementPage(CurrentUser);
+            }
 
             foreach (var btn in allButtons)
             {
@@ -171,6 +187,10 @@ namespace CourseProgect_Planeta35.Pages
                 ContentFrame.Content = new CategoriesControl(CurrentUser);
             }
             else if (clicked == BtnDepartments)
+            {
+                ContentFrame.Content = new DepartmentsControl(CurrentUser);
+            }
+            else if (clicked == BtnProcurement)
             {
                 ContentFrame.Content = new DepartmentsControl(CurrentUser);
             }

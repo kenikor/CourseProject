@@ -2,6 +2,7 @@
 using CourseProgect_Planeta35.Models;
 using System;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace CourseProgect_Planeta35.Pages
@@ -57,6 +58,14 @@ namespace CourseProgect_Planeta35.Pages
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
+        }
+
+        private void Border_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.ButtonState == MouseButtonState.Pressed)
+            {
+                DragMove();
+            }
         }
     }
 }

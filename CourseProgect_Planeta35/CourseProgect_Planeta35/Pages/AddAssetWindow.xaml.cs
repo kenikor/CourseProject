@@ -1,9 +1,10 @@
-﻿using System;
+﻿using CourseProgect_Planeta35.Data;
+using CourseProgect_Planeta35.Models;
+using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using CourseProgect_Planeta35.Data;
-using CourseProgect_Planeta35.Models;
+using System.Windows.Input;
 
 namespace CourseProgect_Planeta35.Controls
 {
@@ -98,6 +99,14 @@ namespace CourseProgect_Planeta35.Controls
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
+        }
+
+        private void Border_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.ButtonState == MouseButtonState.Pressed)
+            {
+                DragMove();
+            }
         }
     }
 }

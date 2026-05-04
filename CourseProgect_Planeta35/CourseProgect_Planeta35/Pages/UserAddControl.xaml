@@ -17,7 +17,8 @@
         <Style x:Key="PrimaryButton" TargetType="Button">
             <Setter Property="Background" Value="#8B9B4C"/>
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Padding" Value="10 6"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Margin" Value="5"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Cursor" Value="Hand"/>
@@ -25,7 +26,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" CornerRadius="10">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="6">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
@@ -113,18 +114,37 @@
     </UserControl.Resources>
 
     <!-- Основная разметка -->
-    <DockPanel LastChildFill="True" Margin="16">
+    <DockPanel LastChildFill="False" Margin="16">
 
-        <!-- Заголовок -->
-        <StackPanel DockPanel.Dock="Top" Margin="0 0 0 12">
-            <TextBlock Text="Управление пользователями" FontSize="24" FontWeight="Bold" Margin="0 0 0 4"/>
-            <TextBlock Text="{Binding Users.Count, StringFormat='{}{0} пользователей'}" FontSize="14" Foreground="#777"/>
+        <StackPanel DockPanel.Dock="Left">
+            <TextBlock Text="Управление пользователями"
+                   FontSize="24"
+                   FontWeight="Bold"/>
+
+            <TextBlock Text="{Binding Users.Count, StringFormat='{}{0} пользователей'}"
+                   Margin="0 4 0 0"
+                   FontSize="14"
+                   Foreground="#777"/>
         </StackPanel>
 
-        <!-- Кнопка добавления -->
-        <Button DockPanel.Dock="Top" Content="Добавить пользователя" Width="220" Height="42" Margin="0 0 0 16"
-                Style="{StaticResource PrimaryButton}" Click="AddUser_Click"/>
+        <Button DockPanel.Dock="Right"
+            Width="220"
+            Height="42"
+            Click="AddUser_Click"
+            Style="{StaticResource PrimaryButton}">
 
+            <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Center">
+
+                <TextBlock Text="+"
+                       FontSize="18"
+                       Margin="0,-6,8,0"/>
+
+                <TextBlock Text="Добавить пользователя"/>
+
+            </StackPanel>
+
+        </Button>
         <!-- Список пользователей -->
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <StackPanel HorizontalAlignment="Center">
