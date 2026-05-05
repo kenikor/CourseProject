@@ -9,10 +9,97 @@
 
     <Page.Resources>
 
+        <Style x:Key="ModernTextBox" TargetType="TextBox">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#151A17"/>
+            <Setter Property="BorderBrush" Value="#2F3A33"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="FontSize" Value="13"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="border"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="8">
+
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <!-- Hover -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border"
+                                Property="BorderBrush"
+                                Value="#3E5C4C"/>
+                            </Trigger>
+
+                            <!-- Focus -->
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="border"
+                                Property="BorderBrush"
+                                Value="#8B9B4C"/>
+                                <Setter TargetName="border"
+                                Property="Background"
+                                Value="#1C2621"/>
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ModernPasswordBox" TargetType="PasswordBox">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#151A17"/>
+            <Setter Property="BorderBrush" Value="#2F3A33"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="8,4"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="PasswordBox">
+                        <Border x:Name="border"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="8">
+
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border"
+                                Property="BorderBrush"
+                                Value="#3E5C4C"/>
+                            </Trigger>
+
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="border"
+                                Property="BorderBrush"
+                                Value="#8B9B4C"/>
+                                <Setter TargetName="border"
+                                Property="Background"
+                                Value="#1C2621"/>
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <!-- TAB STYLE -->
         <Style x:Key="TabButtonStyle" TargetType="ToggleButton">
             <Setter Property="Background" Value="#151A17"/>
-            <Setter Property="Foreground" Value="#A8B3A8"/>
+            <Setter Property="Foreground" Value="White"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Padding" Value="8"/>
             <Setter Property="Template">
@@ -31,7 +118,7 @@
 
             <Style.Triggers>
                 <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Background" Value="#8B9B4C"/>
+                    <Setter Property="Background" Value="#3E5C4C"/>
                     <Setter Property="Foreground" Value="White"/>
                     <Setter Property="BorderThickness" Value="0"/>
                 </Trigger>
@@ -101,10 +188,11 @@
                 <Border Width="70"
                         Height="70"
                         CornerRadius="18"
-                        Background="#1C1F1D"
+                        Background="#3E5C4C"
                         Effect="{StaticResource ShadowEffect}">
                     <TextBlock Text="📦"
                                FontSize="34"
+                               Foreground="White"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"/>
                 </Border>
@@ -116,7 +204,7 @@
                            Margin="0 10 0 0"/>
 
                 <TextBlock Text="управление инвентарём"
-                           Foreground="#A8B3A8"
+                           Foreground="White"
                            FontSize="11"
                            HorizontalAlignment="Center"/>
             </StackPanel>
@@ -157,6 +245,7 @@
 
                         <TextBlock Text="Имя" Foreground="#C9D1C9"/>
                         <TextBox x:Name="NameBox"
+                                 Style="{StaticResource ModernTextBox}"
                                  Height="30"
                                  Margin="0 5 0 10"
                                  Background="#151A17"
@@ -165,18 +254,20 @@
                     </StackPanel>
 
                     <!-- EMAIL -->
-                    <TextBlock Text="Email" Foreground="#C9D1C9"/>
+                    <TextBlock Text="Email" Foreground="White"/>
                     <TextBox x:Name="EmailBox"
                              Height="30"
                              Margin="0 5 0 10"
                              Background="#151A17"
+                             Style="{StaticResource ModernTextBox}"
                              Foreground="White"
                              BorderBrush="#2F3A33"/>
 
                     <!-- PASSWORD -->
-                    <TextBlock Text="Пароль" Foreground="#C9D1C9"/>
+                    <TextBlock Text="Пароль" Foreground="White"/>
                     <PasswordBox x:Name="PasswordBox"
                                  Height="30"
+                                 Style="{StaticResource ModernPasswordBox}"
                                  Margin="0 5 0 12"
                                  Background="#151A17"
                                  Foreground="White"
@@ -191,22 +282,24 @@
 
                     <!-- BUTTONS -->
                     <ToggleButton Content="Продолжить"
-                                  Background="#8B9B4C"
+                                  Background="#3E5C4C"
                                   Foreground="White"
                                   FontWeight="SemiBold"
                                   BorderThickness="0"
                                   Cursor="Hand"
                                   Click="Submit_Click"
+                                  Style="{StaticResource TabButtonStyle}"
                                   Height="34"
                                   Margin="0 0 0 8"/>
 
                     <ToggleButton Content="Вход как гость"
                                   Background="Transparent"
-                                  Foreground="#A8B3A8"
-                                  BorderBrush="#2F3A33"
+                                  Foreground="White"
+                                  BorderBrush="#3E5C4C"
                                   BorderThickness="1"
                                   Cursor="Hand"
                                   Click="GuestLogin_Click"
+                                  Style="{StaticResource TabButtonStyle}"
                                   Height="30"/>
                 </StackPanel>
             </Border>

@@ -5,6 +5,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
 
 namespace CourseProgect_Planeta35.Pages
 {
@@ -32,6 +34,38 @@ namespace CourseProgect_Planeta35.Pages
             DepartmentBox.ItemsSource = _dbContext.Departments.ToList();
             DepartmentBox.DisplayMemberPath = "Name";
             DepartmentBox.SelectedValuePath = "Id";
+
+            this.Loaded += (s, e) => StartBackgroundAnimation();
+        }
+
+        private void StartBackgroundAnimation()
+        {
+            AnimateBrush(BgBrush1, 40, 0.2, 0.6);
+            AnimateBrush(BgBrush2, 50, 0.8, 0.4);
+        }
+
+        private void AnimateBrush(RadialGradientBrush brush, double seconds, double from, double to)
+        {
+            var originAnim = new PointAnimation
+            {
+                From = new Point(from, from),
+                To = new Point(to, to),
+                Duration = TimeSpan.FromSeconds(seconds),
+                AutoReverse = true,
+                RepeatBehavior = RepeatBehavior.Forever
+            };
+
+            var centerAnim = new PointAnimation
+            {
+                From = new Point(0.4, 0.4),
+                To = new Point(0.6, 0.6),
+                Duration = TimeSpan.FromSeconds(seconds * 1.3),
+                AutoReverse = true,
+                RepeatBehavior = RepeatBehavior.Forever
+            };
+
+            brush.BeginAnimation(RadialGradientBrush.GradientOriginProperty, originAnim);
+            brush.BeginAnimation(RadialGradientBrush.CenterProperty, centerAnim);
         }
 
         private void LoadUsers()

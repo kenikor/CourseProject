@@ -24,45 +24,96 @@
             </Setter>
         </Style>
     </UserControl.Resources>
-    
-    <Grid Margin="20">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
 
-        <!-- HEADER -->
-        <DockPanel Margin="0 0 0 20">
-            <StackPanel DockPanel.Dock="Left">
-                <TextBlock Text="Категории имущества"
+
+
+    <Grid>
+
+        <!-- 🌑 ФОН -->
+        <Grid>
+
+            <!-- БАЗА -->
+            <Rectangle>
+                <Rectangle.Fill>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#1A1F1C" Offset="0"/>
+                        <GradientStop Color="#2B3A31" Offset="1"/>
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+
+            <!-- МЯГКОЕ СВЕТОВОЕ ПЯТНО -->
+            <Rectangle Opacity="0.25">
+                <Rectangle.Fill>
+                    <RadialGradientBrush x:Name="BgBrush1"
+                                     Center="0.3,0.3"
+                                     GradientOrigin="0.2,0.2"
+                                     RadiusX="0.9"
+                                     RadiusY="0.9">
+                        <GradientStop Color="#3E5C4C" Offset="0"/>
+                        <GradientStop Color="#1A1F1C" Offset="1"/>
+                    </RadialGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+
+            <!-- ОЛИВКОВЫЙ АКЦЕНТ -->
+            <Rectangle Opacity="0.15">
+                <Rectangle.Fill>
+                    <RadialGradientBrush x:Name="BgBrush2"
+                                     Center="0.8,0.2"
+                                     GradientOrigin="0.9,0.1"
+                                     RadiusX="0.8"
+                                     RadiusY="0.8">
+                        <GradientStop Color="#8B9B4C" Offset="0"/>
+                        <GradientStop Color="#2B3A31" Offset="1"/>
+                    </RadialGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+
+        </Grid>
+
+        <!-- 🧊 КОНТЕНТ -->
+        <Grid Margin="20">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <!-- HEADER -->
+            <DockPanel Margin="0 0 0 20">
+
+                <StackPanel DockPanel.Dock="Left">
+                    <TextBlock Text="Категории имущества"
                            FontSize="26"
                            FontWeight="Bold"
-                           Foreground="#1A1A1A"/>
-                <TextBlock x:Name="CountText"
-                           Margin="0 4 0 0"
-                           Foreground="#6A6A6A"/>
-            </StackPanel>
+                           Foreground="White"/>
 
-            <Button DockPanel.Dock="Right"
-                    Width="200"
+                    <TextBlock x:Name="CountText"
+                           Margin="0 4 0 0"
+                           Foreground="#CFCFCF"/>
+                </StackPanel>
+
+                <Button DockPanel.Dock="Right"
+                    Width="220"
                     Height="42"
                     Click="AddCategory_Click"
-                    Background="#8B9B4C"
-                    Foreground="White"
-                    BorderThickness="0"
-                    FontWeight="SemiBold"
                     Style="{StaticResource MainButton}">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <TextBlock Text="+" FontSize="18" Margin="0 -6 8 0"/>
-                    <TextBlock Text="Добавить категорию"/>
-                </StackPanel>
-            </Button>
-        </DockPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="+" FontSize="18" Margin="0 -6 8 0"/>
+                        <TextBlock Text="Добавить категорию"/>
+                    </StackPanel>
+                </Button>
 
-        <!-- MAIN CONTENT -->
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-            <WrapPanel x:Name="CategoryPanel"
+            </DockPanel>
+
+            <!-- MAIN CONTENT -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <WrapPanel x:Name="CategoryPanel"
                        Orientation="Horizontal"/>
-        </ScrollViewer>
+            </ScrollViewer>
+
+        </Grid>
+
     </Grid>
 </UserControl>

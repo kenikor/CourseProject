@@ -61,7 +61,7 @@
     </Window.Resources>
 
     <Border CornerRadius="16"
-            Background="#8B9B4C"
+            Background="#2B3A31"
             Padding="20"
             Margin="10"
             MouseLeftButtonDown="Border_MouseLeftButtonDown">

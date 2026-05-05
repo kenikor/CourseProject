@@ -7,159 +7,246 @@
              d:DesignHeight="600" d:DesignWidth="800">
 
     <UserControl.Resources>
-        <!-- Стиль для карточек -->
+
+        <!-- 🌿 СТЕКЛЯННАЯ КАРТОЧКА -->
         <Style x:Key="StatCardStyle" TargetType="Border">
-            <Setter Property="CornerRadius" Value="12"/>
-            <Setter Property="Padding" Value="15"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="14"/>
+            <Setter Property="Padding" Value="16"/>
+            <Setter Property="Margin" Value="6"/>
+            <Setter Property="Background" Value="#CC1E2320"/>
+            <Setter Property="BorderBrush" Value="#2F3A33"/>
+            <Setter Property="BorderThickness" Value="1"/>
+
             <Setter Property="Effect">
                 <Setter.Value>
-                    <DropShadowEffect BlurRadius="15" ShadowDepth="3" Opacity="0.2"/>
+                    <DropShadowEffect BlurRadius="20"
+                                      ShadowDepth="2"
+                                      Opacity="0.25"/>
                 </Setter.Value>
             </Setter>
-            <Setter Property="Cursor" Value="Hand"/>
+
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="RenderTransform">
                         <Setter.Value>
-                            <ScaleTransform ScaleX="1.05" ScaleY="1.05"/>
+                            <ScaleTransform ScaleX="1.04" ScaleY="1.04"/>
                         </Setter.Value>
                     </Setter>
-                    <Setter Property="Effect">
-                        <Setter.Value>
-                            <DropShadowEffect BlurRadius="20" ShadowDepth="5" Opacity="0.3"/>
-                        </Setter.Value>
-                    </Setter>
+                    <Setter Property="BorderBrush" Value="#8B9B4C"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
 
-        <!-- Стиль для быстрых действий -->
+        <!-- 🔘 КНОПКИ -->
         <Style x:Key="ActionButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="White"/>
+            <Setter Property="Background" Value="#CC1E2320"/>
+            <Setter Property="BorderBrush" Value="#2F3A33"/>
+            <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="15"/>
             <Setter Property="Margin" Value="5"/>
-            <Setter Property="BorderBrush" Value="#C5C895"/>
-            <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="HorizontalContentAlignment" Value="Left"/>
-            <Setter Property="VerticalContentAlignment" Value="Top"/>
+
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
+                        <Border x:Name="bg"
+                                Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 CornerRadius="12">
                             <ContentPresenter Margin="5"/>
                         </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bg"
+                                        Property="BorderBrush"
+                                        Value="#8B9B4C"/>
+                                <Setter TargetName="bg"
+                                        Property="Background"
+                                        Value="#1C2621"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="RenderTransform">
-                        <Setter.Value>
-                            <ScaleTransform ScaleX="1.05" ScaleY="1.05"/>
-                        </Setter.Value>
-                    </Setter>
-                    <Setter Property="Background" Value="#F0F0F0"/>
-                </Trigger>
-            </Style.Triggers>
         </Style>
+
     </UserControl.Resources>
 
-    <ScrollViewer>
-        <StackPanel Margin="20" Background="#F5F1E9">
+    <Grid>
 
-            <!-- Заголовок -->
-            <StackPanel Margin="0,0,0,20">
-                <TextBlock x:Name="UserNameTextBlock" FontSize="24" FontWeight="Bold" Foreground="#3C2F1F"/>
-                <TextBlock Text="Обзор имущества и статистика системы" FontSize="14" Foreground="#6B7A35"/>
-            </StackPanel>
+        <!-- 🌑 ФОН -->
+        <Grid>
+            <Rectangle>
+                <Rectangle.Fill>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#1A1F1C"/>
+                        <GradientStop Color="#2B3A31" Offset="1"/>
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
 
-            <!-- Статистика -->
-            <UniformGrid Columns="4" Margin="0,0,0,20">
-                <Border x:Name="TotalObjectsCard" Style="{StaticResource StatCardStyle}" Background="#8B9B4C">
-                    <StackPanel>
-                        <TextBlock Text="Всего объектов" Foreground="White"/>
-                        <TextBlock x:Name="TotalObjectsText" FontSize="24" FontWeight="Bold" Foreground="White"/>
-                    </StackPanel>
-                </Border>
-                <Border x:Name="ActiveObjectsCard" Style="{StaticResource StatCardStyle}" Background="#C5C895">
-                    <StackPanel>
-                        <TextBlock Text="В эксплуатации" Foreground="#6B7A35"/>
-                        <TextBlock x:Name="ActiveObjectsText" FontSize="24" FontWeight="Bold" Foreground="#6B7A35"/>
-                    </StackPanel>
-                </Border>
-                <Border x:Name="MaintenanceObjectsCard" Style="{StaticResource StatCardStyle}" Background="#B89968">
-                    <StackPanel>
-                        <TextBlock Text="На обслуживании" Foreground="#4E3A22"/>
-                        <TextBlock x:Name="MaintenanceObjectsText" FontSize="24" FontWeight="Bold" Foreground="#4E3A22"/>
-                    </StackPanel>
-                </Border>
-                <Border x:Name="TotalValueCard" Style="{StaticResource StatCardStyle}" Background="#6B7A35">
-                    <StackPanel>
-                        <TextBlock Text="Общая стоимость" Foreground="White"/>
-                        <TextBlock x:Name="TotalValueText" FontSize="24" FontWeight="Bold" Foreground="White"/>
-                    </StackPanel>
-                </Border>
-            </UniformGrid>
+            <Rectangle Opacity="0.25">
+                <Rectangle.Fill>
+                    <RadialGradientBrush Center="0.3,0.3"
+                                         GradientOrigin="0.2,0.2"
+                                         RadiusX="0.9"
+                                         RadiusY="0.9">
+                        <GradientStop Color="#3E5C4C"/>
+                        <GradientStop Color="#1A1F1C" Offset="1"/>
+                    </RadialGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
 
-            <!-- Категории -->
-            <Border Style="{StaticResource StatCardStyle}" Margin="0,0,0,20">
-                <StackPanel>
-                    <TextBlock Text="Распределение по категориям" FontSize="16" FontWeight="Bold" Foreground="#3C2F1F" Margin="0,0,0,10"/>
-                    <StackPanel x:Name="CategoriesPanel" />
+            <Rectangle Opacity="0.15">
+                <Rectangle.Fill>
+                    <RadialGradientBrush Center="0.8,0.2"
+                                         GradientOrigin="0.9,0.1"
+                                         RadiusX="0.8"
+                                         RadiusY="0.8">
+                        <GradientStop Color="#8B9B4C"/>
+                        <GradientStop Color="#2B3A31" Offset="1"/>
+                    </RadialGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+        </Grid>
+
+        <!-- 📊 КОНТЕНТ -->
+        <ScrollViewer>
+            <StackPanel Margin="20">
+
+                <!-- HEADER -->
+                <StackPanel Margin="0,0,0,20">
+                    <TextBlock x:Name="UserNameTextBlock"
+                               FontSize="24"
+                               FontWeight="Bold"
+                               Foreground="White"/>
+                    <TextBlock Text="Обзор имущества и статистика системы"
+                               FontSize="14"
+                               Foreground="#C9D1C9"/>
                 </StackPanel>
-            </Border>
 
-            <!-- Быстрые действия -->
-            <UniformGrid Columns="3" Margin="0,0,0,20">
-                <Button x:Name="InventoryButton" Style="{StaticResource ActionButtonStyle}" Click="Inventory_Click">
-                    <StackPanel>
-                        <TextBlock Text="Управление инвентарём" FontWeight="Bold" Foreground="#3C2F1F" Margin="0,0,0,5"/>
-                        <TextBlock Text="Просмотр и редактирование объектов" FontSize="12" Foreground="#6B7A35"/>
-                    </StackPanel>
-                </Button>
-                <Button x:Name="CheckButton" Style="{StaticResource ActionButtonStyle}" Click="Check_Click">
-                    <StackPanel>
-                        <TextBlock Text="Провести инвентаризацию" FontWeight="Bold" Foreground="#3C2F1F" Margin="0,0,0,5"/>
-                        <TextBlock Text="Отметить наличие или отсутствие объектов" FontSize="12" Foreground="#6B7A35"/>
-                    </StackPanel>
-                </Button>
-                <Button x:Name="ReportsButton" Style="{StaticResource ActionButtonStyle}" Click="Reports_Click">
-                    <StackPanel>
-                        <TextBlock Text="Сформировать отчёт" FontWeight="Bold" Foreground="#3C2F1F" Margin="0,0,0,5"/>
-                        <TextBlock Text="Создать отчёт в формате PDF или XLSX" FontSize="12" Foreground="#6B7A35"/>
-                    </StackPanel>
-                </Button>
-            </UniformGrid>
+                <!-- СТАТИСТИКА -->
+                <UniformGrid Columns="4" Margin="0,0,0,20">
 
-            <!-- Админ-кнопки -->
-            <UniformGrid x:Name="AdminButtonsPanel" Columns="3" Margin="0,0,0,20" Visibility="Collapsed">
-                <Button Style="{StaticResource ActionButtonStyle}" Click="Categories_Click">
-                    <StackPanel>
-                        <TextBlock Text="Категории" FontWeight="Bold" Foreground="#3C2F1F" Margin="0,0,0,5"/>
-                        <TextBlock Text="Управление категориями объектов" FontSize="12" Foreground="#6B7A35"/>
-                    </StackPanel>
-                </Button>
-                <Button Style="{StaticResource ActionButtonStyle}" Click="Departments_Click">
-                    <StackPanel>
-                        <TextBlock Text="Подразделения" FontWeight="Bold" Foreground="#3C2F1F" Margin="0,0,0,5"/>
-                        <TextBlock Text="Управление подразделениями" FontSize="12" Foreground="#6B7A35"/>
-                    </StackPanel>
-                </Button>
-                <Button Style="{StaticResource ActionButtonStyle}" Click="Users_Click">
-                    <StackPanel>
-                        <TextBlock Text="Пользователи" FontWeight="Bold" Foreground="#3C2F1F" Margin="0,0,0,5"/>
-                        <TextBlock Text="Управление учетными записями" FontSize="12" Foreground="#6B7A35"/>
-                    </StackPanel>
-                </Button>
-            </UniformGrid>
-            <ContentControl x:Name="ContentFrame" Grid.Row="1" Grid.Column="1"/>
+                    <Border Style="{StaticResource StatCardStyle}">
+                        <StackPanel>
+                            <TextBlock Text="Всего объектов" Foreground="#C9D1C9"/>
+                            <TextBlock x:Name="TotalObjectsText"
+                                       FontSize="24"
+                                       FontWeight="Bold"
+                                       Foreground="#8B9B4C"/>
+                        </StackPanel>
+                    </Border>
 
-        </StackPanel>
-    </ScrollViewer>
+                    <Border Style="{StaticResource StatCardStyle}">
+                        <StackPanel>
+                            <TextBlock Text="В эксплуатации" Foreground="#C9D1C9"/>
+                            <TextBlock x:Name="ActiveObjectsText"
+                                       FontSize="24"
+                                       FontWeight="Bold"
+                                       Foreground="#8B9B4C"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource StatCardStyle}">
+                        <StackPanel>
+                            <TextBlock Text="На обслуживании" Foreground="#C9D1C9"/>
+                            <TextBlock x:Name="MaintenanceObjectsText"
+                                       FontSize="24"
+                                       FontWeight="Bold"
+                                       Foreground="#8B9B4C"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource StatCardStyle}">
+                        <StackPanel>
+                            <TextBlock Text="Общая стоимость" Foreground="#C9D1C9"/>
+                            <TextBlock x:Name="TotalValueText"
+                                       FontSize="24"
+                                       FontWeight="Bold"
+                                       Foreground="#8B9B4C"/>
+                        </StackPanel>
+                    </Border>
+
+                </UniformGrid>
+
+                <!-- КАТЕГОРИИ -->
+                <Border Style="{StaticResource StatCardStyle}" Margin="0,0,0,20">
+                    <StackPanel>
+                        <TextBlock Text="Распределение по категориям"
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   Foreground="White"
+                                   Margin="0,0,0,10"/>
+                        <StackPanel x:Name="CategoriesPanel"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- БЫСТРЫЕ ДЕЙСТВИЯ -->
+                <UniformGrid Columns="3" Margin="0,0,0,20">
+
+                    <Button Style="{StaticResource ActionButtonStyle}" Click="Inventory_Click">
+                        <StackPanel>
+                            <TextBlock Text="Управление инвентарём"
+                                       FontWeight="Bold"
+                                       Foreground="White"
+                                       Margin="0,0,0,5"/>
+                            <TextBlock Text="Просмотр и редактирование объектов"
+                                       FontSize="12"
+                                       Foreground="#C9D1C9"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Style="{StaticResource ActionButtonStyle}" Click="Check_Click">
+                        <StackPanel>
+                            <TextBlock Text="Провести инвентаризацию"
+                                       FontWeight="Bold"
+                                       Foreground="White"
+                                       Margin="0,0,0,5"/>
+                            <TextBlock Text="Отметить наличие или отсутствие объектов"
+                                       FontSize="12"
+                                       Foreground="#C9D1C9"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Style="{StaticResource ActionButtonStyle}" Click="Reports_Click">
+                        <StackPanel>
+                            <TextBlock Text="Сформировать отчёт"
+                                       FontWeight="Bold"
+                                       Foreground="White"
+                                       Margin="0,0,0,5"/>
+                            <TextBlock Text="Создать PDF или XLSX"
+                                       FontSize="12"
+                                       Foreground="#C9D1C9"/>
+                        </StackPanel>
+                    </Button>
+
+                </UniformGrid>
+
+                <!-- АДМИН -->
+                <UniformGrid x:Name="AdminButtonsPanel"
+                             Columns="3"
+                             Margin="0,0,0,20"
+                             Visibility="Collapsed">
+
+                    <Button Style="{StaticResource ActionButtonStyle}" Click="Categories_Click">
+                        <TextBlock Text="Категории" Foreground="White"/>
+                    </Button>
+
+                    <Button Style="{StaticResource ActionButtonStyle}" Click="Departments_Click">
+                        <TextBlock Text="Подразделения" Foreground="White"/>
+                    </Button>
+
+                    <Button Style="{StaticResource ActionButtonStyle}" Click="Users_Click">
+                        <TextBlock Text="Пользователи" Foreground="White"/>
+                    </Button>
+
+                </UniformGrid>
+
+            </StackPanel>
+        </ScrollViewer>
+
+    </Grid>
 </UserControl>

@@ -5,9 +5,9 @@
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         Width="480" Height="650"
-        Background="#F5F1E9"
         WindowStyle="None"
-        AllowsTransparency="True">
+        AllowsTransparency="True"
+        Background="Transparent">
 
     <Window.Resources>
         <!-- Общий стиль TextBox -->
@@ -49,14 +49,14 @@
         </Style>
     </Window.Resources>
 
-    <Border CornerRadius="16" Background="White" Padding="20" Margin="10">
+    <Border CornerRadius="16" Background="#2B3A31" Padding="20" Margin="10">
         <StackPanel>
             <TextBlock x:Name="TitleText"
                        Text="Проверка объекта"
                        HorizontalAlignment="Center"
                        FontSize="22"
                        FontWeight="Bold"
-                       Foreground="#2C2C2C"
+                       Foreground="White"
                        Margin="0 0 0 10"/>
 
             <Border Height="180" Background="#F0F0F0" CornerRadius="10" Margin="0 10 0 10">
@@ -64,22 +64,22 @@
             </Border>
 
             <StackPanel Orientation="Horizontal" Margin="0 5">
-                <TextBlock Text="Категория: " FontWeight="Bold"/>
+                <TextBlock Text="Категория: " FontWeight="Bold" Foreground="White"/>
                 <TextBlock x:Name="CategoryText"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="0 5">
-                <TextBlock Text="Серийный номер: " FontWeight="Bold"/>
+                <TextBlock Text="Серийный номер: " FontWeight="Bold" Foreground="White"/>
                 <TextBlock x:Name="SerialText"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="0 5">
-                <TextBlock Text="Ответственный: " FontWeight="Bold"/>
+                <TextBlock Text="Ответственный: " FontWeight="Bold" Foreground="White"/>
                 <TextBlock x:Name="ResponsibleText"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="0 10">
-                <TextBlock Text="Статус: " FontWeight="Bold"/>
+                <TextBlock Text="Статус: " FontWeight="Bold" Foreground="White"/>
                 <TextBlock x:Name="StatusText"/>
             </StackPanel>
 
@@ -98,7 +98,7 @@
                     Click="BtnMarkChecked_Click"/>
 
 
-            <TextBlock Text="Заметки:" FontWeight="Bold" Margin="0 10 0 5"/>
+            <TextBlock Text="Заметки:" FontWeight="Bold" Margin="0 10 0 5" Foreground="White"/>
             <TextBox x:Name="NotesBox" Height="80" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
 
             <!-- Кнопка сохранить -->

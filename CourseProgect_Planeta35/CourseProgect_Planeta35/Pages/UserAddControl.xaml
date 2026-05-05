@@ -110,54 +110,98 @@
                 </Grid>
             </Border>
         </DataTemplate>
-
     </UserControl.Resources>
 
-    <!-- Основная разметка -->
-    <DockPanel LastChildFill="False" Margin="16">
+    <Grid>
 
-        <StackPanel DockPanel.Dock="Left">
+        <Grid>
+
+            <!-- БАЗА (тёмно-зелёная) -->
+            <Rectangle>
+                <Rectangle.Fill>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#1A1F1C" Offset="0"/>
+                        <GradientStop Color="#2B3A31" Offset="1"/>
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+
+            <!-- МЯГКОЕ СВЕТОВОЕ ПЯТНО -->
+            <Rectangle Opacity="0.25">
+                <Rectangle.Fill>
+                    <RadialGradientBrush x:Name="BgBrush1"
+                                 Center="0.3,0.3"
+                                 GradientOrigin="0.2,0.2"
+                                 RadiusX="0.9"
+                                 RadiusY="0.9">
+                        <GradientStop Color="#3E5C4C" Offset="0"/>
+                        <GradientStop Color="#1A1F1C" Offset="1"/>
+                    </RadialGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+
+            <!-- АКЦЕНТНОЕ ОЛИВКОВОЕ ПЯТНО -->
+            <Rectangle Opacity="0.15">
+                <Rectangle.Fill>
+                    <RadialGradientBrush x:Name="BgBrush2"
+                                 Center="0.8,0.2"
+                                 GradientOrigin="0.9,0.1"
+                                 RadiusX="0.8"
+                                 RadiusY="0.8">
+                        <GradientStop Color="#8B9B4C" Offset="0"/>
+                        <GradientStop Color="#2B3A31" Offset="1"/>
+                    </RadialGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+
+        </Grid>
+
+        <!-- 🧊 ОСНОВНОЙ UI -->
+        <Grid Margin="16">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Заголовок -->
             <TextBlock Text="Управление пользователями"
-                   FontSize="24"
-                   FontWeight="Bold"/>
+                       Foreground="White"
+                       FontSize="24"
+                       FontWeight="Bold"/>
 
-            <TextBlock Text="{Binding Users.Count, StringFormat='{}{0} пользователей'}"
-                   Margin="0 4 0 0"
-                   FontSize="14"
-                   Foreground="#777"/>
-        </StackPanel>
+            <!-- Кнопка -->
+            <Button Grid.Row="1"
+                Width="260"
+                Height="42"
+                Margin="0 10 0 10"
+                Click="AddUser_Click"
+                Style="{StaticResource PrimaryButton}">
 
-        <Button DockPanel.Dock="Right"
-            Width="220"
-            Height="42"
-            Click="AddUser_Click"
-            Style="{StaticResource PrimaryButton}">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="+"
+                           FontSize="18"
+                           Margin="0,-6,8,0"/>
+                    <TextBlock Text="Добавить пользователя"/>
+                </StackPanel>
 
-            <StackPanel Orientation="Horizontal"
-                    HorizontalAlignment="Center">
+            </Button>
 
-                <TextBlock Text="+"
-                       FontSize="18"
-                       Margin="0,-6,8,0"/>
+            <!-- Список -->
+            <ScrollViewer Grid.Row="2"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled">
 
-                <TextBlock Text="Добавить пользователя"/>
-
-            </StackPanel>
-
-        </Button>
-        <!-- Список пользователей -->
-        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-            <StackPanel HorizontalAlignment="Center">
                 <ListBox x:Name="UsersList"
-                         ItemTemplate="{StaticResource UserCardTemplate}"
-                         Background="Transparent"
-                         BorderThickness="0"
-                         HorizontalContentAlignment="Stretch"/>
-            </StackPanel>
-        </ScrollViewer>
+                     ItemTemplate="{StaticResource UserCardTemplate}"
+                     Background="Transparent"
+                     BorderThickness="0"
+                     HorizontalContentAlignment="Stretch"/>
+            </ScrollViewer>
 
-        <!-- Всплывающее окно -->
-        <Border x:Name="AddPanel"
+            <!-- Popup -->
+            <Border x:Name="AddPanel"
                 Background="White"
                 CornerRadius="14"
                 Padding="24"
@@ -170,21 +214,40 @@
                 Margin="0 80 0 0"
                 Panel.ZIndex="999"
                 Effect="{DynamicResource DropShadow}">
-            <StackPanel>
-                <TextBlock Text="Имя" Margin="0 0 0 4"/>
-                <TextBox x:Name="NameBox" Margin="0 0 0 12"/>
-                <TextBlock Text="Email" Margin="0 0 0 4"/>
-                <TextBox x:Name="EmailBox" Margin="0 0 0 12"/>
-                <TextBlock Text="Роль" Margin="0 0 0 4"/>
-                <ComboBox x:Name="RoleBox" Margin="0 0 0 12"/>
-                <TextBlock Text="Отдел" Margin="0 0 0 4"/>
-                <ComboBox x:Name="DepartmentBox" Margin="0 0 0 12"/>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 12 0 0">
-                    <Button Content="Сохранить" Width="130" Margin="0 0 8 0" Style="{StaticResource PrimaryButton}" Click="SaveNewUser_Click"/>
-                    <Button Content="Отмена" Width="110" Style="{StaticResource SecondaryButton}" Click="CancelAdd_Click"/>
-                </StackPanel>
-            </StackPanel>
-        </Border>
 
-    </DockPanel>
+                <StackPanel>
+                    <TextBlock Text="Имя" Margin="0 0 0 4"/>
+                    <TextBox x:Name="NameBox" Margin="0 0 0 12"/>
+
+                    <TextBlock Text="Email" Margin="0 0 0 4"/>
+                    <TextBox x:Name="EmailBox" Margin="0 0 0 12"/>
+
+                    <TextBlock Text="Роль" Margin="0 0 0 4"/>
+                    <ComboBox x:Name="RoleBox" Margin="0 0 0 12"/>
+
+                    <TextBlock Text="Отдел" Margin="0 0 0 4"/>
+                    <ComboBox x:Name="DepartmentBox" Margin="0 0 0 12"/>
+
+                    <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            Margin="0 12 0 0">
+
+                        <Button Content="Сохранить"
+                            Width="130"
+                            Margin="0 0 8 0"
+                            Style="{StaticResource PrimaryButton}"
+                            Click="SaveNewUser_Click"/>
+
+                        <Button Content="Отмена"
+                            Width="110"
+                            Style="{StaticResource SecondaryButton}"
+                            Click="CancelAdd_Click"/>
+                    </StackPanel>
+                </StackPanel>
+
+            </Border>
+
+        </Grid>
+
+    </Grid>
 </UserControl>

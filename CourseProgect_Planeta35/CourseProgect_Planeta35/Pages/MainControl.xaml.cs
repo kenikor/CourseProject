@@ -16,6 +16,8 @@ namespace CourseProgect_Planeta35
         public List<Asset> Items { get; set; }
         public List<AssetCategory> Categories { get; set; }
 
+        public event Action<string> NavigateRequested;
+
         public MainControl(User user)
         {
             InitializeComponent();
@@ -43,6 +45,21 @@ namespace CourseProgect_Planeta35
             ActiveObjectsText.Text = Items.Count(i => i.Status == "В эксплуатации").ToString();
             MaintenanceObjectsText.Text = Items.Count(i => i.Status == "На обслуживании").ToString();
             TotalValueText.Text = $"{Items.Sum(i => i.Cost ?? 0):N0} ₽";
+        }
+
+        private Color GetColorForCategory(int id)
+        {
+            string[] palette =
+            {
+                "#8B9B4C", // основной зелёный
+                "#C5C895", // светлый
+                "#B89968", // тёплый
+                "#6B7A35"  // тёмный
+            };
+
+            return (Color)ColorConverter.ConvertFromString(
+                palette[id % palette.Length]
+            );
         }
 
         private void LoadCategories()
@@ -78,37 +95,64 @@ namespace CourseProgect_Planeta35
                 CategoriesPanel.Children.Add(sp);
             }
         }
-
-        private Color GetColorForCategory(int id)
+        private void Navigate(string page)
         {
-            string[] palette = { "#8B9B4C", "#C5C895", "#B89968", "#6B7A35" };
-            return (Color)ColorConverter.ConvertFromString(palette[id % palette.Length]);
+            var mainPage = Window.GetWindow(this) as MainWindow;
+
+            if (mainPage?.MainFrame != null)
+            {
+                switch (page)
+                {
+                    case "Inventory":
+                        mainPage.MainFrame.Content = new InventoryListControl(CurrentUser);
+                        break;
+                    case "Check":
+                        mainPage.MainFrame.Content = new InventoryCheckControl(CurrentUser);
+                        break;
+                    case "Reports":
+                        mainPage.MainFrame.Content = new ReportsControl(CurrentUser, new AppDbContext());
+                        break;
+                    case "Categories":
+                        mainPage.MainFrame.Content = new CategoriesControl(CurrentUser);
+                        break;
+                    case "Departments":
+                        mainPage.MainFrame.Content = new DepartmentsControl(CurrentUser);
+                        break;
+                    case "Users":
+                        mainPage.MainFrame.Content = new UserAddControl(CurrentUser);
+                        break;
+                }
+            }
         }
 
         private void Inventory_Click(object sender, RoutedEventArgs e)
         {
-            ContentFrame.Content = new InventoryListControl(CurrentUser);
+            Navigate("Inventory");
         }
 
         private void Check_Click(object sender, RoutedEventArgs e)
         {
-            ContentFrame.Content = new InventoryCheckControl(CurrentUser);
+            Navigate("Check");
         }
+
         private void Reports_Click(object sender, RoutedEventArgs e)
         {
-            ContentFrame.Content = new ReportsControl(CurrentUser, new AppDbContext());
+            Navigate("Reports");
         }
+
         private void Categories_Click(object sender, RoutedEventArgs e)
         {
-            ContentFrame.Content = new CategoriesControl(CurrentUser);
+            Navigate("Categories");
         }
+
         private void Departments_Click(object sender, RoutedEventArgs e)
         {
-            ContentFrame.Content = new DepartmentsControl(CurrentUser);
+            Navigate("Departments");
         }
+
         private void Users_Click(object sender, RoutedEventArgs e)
         {
-            ContentFrame.Content = new UserAddControl(CurrentUser);
+            Navigate("Users");
         }
     }
 }

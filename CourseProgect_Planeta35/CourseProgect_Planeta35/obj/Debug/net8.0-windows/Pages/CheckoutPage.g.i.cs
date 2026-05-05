@@ -124,7 +124,7 @@ namespace CourseProgect_Planeta35.Pages {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/CourseProgect_Planeta35;V1.0.0.0;component/pages/checkoutpage.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/CourseProgect_Planeta35;component/pages/checkoutpage.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\Pages\CheckoutPage.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
