@@ -159,15 +159,16 @@
                     </StackPanel>
 
                     <!-- LOGOUT -->
-                    <Button Grid.Row="2"
-                        Content="Выйти"
-                        Margin="10"
-                        Height="40"
-                        Background="#3E5C4C"
-                        Foreground="White"
-                        BorderThickness="0"
-                        Cursor="Hand"
-                        Click="BtnLogout_Checked"/>
+                    <ToggleButton   Grid.Row="2"
+                                    Content="Выйти"
+                                    Margin="10"
+                                    Height="40"
+                                    Background="#2B3A31"
+                                    Foreground="White"
+                                    BorderThickness="0"
+                                    Cursor="Hand"
+                                    Style="{StaticResource MenuButtonStyle}"
+                                    Click="BtnLogout_Checked"/>
 
                 </Grid>
             </Border>

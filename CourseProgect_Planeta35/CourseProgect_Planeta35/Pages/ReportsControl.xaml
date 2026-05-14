@@ -3,6 +3,206 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              Background="Transparent">
 
+    <UserControl.Resources>
+
+        <Style x:Key="ActionButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#2A322D"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Padding" Value="10,6"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bg"
+                        Background="{TemplateBinding Background}"
+                        CornerRadius="10"
+                        Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <!-- hover -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bg" Property="Background" Value="#3E5C4C"/>
+                            </Trigger>
+
+                            <!-- pressed -->
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="bg" Property="Background" Value="#8B9B4C"/>
+                            </Trigger>
+
+                            <!-- disabled -->
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="bg" Property="Opacity" Value="0.5"/>
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- COMBOBOX -->
+        <Style x:Key="DarkComboBox" TargetType="ComboBox">
+
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#151A17"/>
+            <Setter Property="BorderBrush" Value="#2F3A33"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="ComboBox">
+
+                        <Grid>
+
+                            <Border x:Name="Border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="8"/>
+
+                            <Grid Margin="10,0">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="30"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Selected -->
+                                <ContentPresenter Grid.Column="0"
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Left"
+                                          Content="{TemplateBinding SelectionBoxItem}"
+                                          ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"/>
+
+                                <!-- Arrow -->
+                                <ToggleButton Grid.Column="1"
+                                      Focusable="False"
+                                      IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                      Background="Transparent"
+                                      BorderThickness="0"
+                                      Cursor="Hand">
+
+                                    <TextBlock Text="▼"
+                                       FontSize="10"
+                                       Foreground="White"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+
+                                </ToggleButton>
+
+                            </Grid>
+
+                            <!-- Dropdown -->
+                            <Popup x:Name="Popup"
+                           Placement="Bottom"
+                           AllowsTransparency="True"
+                           Focusable="False"
+                           IsOpen="{TemplateBinding IsDropDownOpen}"
+                           PopupAnimation="Fade">
+
+                                <Border Background="#1C2621"
+                                BorderBrush="#3E5C4C"
+                                BorderThickness="1"
+                                CornerRadius="10"
+                                Margin="0,5,0,0">
+
+                                    <ScrollViewer>
+
+                                        <ItemsPresenter/>
+
+                                    </ScrollViewer>
+
+                                </Border>
+
+                            </Popup>
+
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+
+                            <!-- Hover -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border"
+                                Property="BorderBrush"
+                                Value="#3E5C4C"/>
+                            </Trigger>
+
+                            <!-- Focus -->
+                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                <Setter TargetName="Border"
+                                Property="BorderBrush"
+                                Value="#8B9B4C"/>
+
+                                <Setter TargetName="Border"
+                                Property="Background"
+                                Value="#1C2621"/>
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+            </Setter>
+
+        </Style>
+
+        <!-- ITEMS -->
+        <Style TargetType="ComboBoxItem">
+
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Padding" Value="10,6"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="ComboBoxItem">
+
+                        <Border x:Name="Bg"
+                        Background="{TemplateBinding Background}"
+                        CornerRadius="6"
+                        Margin="4">
+
+                            <ContentPresenter VerticalAlignment="Center"/>
+
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsHighlighted" Value="True">
+                                <Setter TargetName="Bg"
+                                Property="Background"
+                                Value="#24352C"/>
+                            </Trigger>
+
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Bg"
+                                Property="Background"
+                                Value="#3E5C4C"/>
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+            </Setter>
+
+        </Style>
+    </UserControl.Resources>
+
     <Grid>
         <Grid>
             <Rectangle>
@@ -63,17 +263,27 @@
 
                         <StackPanel Margin="0 0 20 0">
                             <TextBlock Text="Тип отчёта" Foreground="#BFCBC2"/>
-                            <ComboBox x:Name="CbReportType" Width="260"/>
+                            <ComboBox x:Name="CbReportType"
+                                      Width="260"
+                                      Style="{StaticResource DarkComboBox}"
+                                      SelectionChanged="CbReportType_SelectionChanged">
+                                <ComboBoxItem Content="Общий отчет по имуществу"/>
+                                <ComboBoxItem Content="Отчет по результатам инвентаризации"/>
+                            </ComboBox>
                         </StackPanel>
 
                         <StackPanel Margin="0 0 20 0">
                             <TextBlock Text="Категория" Foreground="#BFCBC2"/>
-                            <ComboBox x:Name="CbCategory" Width="200"/>
+                            <ComboBox x:Name="CbCategory"
+                                      Width="200"
+                                      Style="{StaticResource DarkComboBox}"
+                                      DisplayMemberPath="Name"
+                                      SelectedValuePath="Id"/>
                         </StackPanel>
 
                         <StackPanel>
                             <TextBlock Text="Подразделение" Foreground="#BFCBC2"/>
-                            <ComboBox x:Name="CbDepartment" Width="200"/>
+                            <ComboBox x:Name="CbDepartment" Width="200" Style="{StaticResource DarkComboBox}" DisplayMemberPath="Name"/>
                         </StackPanel>
 
                     </WrapPanel>
@@ -82,35 +292,51 @@
 
                         <StackPanel Margin="0 0 20 0">
                             <TextBlock Text="Статус" Foreground="#BFCBC2"/>
-                            <ComboBox x:Name="CbStatus" Width="200"/>
+                            <ComboBox x:Name="CbStatus"
+                                      Width="200"
+                                      Style="{StaticResource DarkComboBox}">
+                                <ComboBoxItem Content="Все"/>
+                                <ComboBoxItem Content="В эксплуатации"/>
+                                <ComboBoxItem Content="На обслуживании"/>
+                                <ComboBoxItem Content="Списано"/>
+                                <ComboBoxItem Content="Отсутствует"/>
+                            </ComboBox>
                         </StackPanel>
 
                         <Button Content="Обновить"
                                 Width="120"
-                                Margin="0 18 8 0"
-                                Background="#8B9B4C"
+                                Margin="0 15 8 10"
+                                Click="BtnRefresh_Click"
+                                Background="#3E5C4C"
                                 Foreground="White"
+                                Style="{StaticResource ActionButtonStyle}"
                                 BorderThickness="0"/>
 
                         <Button Content="Сброс"
                                 Width="100"
-                                Margin="0 18 8 0"
+                                Margin="0 15 8 10"
+                                Click="BtnResetFilters_Click"
                                 Background="#2A322D"
                                 Foreground="White"
+                                Style="{StaticResource ActionButtonStyle}"
                                 BorderThickness="0"/>
 
                         <Button Content="PDF"
                                 Width="100"
-                                Margin="0 18 8 0"
+                                Margin="0 15 8 10"                                
+                                Click="BtnExportPdf_Click"
                                 Background="#2A322D"
                                 Foreground="White"
+                                Style="{StaticResource ActionButtonStyle}"
                                 BorderThickness="0"/>
 
                         <Button Content="XLSX"
                                 Width="100"
-                                Margin="0 18 0 0"
+                                Margin="0 15 8 10"
+                                Click="BtnExportXlsx_Click"
                                 Background="#2A322D"
                                 Foreground="White"
+                                Style="{StaticResource ActionButtonStyle}"
                                 BorderThickness="0"/>
 
                     </WrapPanel>
@@ -129,13 +355,22 @@
                 <DataGrid x:Name="DataGridPreview"
                           AutoGenerateColumns="False"
                           IsReadOnly="True"
-                          Background="Transparent"
+                          Background="#2F3B33"
                           Foreground="White"
                           GridLinesVisibility="None"
                           HeadersVisibility="Column"
                           RowBackground="#232B26"
                           AlternatingRowBackground="#1E2421"
                           BorderThickness="0">
+
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Background" Value="#EAEAEA"/>
+                            <Setter Property="Foreground" Value="#2F3B33"/>
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                            <Setter Property="Padding" Value="6"/>
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
 
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Название" Binding="{Binding Asset.Name}" Width="*"/>

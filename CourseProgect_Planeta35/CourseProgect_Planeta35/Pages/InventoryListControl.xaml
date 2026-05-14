@@ -4,7 +4,209 @@
              xmlns:models="clr-namespace:CourseProgect_Planeta35.Models"
              Background="Transparent">
 
-    <Grid>
+    <UserControl.Resources>
+        <Style x:Key="ActionButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#151A17"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#2F3A33"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+             CornerRadius="10"
+             Background="{TemplateBinding Background}"
+             BorderBrush="{TemplateBinding BorderBrush}"
+             BorderThickness="{TemplateBinding BorderThickness}"
+             Padding="6">
+                            <ContentPresenter HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <!-- Hover -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#24352C"/>
+                            </Trigger>
+
+                            <!-- Pressed -->
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#3E5C4C"/>
+                                <Setter TargetName="border" Property="BorderThickness" Value="0"/>
+                            </Trigger>
+
+                            <!-- Disabled -->
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="border" Property="Opacity" Value="0.5"/>
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- COMBOBOX -->
+        <Style x:Key="DarkComboBox" TargetType="ComboBox">
+
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#151A17"/>
+            <Setter Property="BorderBrush" Value="#2F3A33"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="ComboBox">
+
+                        <Grid>
+
+                            <Border x:Name="Border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="8"/>
+
+                            <Grid Margin="10,0">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="30"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Selected -->
+                                <ContentPresenter Grid.Column="0"
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Left"
+                                          Content="{TemplateBinding SelectionBoxItem}"
+                                          ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"/>
+
+                                <!-- Arrow -->
+                                <ToggleButton Grid.Column="1"
+                                      Focusable="False"
+                                      IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                      Background="Transparent"
+                                      BorderThickness="0"
+                                      Cursor="Hand">
+
+                                    <TextBlock Text="▼"
+                                       FontSize="10"
+                                       Foreground="White"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+
+                                </ToggleButton>
+
+                            </Grid>
+
+                            <!-- Dropdown -->
+                            <Popup x:Name="Popup"
+                           Placement="Bottom"
+                           AllowsTransparency="True"
+                           Focusable="False"
+                           IsOpen="{TemplateBinding IsDropDownOpen}"
+                           PopupAnimation="Fade">
+
+                                <Border Background="#1C2621"
+                                BorderBrush="#3E5C4C"
+                                BorderThickness="1"
+                                CornerRadius="10"
+                                Margin="0,5,0,0">
+
+                                    <ScrollViewer>
+
+                                        <ItemsPresenter/>
+
+                                    </ScrollViewer>
+
+                                </Border>
+
+                            </Popup>
+
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+
+                            <!-- Hover -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border"
+                                Property="BorderBrush"
+                                Value="#3E5C4C"/>
+                            </Trigger>
+
+                            <!-- Focus -->
+                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                <Setter TargetName="Border"
+                                Property="BorderBrush"
+                                Value="#8B9B4C"/>
+
+                                <Setter TargetName="Border"
+                                Property="Background"
+                                Value="#1C2621"/>
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+            </Setter>
+
+        </Style>
+
+        <!-- ITEMS -->
+        <Style TargetType="ComboBoxItem">
+
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Padding" Value="10,6"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="ComboBoxItem">
+
+                        <Border x:Name="Bg"
+                        Background="{TemplateBinding Background}"
+                        CornerRadius="6"
+                        Margin="4">
+
+                            <ContentPresenter VerticalAlignment="Center"/>
+
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsHighlighted" Value="True">
+                                <Setter TargetName="Bg"
+                                Property="Background"
+                                Value="#24352C"/>
+                            </Trigger>
+
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Bg"
+                                Property="Background"
+                                Value="#3E5C4C"/>
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+            </Setter>
+
+        </Style>
+    </UserControl.Resources>
+
+<Grid>
 
         <!-- 🌑 фон -->
         <Grid>
@@ -75,25 +277,36 @@
                     <!-- CATEGORY -->
                     <ComboBox x:Name="CategoryFilter"
                               Width="180"
+                              Style="{StaticResource DarkComboBox}"
                               Margin="0 0 12 0"
                               Background="#2A322D"
-                              Foreground="White"
+                              Foreground="Black"
                               BorderThickness="0"
                               SelectionChanged="CategoryFilter_SelectionChanged"/>
 
                     <!-- STATUS -->
                     <ComboBox x:Name="StatusFilter"
                               Width="180"
+                              Style="{StaticResource DarkComboBox}"
                               Margin="0 0 12 0"
                               Background="#2A322D"
-                              Foreground="White"
+                              Foreground="Black"
                               BorderThickness="0"
-                              SelectionChanged="StatusFilter_SelectionChanged"/>
+                              SelectionChanged="StatusFilter_SelectionChanged">
+
+                        <ComboBoxItem Content="Все"/>
+                        <ComboBoxItem Content="В наличии"/>
+                        <ComboBoxItem Content="Списано"/>
+                        <ComboBoxItem Content="Отсутствует"/>
+                        <ComboBoxItem Content="На обслуживании"/>
+
+                    </ComboBox>
 
                     <!-- ADD -->
                     <Button Content="➕ Добавить"
                             Width="140"
-                            Background="#8B9B4C"
+                            Background="#3E5C4C"
+                            Style="{StaticResource ActionButtonStyle}"
                             Foreground="White"
                             BorderThickness="0"
                             FontWeight="SemiBold"
@@ -125,43 +338,67 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="{x:Type models:InventoryItem}">
 
-                                <!-- CARD -->
-                                <Border Margin="8"
-                                        Width="260"
-                                        Padding="12"
-                                        Background="#1E2421"
-                                        CornerRadius="14"
+                                <Border Margin="10"
+                                        Width="320"
+                                        Padding="16"
+                                        Background="#1C2320"
+                                        CornerRadius="16"
                                         BorderBrush="#2F3B33"
                                         BorderThickness="1">
 
+                                    <!-- HOVER STYLE -->
                                     <Border.Style>
                                         <Style TargetType="Border">
+
+                                            <Setter Property="RenderTransform">
+                                                <Setter.Value>
+                                                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                                                </Setter.Value>
+                                            </Setter>
+
                                             <Style.Triggers>
+
                                                 <Trigger Property="IsMouseOver" Value="True">
                                                     <Setter Property="BorderBrush" Value="#8B9B4C"/>
                                                     <Setter Property="Background" Value="#232B26"/>
+                                                    <Setter Property="RenderTransform">
+                                                        <Setter.Value>
+                                                            <ScaleTransform ScaleX="1.02" ScaleY="1.02"/>
+                                                        </Setter.Value>
+                                                    </Setter>
                                                 </Trigger>
+
                                             </Style.Triggers>
+
                                         </Style>
                                     </Border.Style>
 
                                     <StackPanel>
 
-                                        <Image Source="{Binding ImagePathToShow}"
-                                               Height="120"
-                                               Stretch="UniformToFill"
-                                               Margin="0 0 0 10"/>
+                                        <!-- IMAGE -->
+                                        <Border Height="160"
+                                                Background="#2A322D"
+                                                CornerRadius="12"
+                                                Margin="0 0 0 12">
 
+                                            <Image Source="{Binding Asset.ImagePath}"
+                                                   Stretch="Uniform"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>
+                                        </Border>
+
+                                        <!-- NAME -->
                                         <TextBlock Text="{Binding Asset.Name}"
-                                                   FontSize="16"
+                                                   FontSize="18"
                                                    FontWeight="SemiBold"
                                                    Foreground="White"
-                                                   TextTrimming="CharacterEllipsis"/>
+                                                   TextTrimming="CharacterEllipsis"
+                                                   Margin="0 0 0 6"/>
 
+                                        <!-- CATEGORY + DEP -->
                                         <TextBlock Text="{Binding Asset.Category.Name}"
                                                    Foreground="#BFCBC2"
-                                                   FontSize="12"
-                                                   Margin="0 4 0 0"/>
+                                                   FontSize="13"/>
 
                                         <TextBlock Text="{Binding Asset.Department.Name}"
                                                    Foreground="#9AA59F"
@@ -169,10 +406,10 @@
                                                    Margin="0 2 0 0"/>
 
                                         <!-- STATUS -->
-                                        <Border Margin="0 8 0 0"
-                                                Padding="6 3"
-                                                CornerRadius="6"
-                                                Background="#8B9B4C"
+                                        <Border Margin="0 10 0 0"
+                                                Padding="8 4"
+                                                CornerRadius="8"
+                                                Background="#3E5C4C"
                                                 HorizontalAlignment="Left">
 
                                             <TextBlock Text="{Binding Asset.Status}"
@@ -180,22 +417,44 @@
                                                        FontSize="12"/>
                                         </Border>
 
+                                        <!-- PRICE -->
                                         <TextBlock Text="{Binding Asset.Cost, StringFormat={}{0:N0} ₽}"
-                                                   Foreground="White"
-                                                   FontSize="14"
-                                                   Margin="0 8 0 0"/>
+                                                   Foreground="#8B9B4C"
+                                                   FontSize="16"
+                                                   FontWeight="Bold"
+                                                   Margin="0 10 0 0"/>
 
-                                        <!-- ACTIONS -->
+                                        <!-- QR -->
+                                        <Border Margin="0 12 0 0"
+                                                Background="White"
+                                                Padding="8"
+                                                CornerRadius="10"
+                                                HorizontalAlignment="Center">
+
+                                            <Image Source="{Binding QRImage}"
+                                                   Width="200"
+                                                   Height="200"
+                                                   Stretch="Uniform"/>
+
+                                        </Border>
+
+                                        <!-- BUTTON -->
                                         <Button Content="Удалить"
-                                                Margin="0 10 0 0"
+                                                Style="{StaticResource ActionButtonStyle}"
+                                                Margin="0 12 0 0"
                                                 Background="#2A322D"
                                                 Foreground="White"
                                                 BorderThickness="0"
+                                                Height="34"
+                                                Cursor="Hand"
                                                 Click="DeleteButton_Click"/>
+                                        
 
                                     </StackPanel>
+                                    
 
                                 </Border>
+                                
 
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>

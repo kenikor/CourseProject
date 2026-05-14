@@ -74,6 +74,10 @@ namespace CourseProgect_Planeta35.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("purchase_date");
 
+                    b.Property<Guid>("QrToken")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("qr_token");
+
                     b.Property<int?>("ResponsibleId")
                         .HasColumnType("int")
                         .HasColumnName("responsible_id");
@@ -213,6 +217,10 @@ namespace CourseProgect_Planeta35.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasMaxLength(150)
@@ -320,6 +328,10 @@ namespace CourseProgect_Planeta35.Migrations
                     b.Property<int>("AssetId")
                         .HasColumnType("int")
                         .HasColumnName("asset_id");
+
+                    b.Property<string>("ImagePathToShow")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("InventoryId")
                         .HasColumnType("int")

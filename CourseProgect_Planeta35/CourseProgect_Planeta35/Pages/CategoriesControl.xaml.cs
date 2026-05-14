@@ -5,7 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
+using System.Windows.Shapes;
 
 namespace CourseProgect_Planeta35.Pages
 {
@@ -19,37 +19,6 @@ namespace CourseProgect_Planeta35.Pages
             CurrentUser = user ?? throw new ArgumentNullException(nameof(user));
 
             LoadCategoriesFromDb();
-            Loaded += (s, e) => StartBackgroundAnimation();
-        }
-
-        private void StartBackgroundAnimation()
-        {
-            AnimateBrush(BgBrush1, 40, 0.2, 0.6);
-            AnimateBrush(BgBrush2, 50, 0.8, 0.4);
-        }
-
-        private void AnimateBrush(RadialGradientBrush brush, double seconds, double from, double to)
-        {
-            var originAnim = new PointAnimation
-            {
-                From = new Point(from, from),
-                To = new Point(to, to),
-                Duration = TimeSpan.FromSeconds(seconds),
-                AutoReverse = true,
-                RepeatBehavior = RepeatBehavior.Forever
-            };
-
-            var centerAnim = new PointAnimation
-            {
-                From = new Point(0.4, 0.4),
-                To = new Point(0.6, 0.6),
-                Duration = TimeSpan.FromSeconds(seconds * 1.3),
-                AutoReverse = true,
-                RepeatBehavior = RepeatBehavior.Forever
-            };
-
-            brush.BeginAnimation(RadialGradientBrush.GradientOriginProperty, originAnim);
-            brush.BeginAnimation(RadialGradientBrush.CenterProperty, centerAnim);
         }
 
         private void LoadCategoriesFromDb()
@@ -64,11 +33,12 @@ namespace CourseProgect_Planeta35.Pages
 
                     foreach (var cat in list)
                     {
-                        string color = string.IsNullOrWhiteSpace(cat.Color)
-                            ? "#366B2B"
-                            : cat.Color;
-
-                        AddCategoryCard(cat.Id, cat.Name, color);
+                        AddCategoryCard(
+                            cat.Id,
+                            cat.Name,
+                            cat.Description,
+                            cat.Color
+                        );
                     }
 
                     UpdateCount();
@@ -91,15 +61,14 @@ namespace CourseProgect_Planeta35.Pages
                     var entity = new AssetCategory
                     {
                         Name = win.CategoryName,
-                        Description = "",
+                        Description = win.CategoryDescription,
                         Color = win.ColorHex
                     };
 
                     db.AssetCategories.Add(entity);
                     db.SaveChanges();
 
-                    // после сохранения появится ID
-                    AddCategoryCard(entity.Id, entity.Name, entity.Color);
+                    AddCategoryCard(entity.Id, entity.Name, entity.Description, entity.Color);
                 }
 
                 UpdateCount();
@@ -111,151 +80,131 @@ namespace CourseProgect_Planeta35.Pages
             CountText.Text = $"{CategoryPanel.Children.Count} категорий";
         }
 
-        private void AddCategoryCard(int id, string name, string colorHex)
+        private void AddCategoryCard(int id, string name, string description, string color)
         {
-            Color color;
+            Brush accent;
+
             try
             {
-                color = (Color)ColorConverter.ConvertFromString(colorHex);
+                accent = (Brush)new BrushConverter().ConvertFromString(color);
             }
             catch
             {
-                color = Color.FromRgb(54, 107, 43); // fallback
+                accent = new SolidColorBrush(Color.FromRgb(54, 107, 43));
             }
-
-            Color lightColor = Color.FromArgb(40, color.R, color.G, color.B);
 
             Border card = new Border
             {
                 Width = 320,
-                Height = 110,
-                Background = Brushes.White,
+                Height = 120,
+                Background = (Brush)new BrushConverter().ConvertFromString("#1E2320"),
                 CornerRadius = new CornerRadius(16),
                 Padding = new Thickness(15),
                 Margin = new Thickness(10),
-                Effect = new System.Windows.Media.Effects.DropShadowEffect
-                {
-                    Color = Colors.Black,
-                    Opacity = 0.15,
-                    BlurRadius = 10
-                },
                 Tag = id
             };
 
-            Grid grid = new Grid();
-            grid.ColumnDefinitions.Add(new ColumnDefinition());
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            Grid root = new Grid();
 
-            // LEFT
-            StackPanel left = new StackPanel { Orientation = Orientation.Horizontal };
-
-            Border colorOuter = new Border
+            // LEFT STRIPE
+            Border stripe = new Border
             {
-                Width = 40,
-                Height = 40,
-                Background = new SolidColorBrush(lightColor),
-                CornerRadius = new CornerRadius(20)
+                Width = 8,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                CornerRadius = new CornerRadius(20, 0, 0, 20),
+                Background = accent
             };
 
-            Border colorInner = new Border
+            root.Children.Add(stripe);
+
+            Grid content = new Grid
             {
-                Width = 20,
-                Height = 20,
-                Background = new SolidColorBrush(color),
-                CornerRadius = new CornerRadius(10),
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center
+                Margin = new Thickness(20, 15, 15, 15)
             };
 
-            colorOuter.Child = colorInner;
-            left.Children.Add(colorOuter);
+            content.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            content.RowDefinitions.Add(new RowDefinition());
+            content.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
-            StackPanel text = new StackPanel { Margin = new Thickness(12, 0, 0, 0) };
-            text.Children.Add(new TextBlock { Text = name, FontWeight = FontWeights.Bold, FontSize = 16 });
-            text.Children.Add(new TextBlock { Text = colorHex?.ToUpper(), Foreground = Brushes.Gray, FontSize = 12 });
-
-            left.Children.Add(text);
-
-            // RIGHT BUTTONS
-            StackPanel right = new StackPanel
+            // HEADER
+            StackPanel header = new StackPanel
             {
-                Orientation = Orientation.Horizontal,
-                HorizontalAlignment = HorizontalAlignment.Right
+                Orientation = Orientation.Horizontal
             };
 
-            Button edit = new Button
+            Ellipse dot = new Ellipse
             {
-                Content = "✎",
-                Width = 32,
-                Height = 32,
-                Background = Brushes.Transparent,
-                BorderThickness = new Thickness(0),
-                Foreground = Brushes.Gray,
-                Margin = new Thickness(4)
+                Width = 14,
+                Height = 14,
+                Fill = accent
             };
 
+            TextBlock title = new TextBlock
+            {
+                Text = name,
+                Margin = new Thickness(10, 0, 0, 0),
+                FontSize = 18,
+                FontWeight = FontWeights.Bold,
+                Foreground = Brushes.White
+            };
+
+            header.Children.Add(dot);
+            header.Children.Add(title);
+
+            Grid.SetRow(header, 0);
+
+            // DESCRIPTION
+            TextBlock desc = new TextBlock
+            {
+                Text = description,
+                Margin = new Thickness(0, 10, 0, 0),
+                Foreground = Brushes.White,
+                TextWrapping = TextWrapping.Wrap
+            };
+
+            Grid.SetRow(desc, 1);
+
+            // DELETE
             Button delete = new Button
             {
                 Content = "🗑",
-                Width = 32,
-                Height = 32,
+                Width = 30,
+                Height = 30,
                 Background = Brushes.Transparent,
                 BorderThickness = new Thickness(0),
-                Foreground = Brushes.DarkRed,
-                Margin = new Thickness(4)
+                Foreground = Brushes.White,
+                HorizontalAlignment = HorizontalAlignment.Right,
+                VerticalAlignment = VerticalAlignment.Top,
+                Tag = id
             };
 
-            // Редактирование
-            edit.Click += (s, e) =>
-            {
-                using (var db = new AppDbContext())
-                {
-                    var entity = db.AssetCategories.FirstOrDefault(x => x.Id == id);
-                    if (entity == null) return;
-
-                    var win = new AddCategoryWindow(entity.Name, entity.Color);
-                    if (win.ShowDialog() == true)
-                    {
-                        entity.Name = win.CategoryName;
-                        entity.Color = win.ColorHex;
-                        db.SaveChanges();
-
-                        // Обновляем UI
-                        text.Children.Clear();
-                        text.Children.Add(new TextBlock { Text = entity.Name, FontWeight = FontWeights.Bold, FontSize = 16 });
-                        text.Children.Add(new TextBlock { Text = entity.Color?.ToUpper(), Foreground = Brushes.Gray, FontSize = 12 });
-                    }
-                }
-            };
-
-            // Удаление
             delete.Click += (s, e) =>
             {
-                if (MessageBox.Show("Удалить категорию?", "Подтверждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                {
-                    using (var db = new AppDbContext())
-                    {
-                        var entity = db.AssetCategories.FirstOrDefault(x => x.Id == id);
-                        if (entity != null)
-                        {
-                            db.AssetCategories.Remove(entity);
-                            db.SaveChanges();
-                        }
-                    }
+                int catId = (int)delete.Tag;
 
-                    CategoryPanel.Children.Remove(card);
-                    UpdateCount();
+                using (var db = new AppDbContext())
+                {
+                    var entity = db.AssetCategories.FirstOrDefault(x => x.Id == catId);
+                    if (entity != null)
+                    {
+                        db.AssetCategories.Remove(entity);
+                        db.SaveChanges();
+                    }
                 }
+
+                CategoryPanel.Children.Remove(card);
+                UpdateCount();
             };
 
-            right.Children.Add(edit);
-            right.Children.Add(delete);
+            Grid.SetRow(delete, 2);
 
-            grid.Children.Add(left);
-            Grid.SetColumn(right, 1);
-            grid.Children.Add(right);
+            content.Children.Add(header);
+            content.Children.Add(desc);
 
-            card.Child = grid;
+            root.Children.Add(content);
+            root.Children.Add(delete);
+
+            card.Child = root;
 
             CategoryPanel.Children.Add(card);
         }

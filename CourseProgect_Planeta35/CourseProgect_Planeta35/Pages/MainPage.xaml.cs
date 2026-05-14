@@ -4,7 +4,7 @@ using CourseProgect_Planeta35.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Windows;
 using System.Windows.Controls;
-using UIInventoryItem = CourseProgect_Planeta35.Controls.InventoryItem;
+using UIInventoryItem = CourseProgect_Planeta35.Models.InventoryItem;
 using System.Windows.Controls.Primitives;
 
 namespace CourseProgect_Planeta35.Pages
@@ -46,6 +46,7 @@ namespace CourseProgect_Planeta35.Pages
             if (user.RoleId == 1) // admin
             {
                 BtnProcurement.Visibility = Visibility.Visible;
+                BtnInventory.Visibility = Visibility.Visible;
                 BtnReports.Visibility = Visibility.Visible;
                 AdminPanel.Visibility = Visibility.Visible;
             }

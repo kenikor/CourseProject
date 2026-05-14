@@ -69,9 +69,6 @@
     <Page Update="Pages\AssetCheckWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\CategoriesControl.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="Pages\DepartmentsControl.xaml">
       <SubType>Designer</SubType>
     </Page>

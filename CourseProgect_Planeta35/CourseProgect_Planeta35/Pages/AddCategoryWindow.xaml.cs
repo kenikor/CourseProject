@@ -1,7 +1,4 @@
-﻿using CourseProgect_Planeta35.Data;
-using CourseProgect_Planeta35.Models;
-using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -10,49 +7,44 @@ namespace CourseProgect_Planeta35.Pages
     public partial class AddCategoryWindow : Window
     {
         public string CategoryName { get; private set; }
+        public string CategoryDescription { get; private set; }
         public string ColorHex { get; private set; }
 
-        // Конструктор для добавления новой категории
         public AddCategoryWindow()
         {
             InitializeComponent();
-            ColorBox.TextChanged += (s, e) => UpdateColorPreview();
         }
 
-        // Конструктор для редактирования существующей категории
         public AddCategoryWindow(string name, string color) : this()
         {
             NameBox.Text = name;
-            ColorBox.Text = color;
-        }
 
-        private void UpdateColorPreview()
-        {
-            try
+            if (!string.IsNullOrWhiteSpace(color))
             {
-                ColorPreview.Fill = new SolidColorBrush(
-                    (Color)ColorConverter.ConvertFromString(ColorBox.Text));
-            }
-            catch
-            {
-                ColorPreview.Fill = Brushes.Transparent;
+                try
+                {
+                    CategoryColorPicker.SelectedColor =
+                        (Color)ColorConverter.ConvertFromString(color);
+                }
+                catch { }
             }
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
-            // Мини-валидация
             if (string.IsNullOrWhiteSpace(NameBox.Text))
             {
-                MessageBox.Show("Название категории обязательно!");
+                MessageBox.Show("Название обязательно");
                 return;
             }
 
-            // Устанавливаем публичные свойства, чтобы их можно было получить снаружи
-            CategoryName = NameBox.Text.Trim();
-            ColorHex = ColorBox.Text.Trim();
+            var color = CategoryColorPicker.SelectedColor ?? Colors.Green;
 
-            DialogResult = true; // окно закрывается, возвращая true
+            CategoryName = NameBox.Text.Trim();
+            CategoryDescription = DescriptionBox.Text.Trim();
+            ColorHex = color.ToString();
+
+            DialogResult = true;
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
@@ -60,7 +52,7 @@ namespace CourseProgect_Planeta35.Pages
             DialogResult = false;
         }
 
-        private void Border_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ButtonState == MouseButtonState.Pressed)
             {

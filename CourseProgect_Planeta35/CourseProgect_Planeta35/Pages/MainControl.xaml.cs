@@ -6,6 +6,10 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using LiveChartsCore;
+using LiveChartsCore.SkiaSharpView;
+using LiveChartsCore.SkiaSharpView.Painting;
+using SkiaSharp;
 
 namespace CourseProgect_Planeta35
 {
@@ -15,6 +19,10 @@ namespace CourseProgect_Planeta35
         public User CurrentUser { get; }
         public List<Asset> Items { get; set; }
         public List<AssetCategory> Categories { get; set; }
+        public ISeries[] Series { get; set; }
+        public Axis[] XAxes { get; set; }
+        public Axis[] YAxes { get; set; }
+        public SolidColorPaint LegendPaint { get; set; }
 
         public event Action<string> NavigateRequested;
 
@@ -23,43 +31,112 @@ namespace CourseProgect_Planeta35
             InitializeComponent();
             CurrentUser = user;
             _db = new AppDbContext();
-
-            // ВСЕГДА показываем полный инвентарь
             Items = _db.Assets.ToList();
 
-            // Категории
             Categories = _db.AssetCategories.ToList();
 
             LoadStats();
             LoadCategories();
+            InitChart();
+            DataContext = this;
 
-            // Админ-кнопки только для админа
-            AdminButtonsPanel.Visibility = CurrentUser.RoleId == 1 ? Visibility.Visible : Visibility.Collapsed;
+            var timer = new System.Windows.Threading.DispatcherTimer();
+            var rnd = new Random();
+
+            timer.Interval = TimeSpan.FromSeconds(2);
+
+            timer.Tick += (s, e) =>
+            {
+                var list = Series[0] as LineSeries<int>;
+                if (list?.Values is IList<int> values)
+                {
+                    values.Add(rnd.Next(2, 12));
+                    if (values.Count > 10)
+                        values.RemoveAt(0);
+                }
+            };
+
+            timer.Start();
+        }
+
+        private void InitChart()
+        {
+            var rnd = new Random();
+            LegendPaint = new SolidColorPaint(new SKColor(230, 230, 230));
+
+            var data = Enumerable.Range(1, 7)
+                .Select(_ => rnd.Next(2, 12))
+                .ToList();
+
+            Series = new ISeries[]
+            {
+                new LineSeries<int>
+                {
+                    Name = "Активность системы",
+
+                    Values = data,
+
+                    Stroke = new SolidColorPaint(
+                        new SKColor(139, 155, 76), 
+                        4),
+
+                    GeometryFill = new SolidColorPaint(
+                        new SKColor(62, 92, 76)), 
+
+                    GeometryStroke = new SolidColorPaint(SKColors.White, 2),
+
+                    GeometrySize = 10,
+
+                    Fill = null,
+
+                    DataLabelsPaint =
+                        new SolidColorPaint(SKColors.White)
+                }
+                    };
+
+                    XAxes = new[]
+                    {
+                new Axis
+                {
+                    Labels = new[]
+                    {
+                        "Янв","Фев","Мар",
+                        "Апр","Май","Июн","Июл"
+                    },
+
+                    LabelsPaint =
+                        new SolidColorPaint(SKColors.LightGray),
+
+                    TextSize = 12,
+
+                    SeparatorsPaint =
+                        new SolidColorPaint(
+                            new SKColor(50, 60, 55))
+                }
+            };
+
+            YAxes = new[]
+            {
+                new Axis
+                {
+                    LabelsPaint =
+                        new SolidColorPaint(SKColors.LightGray),
+
+                    TextSize = 12,
+
+                    SeparatorsPaint =
+                        new SolidColorPaint(
+                            new SKColor(50, 60, 55))
+                }
+            };
         }
 
         private void LoadStats()
         {
-            UserNameTextBlock.Text = $"Добро пожаловать, {CurrentUser.FullName ?? CurrentUser.Username}!";
-
             TotalObjectsText.Text = Items.Count.ToString();
             ActiveObjectsText.Text = Items.Count(i => i.Status == "В эксплуатации").ToString();
             MaintenanceObjectsText.Text = Items.Count(i => i.Status == "На обслуживании").ToString();
             TotalValueText.Text = $"{Items.Sum(i => i.Cost ?? 0):N0} ₽";
-        }
-
-        private Color GetColorForCategory(int id)
-        {
-            string[] palette =
-            {
-                "#8B9B4C", // основной зелёный
-                "#C5C895", // светлый
-                "#B89968", // тёплый
-                "#6B7A35"  // тёмный
-            };
-
-            return (Color)ColorConverter.ConvertFromString(
-                palette[id % palette.Length]
-            );
         }
 
         private void LoadCategories()
@@ -77,7 +154,7 @@ namespace CourseProgect_Planeta35
                 StackPanel sp = new StackPanel { Margin = new Thickness(0, 0, 0, 12) };
 
                 StackPanel header = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Stretch };
-                header.Children.Add(new TextBlock { Text = cat.Name, Width = 160, Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#3C2F1F")), FontWeight = FontWeights.SemiBold });
+                header.Children.Add(new TextBlock { Text = cat.Name, Width = 160, Foreground = new SolidColorBrush(Color.FromRgb(230, 239, 230)), FontWeight = FontWeights.SemiBold });
                 header.Children.Add(new TextBlock { Text = $"{catItems.Count} объектов", Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#6B7A35")) });
 
                 sp.Children.Add(header);
@@ -88,71 +165,14 @@ namespace CourseProgect_Planeta35
                     Maximum = 100,
                     Value = percentage,
                     Height = 10,
-                    Foreground = new SolidColorBrush(GetColorForCategory(cat.Id)),
-                    Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F5F1E9"))
+                    Background = new SolidColorBrush(Color.FromRgb(30, 35, 32)),
+                    Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#8B9B4C")),
+                    BorderThickness = new Thickness(0),
+                    Margin = new Thickness(0, 4, 0, 0)
                 });
 
                 CategoriesPanel.Children.Add(sp);
             }
-        }
-        private void Navigate(string page)
-        {
-            var mainPage = Window.GetWindow(this) as MainWindow;
-
-            if (mainPage?.MainFrame != null)
-            {
-                switch (page)
-                {
-                    case "Inventory":
-                        mainPage.MainFrame.Content = new InventoryListControl(CurrentUser);
-                        break;
-                    case "Check":
-                        mainPage.MainFrame.Content = new InventoryCheckControl(CurrentUser);
-                        break;
-                    case "Reports":
-                        mainPage.MainFrame.Content = new ReportsControl(CurrentUser, new AppDbContext());
-                        break;
-                    case "Categories":
-                        mainPage.MainFrame.Content = new CategoriesControl(CurrentUser);
-                        break;
-                    case "Departments":
-                        mainPage.MainFrame.Content = new DepartmentsControl(CurrentUser);
-                        break;
-                    case "Users":
-                        mainPage.MainFrame.Content = new UserAddControl(CurrentUser);
-                        break;
-                }
-            }
-        }
-
-        private void Inventory_Click(object sender, RoutedEventArgs e)
-        {
-            Navigate("Inventory");
-        }
-
-        private void Check_Click(object sender, RoutedEventArgs e)
-        {
-            Navigate("Check");
-        }
-
-        private void Reports_Click(object sender, RoutedEventArgs e)
-        {
-            Navigate("Reports");
-        }
-
-        private void Categories_Click(object sender, RoutedEventArgs e)
-        {
-            Navigate("Categories");
-        }
-
-        private void Departments_Click(object sender, RoutedEventArgs e)
-        {
-            Navigate("Departments");
-        }
-
-        private void Users_Click(object sender, RoutedEventArgs e)
-        {
-            Navigate("Users");
         }
     }
 }

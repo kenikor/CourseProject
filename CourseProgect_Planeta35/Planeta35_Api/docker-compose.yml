@@ -1,0 +1,20 @@
+﻿services:
+
+  api:
+    build:
+      context: ..
+      dockerfile: Planeta35_Api/Dockerfile
+
+    ports:
+      - "8080:8080"
+
+    restart: always
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: Planet35
+    environment:
+      ACCEPT_EULA: "DESKTOP-OSID0QL"
+      SA_PASSWORD: "YourStrong!Passw0rd123"
+    ports:
+      - "1433:1433"

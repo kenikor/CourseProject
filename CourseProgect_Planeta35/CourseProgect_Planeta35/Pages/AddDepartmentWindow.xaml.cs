@@ -1,12 +1,17 @@
 ﻿using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace CourseProgect_Planeta35.Controls
 {
     public partial class AddDepartmentWindow : Window
     {
         public string DepartmentName { get; private set; }
+
         public string DepartmentDescription { get; private set; }
+
+        // ЦВЕТ ПОДРАЗДЕЛЕНИЯ
+        public string DepartmentColor { get; private set; }
 
         public AddDepartmentWindow()
         {
@@ -22,7 +27,15 @@ namespace CourseProgect_Planeta35.Controls
             }
 
             DepartmentName = NameBox.Text.Trim();
+
             DepartmentDescription = DescriptionBox.Text.Trim();
+
+            // БЕРЁМ ЦВЕТ ИЗ COLOR PICKER
+            Color selectedColor =
+                DepartmentColorPicker.SelectedColor ?? Colors.Green;
+
+            // ПЕРЕВОДИМ В HEX
+            DepartmentColor = selectedColor.ToString();
 
             DialogResult = true;
         }
@@ -32,7 +45,7 @@ namespace CourseProgect_Planeta35.Controls
             DialogResult = false;
         }
 
-        private void Border_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ButtonState == MouseButtonState.Pressed)
             {

@@ -728,3 +728,4 @@ C:\CourseProject\CourseProject\CourseProgect_Planeta35\CourseProgect_Planeta35\o
 C:\CourseProject\CourseProject\CourseProgect_Planeta35\CourseProgect_Planeta35\obj\Debug\net8.0-windows\Pages\ProcurementPage.baml
 C:\CourseProject\CourseProject\CourseProgect_Planeta35\CourseProgect_Planeta35\obj\Debug\net8.0-windows\Pages\CheckoutPage.baml
 C:\CourseProject\CourseProject\CourseProgect_Planeta35\CourseProgect_Planeta35\obj\Debug\net8.0-windows\Pages\CheckoutPage.g.cs
+C:\CourseProject\CourseProject\CourseProgect_Planeta35\CourseProgect_Planeta35\bin\Debug\net8.0-windows\QRCoder.dll

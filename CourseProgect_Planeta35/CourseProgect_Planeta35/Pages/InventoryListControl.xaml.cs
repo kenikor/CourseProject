@@ -27,17 +27,19 @@ namespace CourseProgect_Planeta35.Controls
             LoadItems();
         }
 
-        private void LoadDataFromDB()
+        private async Task LoadDataFromDB() // Меняем void на async Task
         {
             try
             {
                 using (var db = new AppDbContext())
                 {
+                    // Загружаем категории
                     Categories = db.AssetCategories
                         .AsNoTracking()
                         .Include(c => c.Assets)
                         .ToList();
 
+                    // Загружаем ассеты со всеми связями
                     var assets = db.Assets
                         .AsNoTracking()
                         .Include(a => a.Category)
@@ -45,14 +47,19 @@ namespace CourseProgect_Planeta35.Controls
                         .Include(a => a.Department)
                         .ToList();
 
-                    InventoryItems = assets
-                        .Select(a => new InventoryItem
-                        {
-                            Asset = a,
-                            // Если нет картинки, показываем плейсхолдер
-                            ImagePathToShow = string.IsNullOrEmpty(a.ImagePath) ? "Images/placeholder.png" : a.ImagePath
-                        })
-                        .ToList();
+                    // Преобразуем в InventoryItem
+                    InventoryItems = assets.Select(a => new InventoryItem
+                    {
+                        Asset = a
+                    }).ToList();
+
+                    // Генерируем QR-коды для каждого элемента
+                    foreach (var item in InventoryItems)
+                    {
+                        // Вызываем асинхронный метод генерации для одного ассета
+                        // Предполагаем, что внутри он использует URL типа localhost:8080/assets/{id}
+                        await item.GenerateMultipleQrsAsync(1);
+                    }
                 }
             }
             catch (Exception ex)
@@ -160,12 +167,5 @@ namespace CourseProgect_Planeta35.Controls
         private void SearchBox_TextChanged(object sender, TextChangedEventArgs e) => LoadItems();
         private void CategoryFilter_SelectionChanged(object sender, SelectionChangedEventArgs e) => LoadItems();
         private void StatusFilter_SelectionChanged(object sender, SelectionChangedEventArgs e) => LoadItems();
-    }
-
-    // Добавляем новое свойство для отображения картинки
-    public class InventoryItem
-    {
-        public Asset Asset { get; set; }
-        public string ImagePathToShow { get; set; }
     }
 }

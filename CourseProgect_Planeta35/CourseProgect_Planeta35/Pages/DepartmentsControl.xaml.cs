@@ -1,19 +1,25 @@
-﻿using CourseProgect_Planeta35.Data;
+﻿using CourseProgect_Planeta35.Controls;
+using CourseProgect_Planeta35.Data;
 using CourseProgect_Planeta35.Models;
-using CourseProgect_Planeta35.Controls;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace CourseProgect_Planeta35.Pages
 {
     public partial class DepartmentsControl : UserControl
     {
         private readonly User CurrentUser;
+
         public DepartmentsControl(User user)
         {
             InitializeComponent();
-            CurrentUser = user ?? throw new ArgumentNullException(nameof(user));
+
+            CurrentUser = user ??
+                throw new ArgumentNullException(nameof(user));
+
             LoadDepartmentsFromDb();
         }
 
@@ -24,21 +30,33 @@ namespace CourseProgect_Planeta35.Pages
                 using (var db = new AppDbContext())
                 {
                     var list = db.Departments.ToList();
-                    DepartmentsPanel.Children.Clear();
+
+                    DepartmentsList.Items.Clear();
 
                     foreach (var dept in list)
-                        AddDepartmentCard(dept.Id, dept.Name, dept.Location);
+                    {
+                        AddDepartmentCard(
+                            dept.Id,
+                            dept.Name,
+                            dept.Location,
+                            dept.Color
+                        );
+                    }
 
                     UpdateCount();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ошибка загрузки подразделений:\n" + ex.Message);
+                MessageBox.Show(
+                    "Ошибка загрузки подразделений:\n" +
+                    ex.Message);
             }
         }
 
-        private void AddDepartment_Click(object sender, RoutedEventArgs e)
+        private void AddDepartment_Click(
+            object sender,
+            RoutedEventArgs e)
         {
             var win = new AddDepartmentWindow();
 
@@ -49,13 +67,20 @@ namespace CourseProgect_Planeta35.Pages
                     var entity = new Department
                     {
                         Name = win.DepartmentName,
-                        Location = win.DepartmentDescription
+                        Location = win.DepartmentDescription,
+                        Color = win.DepartmentColor
                     };
 
                     db.Departments.Add(entity);
+
                     db.SaveChanges();
 
-                    AddDepartmentCard(entity.Id, entity.Name, entity.Location);
+                    AddDepartmentCard(
+                        entity.Id,
+                        entity.Name,
+                        entity.Location,
+                        entity.Color
+                    );
                 }
 
                 UpdateCount();
@@ -64,115 +89,190 @@ namespace CourseProgect_Planeta35.Pages
 
         private void UpdateCount()
         {
-            CountText.Text = $"{DepartmentsPanel.Children.Count} подразделений";
+            CountText.Text =
+                $"{DepartmentsList.Items.Count} подразделений";
         }
 
-        private void AddDepartmentCard(int id, string name, string description)
+        private void AddDepartmentCard(
+            int id,
+            string name,
+            string description,
+            string color)
         {
+            Brush accent =
+                (Brush)new BrushConverter()
+                .ConvertFromString(color);
+
             Border card = new Border
             {
-                Width = 320,
-                Height = 110,
-                Background = Brushes.White,
-                CornerRadius = new CornerRadius(16),
-                Padding = new Thickness(15),
-                Margin = new Thickness(10),
-                Effect = new System.Windows.Media.Effects.DropShadowEffect
-                {
-                    Color = Colors.Black,
-                    Opacity = 0.15,
-                    BlurRadius = 10
-                },
+                Style = (Style)FindResource("DepartmentCardStyle"),
                 Tag = id
             };
 
-            Grid grid = new Grid();
-            grid.ColumnDefinitions.Add(new ColumnDefinition());
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            Grid root = new Grid();
 
-            StackPanel left = new StackPanel { Orientation = Orientation.Horizontal };
-
-            Border iconOuter = new Border
+            // LEFT STRIPE
+            Border stripe = new Border
             {
-                Width = 40,
-                Height = 40,
-                Background = new SolidColorBrush(Color.FromArgb(40, 55, 107, 43)),
-                CornerRadius = new CornerRadius(20)
+                Width = 8,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                CornerRadius = new CornerRadius(20, 0, 0, 20),
+                Background = accent
             };
 
-            Border iconInner = new Border
+            root.Children.Add(stripe);
+
+            // CONTENT
+            Grid content = new Grid
             {
-                Width = 20,
-                Height = 20,
-                Background = new SolidColorBrush(Color.FromRgb(55, 107, 43)),
-                CornerRadius = new CornerRadius(10),
-                HorizontalAlignment = HorizontalAlignment.Center,
+                Margin = new Thickness(22, 18, 18, 18)
+            };
+
+            content.RowDefinitions.Add(
+                new RowDefinition
+                {
+                    Height = GridLength.Auto
+                });
+
+            content.RowDefinitions.Add(
+                new RowDefinition());
+
+            content.RowDefinitions.Add(
+                new RowDefinition
+                {
+                    Height = GridLength.Auto
+                });
+
+            StackPanel header = new StackPanel
+            {
+                Orientation = Orientation.Horizontal
+            };
+
+            Ellipse dot = new Ellipse
+            {
+                Width = 14,
+                Height = 14,
+                Fill = accent,
                 VerticalAlignment = VerticalAlignment.Center
             };
 
-            iconOuter.Child = iconInner;
-            left.Children.Add(iconOuter);
-
-            StackPanel text = new StackPanel { Margin = new Thickness(12, 0, 0, 0) };
-            text.Children.Add(new TextBlock { Text = name, FontWeight = FontWeights.Bold, FontSize = 16 });
-            text.Children.Add(new TextBlock { Text = description, Foreground = Brushes.Gray, FontSize = 12 });
-
-            left.Children.Add(text);
-
-            StackPanel right = new StackPanel
+            TextBlock title = new TextBlock
             {
-                Orientation = Orientation.Horizontal,
-                HorizontalAlignment = HorizontalAlignment.Right
+                Text = name,
+                Margin = new Thickness(10, 0, 0, 0),
+                FontSize = 20,
+                FontWeight = FontWeights.Bold,
+                Foreground = Brushes.White,
+                VerticalAlignment = VerticalAlignment.Center
             };
 
-            Button edit = new Button
+            header.Children.Add(dot);
+            header.Children.Add(title);
+
+            TextBlock desc = new TextBlock
             {
-                Content = "✎",
-                Width = 32,
-                Height = 32,
-                Background = Brushes.Transparent,
-                BorderThickness = new Thickness(0),
-                Foreground = Brushes.Gray,
-                Margin = new Thickness(4)
+                Text = description,
+
+                Margin = new Thickness(0, 14, 0, 0),
+
+                Foreground =
+                    (Brush)new BrushConverter()
+                    .ConvertFromString("#C7D2CB"),
+
+                FontSize = 13,
+
+                TextWrapping = TextWrapping.Wrap
             };
+
+            Grid.SetRow(desc, 1);
+
+            Border footer = new Border
+            {
+                Background =
+                    (Brush)new BrushConverter()
+                    .ConvertFromString("#273029"),
+
+                CornerRadius = new CornerRadius(10),
+
+                Padding = new Thickness(8, 5, 8, 5),
+
+                HorizontalAlignment =
+                    HorizontalAlignment.Left
+            };
+
+            TextBlock footerText = new TextBlock
+            {
+                Text = "Активно",
+
+                Foreground = accent,
+
+                FontWeight = FontWeights.SemiBold,
+
+                FontSize = 12
+            };
+
+            footer.Child = footerText;
+
+            Grid.SetRow(footer, 2);
 
             Button delete = new Button
             {
                 Content = "🗑",
+
                 Width = 32,
                 Height = 32,
+
                 Background = Brushes.Transparent,
+
                 BorderThickness = new Thickness(0),
-                Foreground = Brushes.DarkRed,
-                Margin = new Thickness(4)
+
+                Foreground = Brushes.White,
+
+                Cursor = Cursors.Hand,
+
+                HorizontalAlignment =
+                    HorizontalAlignment.Right,
+
+                VerticalAlignment =
+                    VerticalAlignment.Top
             };
 
             delete.Click += (s, e) =>
             {
                 int deptId = (int)card.Tag;
+
                 using (var db = new AppDbContext())
                 {
-                    var entity = db.Departments.FirstOrDefault(d => d.Id == deptId);
+                    var entity =
+                        db.Departments
+                        .FirstOrDefault(d => d.Id == deptId);
+
                     if (entity != null)
                     {
                         db.Departments.Remove(entity);
+
                         db.SaveChanges();
                     }
                 }
-                DepartmentsPanel.Children.Remove(card);
+
+                DepartmentsList.Items.Remove(card);
+
                 UpdateCount();
             };
 
-            right.Children.Add(edit);
-            right.Children.Add(delete);
+            // =========================
+            // BUILD
+            // =========================
+            content.Children.Add(header);
+            content.Children.Add(desc);
+            content.Children.Add(footer);
 
-            grid.Children.Add(left);
-            Grid.SetColumn(right, 1);
-            grid.Children.Add(right);
+            root.Children.Add(content);
+            root.Children.Add(delete);
 
-            card.Child = grid;
+            card.Child = root;
 
-            DepartmentsPanel.Children.Add(card);
+            DepartmentsList.Items.Add(card);
         }
     }
 }

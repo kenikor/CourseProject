@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,11 @@ namespace CourseProgect_Planeta35.Models
 {
     public class Asset
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string name)
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+
         [Key]
         [Column("id")]
         public int Id { get; set; }
@@ -47,6 +53,7 @@ namespace CourseProgect_Planeta35.Models
 
         public bool IsChecked { get; set; } = false;
 
+
         [MaxLength(50)]
         [Column("status")]
         public string? Status { get; set; } = "В эксплуатации";
@@ -58,9 +65,22 @@ namespace CourseProgect_Planeta35.Models
 
         [MaxLength(300)]
         [Column("image_path")]
-        public string? ImagePath { get; set; }    // путь к изображению
+        public string? ImagePath { get; set; }   
 
         public ICollection<InventoryItem> InventoryItems { get; set; }
         public ICollection<ChangeLog> ChangeLogs { get; set; }
+
+        private Guid _qrToken = Guid.NewGuid();
+
+        [Column("qr_token")]
+        public Guid QrToken
+        {
+            get => _qrToken;
+            set
+            {
+                _qrToken = value;
+                OnPropertyChanged(nameof(QrToken));
+            }
+        }
     }
 }

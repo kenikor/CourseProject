@@ -5,8 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CourseProgect_Planeta35"
         mc:Ignorable="d"
-        Title="Инвентаризация" Height="480" Width="400">
+        Title="Инвентаризация"
+        WindowState="Maximized"
+        WindowStyle="None"
+        ResizeMode="NoResize">
+    
     <Grid>
-        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>
+        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" MouseLeftButtonDown="Window_MouseLeftButtonDown"/>
+        <Button Content="✕"
+                Width="40"
+                Height="30"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Background="Transparent"
+                Foreground="White"
+                BorderThickness="0"
+                Click="Close_Click"/>
     </Grid>
 </Window>

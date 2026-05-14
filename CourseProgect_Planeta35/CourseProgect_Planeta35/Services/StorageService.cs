@@ -8,8 +8,6 @@ using CourseProgect_Planeta35.Models;
 
 namespace CourseProgect_Planeta35.Services
 {
-    // Простой файловый сервис для чтения/записи JSON.
-    // Структура файлов: %AppData%/CourseProgect_Planeta35/data/{name}.json
     public static class StorageService
     {
         private static readonly string BasePath;

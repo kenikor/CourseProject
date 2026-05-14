@@ -1,6 +1,7 @@
 ﻿using CourseProgect_Planeta35.Data;
 using CourseProgect_Planeta35.Models;
 using CourseProgect_Planeta35.Pages;
+using CourseProgect_Planeta35.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -115,7 +116,7 @@ namespace CourseProgect_Planeta35.Pages
             var main = Application.Current.MainWindow as MainWindow;
             if (main != null)
             {
-                main.MainFrame.Content = new CheckoutPage(Cart);
+                main.MainFrame.Content = new CheckoutPage(Cart, UserSession.CurrentUser);
             }
 
             CloseCart();
