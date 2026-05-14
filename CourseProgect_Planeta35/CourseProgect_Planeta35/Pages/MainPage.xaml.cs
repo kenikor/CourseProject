@@ -6,6 +6,8 @@ using System.Windows;
 using System.Windows.Controls;
 using UIInventoryItem = CourseProgect_Planeta35.Models.InventoryItem;
 using System.Windows.Controls.Primitives;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
 
 namespace CourseProgect_Planeta35.Pages
 {
@@ -24,8 +26,43 @@ namespace CourseProgect_Planeta35.Pages
             ConfigureInterface(user);
             LoadDataFromDb();
             LoadDashboard();
+            StartLiquidAnimation();
 
             BtnDashboard.IsChecked = true;
+        }
+        private void StartLiquidAnimation()
+        {
+            var brush1 = (RadialGradientBrush)FindResource("Brush1");
+            var brush2 = (RadialGradientBrush)FindResource("Brush2");
+            var brush3 = (RadialGradientBrush)FindResource("Brush3");
+
+            AnimateBrush(brush1, 12, 0.0, 1.0);
+            AnimateBrush(brush2, 16, 1.0, 0.0);
+            AnimateBrush(brush3, 9, 0.2, 0.9);
+        }
+
+        private void AnimateBrush(RadialGradientBrush brush, double seconds, double from, double to)
+        {
+            var originAnim = new PointAnimation
+            {
+                From = new Point(from, from),
+                To = new Point(to, to),
+                Duration = TimeSpan.FromSeconds(seconds),
+                AutoReverse = true,
+                RepeatBehavior = RepeatBehavior.Forever
+            };
+
+            var centerAnim = new PointAnimation
+            {
+                From = new Point(0.4, 0.4),
+                To = new Point(0.6, 0.6),
+                Duration = TimeSpan.FromSeconds(seconds * 1.3),
+                AutoReverse = true,
+                RepeatBehavior = RepeatBehavior.Forever
+            };
+
+            brush.BeginAnimation(RadialGradientBrush.GradientOriginProperty, originAnim);
+            brush.BeginAnimation(RadialGradientBrush.CenterProperty, centerAnim);
         }
 
         private void SetupAdminPanel()

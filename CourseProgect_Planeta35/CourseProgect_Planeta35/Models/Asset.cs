@@ -63,6 +63,11 @@ namespace CourseProgect_Planeta35.Models
         [Column("description")]
         public string? Description { get; set; }
 
+        public override string ToString()
+        {
+            return Name;
+        }
+
         [MaxLength(300)]
         [Column("image_path")]
         public string? ImagePath { get; set; }   

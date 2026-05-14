@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using Microsoft.EntityFrameworkCore;
 
 namespace CourseProgect_Planeta35.Pages
 {
@@ -14,6 +15,7 @@ namespace CourseProgect_Planeta35.Pages
     {
         private readonly AppDbContext _dbContext;
         private readonly User CurrentUser;
+        private List<User> _allUsers;
         public ObservableCollection<User> Users { get; set; } = new ObservableCollection<User>();
         private User editingUser = null;
 
@@ -25,7 +27,12 @@ namespace CourseProgect_Planeta35.Pages
             CurrentUser = user ?? throw new ArgumentNullException(nameof(user));
 
             LoadUsers();
-            UsersList.ItemsSource = Users;
+            _allUsers = _dbContext.Users
+                .Include(u => u.Role)
+                .Include(u => u.Department)
+                .ToList();
+
+            UsersList.ItemsSource = _allUsers;
 
             RoleBox.ItemsSource = _dbContext.Roles.ToList();
             RoleBox.DisplayMemberPath = "Name";
@@ -36,6 +43,35 @@ namespace CourseProgect_Planeta35.Pages
             DepartmentBox.SelectedValuePath = "Id";
 
             this.Loaded += (s, e) => StartBackgroundAnimation();
+        }
+
+        private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string search = SearchBox.Text.ToLower();
+
+            var filtered = _allUsers.Where(u =>
+                (!string.IsNullOrEmpty(u.FullName) &&
+                 u.FullName.ToLower().Contains(search))
+
+                ||
+
+                (!string.IsNullOrEmpty(u.Username) &&
+                 u.Username.ToLower().Contains(search))
+
+                ||
+
+                (u.Department != null &&
+                 !string.IsNullOrEmpty(u.Department.Name) &&
+                 u.Department.Name.ToLower().Contains(search))
+
+                ||
+
+                (u.Role != null &&
+                 !string.IsNullOrEmpty(u.Role.Name) &&
+                 u.Role.Name.ToLower().Contains(search))
+            ).ToList();
+
+            UsersList.ItemsSource = filtered;
         }
 
         private void StartBackgroundAnimation()
@@ -98,7 +134,6 @@ namespace CourseProgect_Planeta35.Pages
 
                 if (editWindow.ShowDialog() == true)
                 {
-                    // Обновляем отображаемый список
                     int idx = Users.IndexOf(user);
                     Users[idx] = editWindow.ResultUser;
                 }

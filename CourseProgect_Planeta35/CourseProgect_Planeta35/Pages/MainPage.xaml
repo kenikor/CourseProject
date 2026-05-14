@@ -8,8 +8,40 @@
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="MainPage" Cursor="">
+    
+    
 
     <Page.Resources>
+        <RadialGradientBrush x:Key="Brush1"
+                     x:Name="Brush1"
+                     GradientOrigin="0.2,0.2"
+                     Center="0.3,0.3"
+                     RadiusX="0.8"
+                     RadiusY="0.8">
+            <GradientStop Color="#3E5C4C" Offset="0"/>
+            <GradientStop Color="Transparent" Offset="1"/>
+        </RadialGradientBrush>
+
+        <RadialGradientBrush x:Key="Brush2"
+                     x:Name="Brush2"
+                     GradientOrigin="0.8,0.8"
+                     Center="0.7,0.7"
+                     RadiusX="0.8"
+                     RadiusY="0.8">
+            <GradientStop Color="#8B9B4C" Offset="0"/>
+            <GradientStop Color="Transparent" Offset="1"/>
+        </RadialGradientBrush>
+
+        <RadialGradientBrush x:Key="Brush3"
+                     x:Name="Brush3"
+                     GradientOrigin="0.5,0.5"
+                     Center="0.5,0.5"
+                     RadiusX="0.9"
+                     RadiusY="0.9">
+            <GradientStop Color="#5A7D6A" Offset="0"/>
+            <GradientStop Color="Transparent" Offset="1"/>
+        </RadialGradientBrush>
+
         <Style TargetType="ToggleButton" x:Key="MenuButtonStyle">
             <Setter Property="Margin" Value="6"/>
             <Setter Property="Padding" Value="10"/>
@@ -51,7 +83,10 @@
     <Grid>
 
         <!-- 🌑 ФОН -->
+        <!-- 🌑 ФОН -->
         <Grid>
+
+            <!-- Основной градиент -->
             <Rectangle>
                 <Rectangle.Fill>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
@@ -61,31 +96,16 @@
                 </Rectangle.Fill>
             </Rectangle>
 
-            <Rectangle Opacity="0.25">
-                <Rectangle.Fill>
-                    <RadialGradientBrush x:Name="BgBrush1"
-                                     Center="0.3,0.3"
-                                     GradientOrigin="0.2,0.2"
-                                     RadiusX="0.9"
-                                     RadiusY="0.9">
-                        <GradientStop Color="#3E5C4C"/>
-                        <GradientStop Color="#1A1F1C" Offset="1"/>
-                    </RadialGradientBrush>
-                </Rectangle.Fill>
-            </Rectangle>
+            <!-- Живой фон -->
+            <Rectangle Fill="{StaticResource Brush1}"
+               Opacity="0.20"/>
 
-            <Rectangle Opacity="0.15">
-                <Rectangle.Fill>
-                    <RadialGradientBrush x:Name="BgBrush2"
-                                     Center="0.8,0.2"
-                                     GradientOrigin="0.9,0.1"
-                                     RadiusX="0.8"
-                                     RadiusY="0.8">
-                        <GradientStop Color="#8B9B4C"/>
-                        <GradientStop Color="#2B3A31" Offset="1"/>
-                    </RadialGradientBrush>
-                </Rectangle.Fill>
-            </Rectangle>
+            <Rectangle Fill="{StaticResource Brush2}"
+               Opacity="0.15"/>
+
+            <Rectangle Fill="{StaticResource Brush3}"
+               Opacity="0.12"/>
+
         </Grid>
 
         <!-- 🧊 ОСНОВНОЙ UI -->

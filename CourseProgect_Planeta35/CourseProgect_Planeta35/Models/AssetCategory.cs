@@ -25,6 +25,10 @@ namespace CourseProgect_Planeta35.Models
         [Column("color")]
         [MaxLength(10)]
         public string Color { get; set; }
+        public override string ToString()
+        {
+            return Name;
+        }
 
         public ICollection<Asset> Assets { get; set; }
     }

@@ -19,5 +19,9 @@ namespace CourseProgect_Planeta35.Models
         public string Name { get; set; }
 
         public ICollection<User> Users { get; set; }
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

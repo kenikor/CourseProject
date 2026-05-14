@@ -73,7 +73,6 @@ namespace CourseProgect_Planeta35.Pages
                 IsLogin = false;
             }
         }
-
         private void Submit_Click(object sender, RoutedEventArgs e)
         {
             ErrorText.Visibility = Visibility.Collapsed;
@@ -102,10 +101,8 @@ namespace CourseProgect_Planeta35.Pages
                     return;
                 }
 
-                // Устанавливаем текущего пользователя
                 App.CurrentUser = user;
 
-                // Создаём страницу
                 mainPage = new MainPage(user);
             }
             else
@@ -127,13 +124,12 @@ namespace CourseProgect_Planeta35.Pages
                     Username = email,
                     PasswordHash = passwordHash,
                     FullName = name,
-                    RoleId = 2 // Сотрудник
+                    RoleId = 2 
                 };
 
                 db.Users.Add(newUser);
                 db.SaveChanges();
 
-                // Авторизуем сразу после регистрации
                 App.CurrentUser = newUser;
 
                 MessageBox.Show($"Пользователь {name} успешно зарегистрирован!");
@@ -141,7 +137,6 @@ namespace CourseProgect_Planeta35.Pages
                 mainPage = new MainPage(newUser);
             }
 
-            // Навигация на главную страницу
             if (mainPage != null)
             {
                 if (this.NavigationService != null)
@@ -155,14 +150,12 @@ namespace CourseProgect_Planeta35.Pages
             }
         }
 
-
         private void ShowError(string message)
         {
             ErrorText.Text = message;
             ErrorText.Visibility = Visibility.Visible;
         }
 
-        // Метод для вычисления SHA-256 хэша строки
         private string ComputeSha256Hash(string rawData)
         {
             using (SHA256 sha256Hash = SHA256.Create())
@@ -170,7 +163,7 @@ namespace CourseProgect_Planeta35.Pages
                 byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
                 StringBuilder builder = new StringBuilder();
                 foreach (var b in bytes)
-                    builder.Append(b.ToString("x2")); // Преобразуем байты в hex
+                    builder.Append(b.ToString("x2")); 
                 return builder.ToString();
             }
         }
@@ -181,7 +174,7 @@ namespace CourseProgect_Planeta35.Pages
             {
                 Username = "guest",
                 FullName = "Гость",
-                RoleId = 3 // допустим, роль гостя
+                RoleId = 3 
             };
 
             var mainPage = new MainPage(guestUser);

@@ -21,5 +21,10 @@ namespace CourseProgect_Planeta35.Models
         public ICollection<User> Users { get; set; }
         public ICollection<Asset> Assets { get; set; }
         public ICollection<Inventory> Inventories { get; set; }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

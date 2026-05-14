@@ -82,8 +82,7 @@
                                 <ContentPresenter Grid.Column="0"
                                           VerticalAlignment="Center"
                                           HorizontalAlignment="Left"
-                                          Content="{TemplateBinding SelectionBoxItem}"
-                                          ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"/>
+                                          Content="{TemplateBinding SelectionBoxItem}"/>
 
                                 <!-- Arrow -->
                                 <ToggleButton Grid.Column="1"

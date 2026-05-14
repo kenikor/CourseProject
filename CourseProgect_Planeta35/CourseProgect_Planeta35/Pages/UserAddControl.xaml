@@ -7,6 +7,33 @@
              Background="#F5F1E9">
 
     <UserControl.Resources>
+        <Style TargetType="ListBoxItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <ContentPresenter/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <Style.Triggers>
+                <!-- убираем стандартный selection -->
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="Transparent"/>
+                </Trigger>
+
+                <!-- убираем фокус -->
+                <Trigger Property="IsKeyboardFocused" Value="True">
+                    <Setter Property="Background" Value="Transparent"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
         <!-- Стили оставляем как есть -->
         <Style x:Key="RoleBadge" TargetType="Border">
             <Setter Property="Padding" Value="6 2"/>
@@ -336,91 +363,100 @@
             <!-- Заголовок -->
             <!-- HEADER -->
             <Border Grid.Row="0"
-        Background="#1E2320"
-        CornerRadius="18"
-        Padding="20"
-        BorderBrush="#2F3B33"
-        BorderThickness="1"
-        Margin="0 0 0 20">
+                    Background="#1E2320"
+                    CornerRadius="18"
+                    Padding="20"
+                    BorderBrush="#2F3B33"
+                    BorderThickness="1"
+                    Margin="0 0 0 20">
 
                 <Grid>
-
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- LEFT -->
+                    <!-- LEFT SIDE: TITLE + SUBTITLE -->
                     <StackPanel>
-
                         <TextBlock Text="Пользователи"
-                       FontSize="28"
-                       FontWeight="Bold"
-                       Foreground="White"/>
+                                   FontSize="28"
+                                   FontWeight="Bold"
+                                   Foreground="White"/>
 
                         <TextBlock Text="Управление сотрудниками системы"
-                       Margin="0 4 0 0"
-                       Foreground="#BFCBC2"
-                       FontSize="13"/>
-
+                                   Margin="0 4 0 0"
+                                   Foreground="#BFCBC2"
+                                   FontSize="13"/>
                     </StackPanel>
 
-                    <!-- RIGHT -->
-                    <Button Grid.Column="1"
-                Width="200"
-                Height="42"
-                Click="AddUser_Click"
-                Background="#42604F"
-                BorderThickness="0"
-                Cursor="Hand">
+                    <!-- RIGHT SIDE: SEARCH + BUTTON -->
+                    <StackPanel Grid.Column="1"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center">
 
-                        <Button.Template>
-                            <ControlTemplate TargetType="Button">
+                        <!-- SEARCH -->
+                        <TextBox x:Name="SearchBox"
+                                 Width="240"
+                                 Height="40"
+                                 Margin="20 0 12 0"
+                                 Background="#151A17"
+                                 Foreground="White"
+                                 BorderBrush="#2F3B33"
+                                 BorderThickness="1"
+                                 VerticalContentAlignment="Center"
+                                 Padding="12 0"
+                                 FontSize="13"
+                                 TextChanged="SearchBox_TextChanged"/>
 
-                                <Border x:Name="bg"
-                            Background="{TemplateBinding Background}"
-                            CornerRadius="12">
+                        <!-- BUTTON -->
+                        <Button Width="200"
+                                Height="42"
+                                Click="AddUser_Click"
+                                Background="#42604F"
+                                BorderThickness="0"
+                                Cursor="Hand"
+                                VerticalAlignment="Center">
 
-                                    <StackPanel Orientation="Horizontal"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="bg"
+                                            Background="{TemplateBinding Background}"
+                                            CornerRadius="12">
 
-                                        <TextBlock Text="+"
-                                       FontSize="18"
-                                       Foreground="White"
-                                       Margin="0,-2,8,0"/>
+                                        <StackPanel Orientation="Horizontal"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center">
 
-                                        <TextBlock Text="Добавить"
-                                       Foreground="White"
-                                       FontWeight="SemiBold"
-                                       FontSize="14"/>
+                                            <TextBlock Text="+"
+                                                       FontSize="18"
+                                                       Foreground="White"
+                                                       Margin="0,-2,8,0"/>
 
-                                    </StackPanel>
+                                            <TextBlock Text="Добавить"
+                                                       Foreground="White"
+                                                       FontWeight="SemiBold"
+                                                       FontSize="14"/>
+                                        </StackPanel>
+                                    </Border>
 
-                                </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="bg"
+                                                    Property="Background"
+                                                    Value="#567564"/>
+                                        </Trigger>
 
-                                <ControlTemplate.Triggers>
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter TargetName="bg"
+                                                    Property="Background"
+                                                    Value="#31473A"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
 
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="bg"
-                                    Property="Background"
-                                    Value="#567564"/>
-                                    </Trigger>
-
-                                    <Trigger Property="IsPressed" Value="True">
-                                        <Setter TargetName="bg"
-                                    Property="Background"
-                                    Value="#31473A"/>
-                                    </Trigger>
-
-                                </ControlTemplate.Triggers>
-
-                            </ControlTemplate>
-
-                        </Button.Template>
-
-                    </Button>
-
+                    </StackPanel>
                 </Grid>
 
             </Border>
@@ -439,18 +475,18 @@
 
             <!-- Popup -->
             <Border x:Name="AddPanel"
-                Background="White"
-                CornerRadius="14"
-                Padding="24"
-                BorderBrush="#DDD"
-                BorderThickness="1"
-                Visibility="Collapsed"
-                Width="420"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Top"
-                Margin="0 80 0 0"
-                Panel.ZIndex="999"
-                Effect="{DynamicResource DropShadow}">
+                    Background="White"
+                    CornerRadius="14"
+                    Padding="24"
+                    BorderBrush="#DDD"
+                    BorderThickness="1"
+                    Visibility="Collapsed"
+                    Width="420"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Margin="0 80 0 0"
+                    Panel.ZIndex="999"
+                    Effect="{DynamicResource DropShadow}">
 
                 <StackPanel>
                     <TextBlock Text="Имя" Margin="0 0 0 4"/>
