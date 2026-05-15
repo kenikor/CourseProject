@@ -16,11 +16,11 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="border"
-             CornerRadius="10"
-             Background="{TemplateBinding Background}"
-             BorderBrush="{TemplateBinding BorderBrush}"
-             BorderThickness="{TemplateBinding BorderThickness}"
-             Padding="6">
+                                 CornerRadius="10"
+                                 Background="{TemplateBinding Background}"
+                                 BorderBrush="{TemplateBinding BorderBrush}"
+                                 BorderThickness="{TemplateBinding BorderThickness}"
+                                 Padding="6">
                             <ContentPresenter HorizontalAlignment="Center"
                            VerticalAlignment="Center"/>
                         </Border>
@@ -264,47 +264,73 @@
                 <WrapPanel>
 
                     <!-- SEARCH -->
-                    <TextBox x:Name="SearchBox"
-                             Width="300"
-                             Height="36"
-                             Margin="0 0 12 0"
-                             Background="#2A322D"
-                             Foreground="White"
-                             BorderThickness="0"
-                             VerticalContentAlignment="Center"
-                             TextChanged="SearchBox_TextChanged"/>
+                    <StackPanel Margin="0 0 12 0">
+
+                        <TextBlock Text="Поиск"
+                   Foreground="#BFCBC2"
+                   Margin="0 0 0 4"/>
+
+                        <TextBox x:Name="SearchBox"
+                 Width="300"
+                 Height="36"
+                 Background="#2A322D"
+                 Foreground="White"
+                 BorderThickness="0"
+                 VerticalContentAlignment="Center"
+                 Padding="10 0"
+                 TextChanged="SearchBox_TextChanged"/>
+
+                    </StackPanel>
 
                     <!-- CATEGORY -->
-                    <ComboBox x:Name="CategoryFilter"
-                              Width="180"
-                              Style="{StaticResource DarkComboBox}"
-                              Margin="0 0 12 0"
-                              Background="#2A322D"
-                              Foreground="Black"
-                              BorderThickness="0"
-                              SelectionChanged="CategoryFilter_SelectionChanged"/>
+                    <StackPanel Margin="0 0 12 0">
+
+                        <TextBlock Text="Категория"
+                   Foreground="#BFCBC2"
+                   Margin="0 0 0 4"/>
+
+                        <ComboBox x:Name="CategoryFilter"
+                  Width="180"
+                  Height="36"
+                  Style="{StaticResource DarkComboBox}"
+                  Background="#2A322D"
+                  Foreground="White"
+                  BorderThickness="0"
+                  SelectionChanged="CategoryFilter_SelectionChanged"/>
+
+                    </StackPanel>
 
                     <!-- STATUS -->
-                    <ComboBox x:Name="StatusFilter"
-                              Width="180"
-                              Style="{StaticResource DarkComboBox}"
-                              Margin="0 0 12 0"
-                              Background="#2A322D"
-                              Foreground="Black"
-                              BorderThickness="0"
-                              SelectionChanged="StatusFilter_SelectionChanged">
+                    <StackPanel Margin="0 0 12 0">
 
-                        <ComboBoxItem Content="Все"/>
-                        <ComboBoxItem Content="В наличии"/>
-                        <ComboBoxItem Content="Списано"/>
-                        <ComboBoxItem Content="Отсутствует"/>
-                        <ComboBoxItem Content="На обслуживании"/>
+                        <TextBlock Text="Статус"
+                   Foreground="#BFCBC2"
+                   Margin="0 0 0 4"/>
 
-                    </ComboBox>
+                        <ComboBox x:Name="StatusFilter"
+                  Width="180"
+                  Height="36"
+                  Style="{StaticResource DarkComboBox}"
+                  Background="#2A322D"
+                  Foreground="White"
+                  BorderThickness="0"
+                  SelectionChanged="StatusFilter_SelectionChanged">
+
+                            <ComboBoxItem Content="Все"/>
+                            <ComboBoxItem Content="В наличии"/>
+                            <ComboBoxItem Content="Списано"/>
+                            <ComboBoxItem Content="Отсутствует"/>
+                            <ComboBoxItem Content="На обслуживании"/>
+
+                        </ComboBox>
+
+                    </StackPanel>
 
                     <!-- ADD -->
                     <Button Content="➕ Добавить"
                             Width="140"
+                            Height="36"
+                            Margin="0 10 0 0"
                             Background="#3E5C4C"
                             Style="{StaticResource ActionButtonStyle}"
                             Foreground="White"

@@ -77,19 +77,22 @@ namespace CourseProgect_Planeta35.Pages
             if (user == null) return;
 
             BtnProcurement.Visibility = Visibility.Collapsed;
-            BtnInventory.Visibility = Visibility.Collapsed;
+            BtnInventory.Visibility = Visibility.Visible;
             BtnReports.Visibility = Visibility.Collapsed;
+            BtnCheck.Visibility = Visibility.Collapsed;
 
-            if (user.RoleId == 1) // admin
+            if (user.RoleId == 1) 
             {
                 BtnProcurement.Visibility = Visibility.Visible;
                 BtnInventory.Visibility = Visibility.Visible;
                 BtnReports.Visibility = Visibility.Visible;
                 AdminPanel.Visibility = Visibility.Visible;
+                BtnCheck.Visibility = Visibility.Visible;
             }
-            else if (user.RoleId == 2) // manager
+            else if (user.RoleId == 2) 
             {
                 BtnProcurement.Visibility = Visibility.Visible;
+                BtnReports.Visibility = Visibility.Visible;
             }
         }
 
@@ -166,7 +169,6 @@ namespace CourseProgect_Planeta35.Pages
                     btn.IsChecked = false;
             }
 
-            // Навигация
             if (clicked == BtnDashboard)
                 LoadDashboard();
 

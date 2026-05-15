@@ -20,7 +20,7 @@ namespace CourseProgect_Planeta35.Controls
             InitializeComponent();
             LoadData();
             LoadItems();
-            UpdateProgress(); // сразу показать 0/total
+            UpdateProgress(); 
             CurrentUser = currentUser;
         }
 

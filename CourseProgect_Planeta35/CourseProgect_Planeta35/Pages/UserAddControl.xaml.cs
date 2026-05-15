@@ -1,13 +1,11 @@
 ﻿using CourseProgect_Planeta35.Data;
 using CourseProgect_Planeta35.Models;
-using System;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using Microsoft.EntityFrameworkCore;
 
 namespace CourseProgect_Planeta35.Pages
 {
@@ -15,8 +13,7 @@ namespace CourseProgect_Planeta35.Pages
     {
         private readonly AppDbContext _dbContext;
         private readonly User CurrentUser;
-        private List<User> _allUsers;
-        public ObservableCollection<User> Users { get; set; } = new ObservableCollection<User>();
+        private ObservableCollection<User> _allUsers;
         private User editingUser = null;
 
         public UserAddControl(User user)
@@ -26,11 +23,12 @@ namespace CourseProgect_Planeta35.Pages
             _dbContext = new AppDbContext();
             CurrentUser = user ?? throw new ArgumentNullException(nameof(user));
 
-            LoadUsers();
-            _allUsers = _dbContext.Users
-                .Include(u => u.Role)
-                .Include(u => u.Department)
-                .ToList();
+            _allUsers = new ObservableCollection<User>(
+                _dbContext.Users
+                    .Include(u => u.Role)
+                    .Include(u => u.Department)
+                    .ToList()
+            );
 
             UsersList.ItemsSource = _allUsers;
 
@@ -48,6 +46,12 @@ namespace CourseProgect_Planeta35.Pages
         private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             string search = SearchBox.Text.ToLower();
+
+            if (string.IsNullOrWhiteSpace(search))
+            {
+                UsersList.ItemsSource = _allUsers;
+                return;
+            }
 
             var filtered = _allUsers.Where(u =>
                 (!string.IsNullOrEmpty(u.FullName) &&
@@ -71,7 +75,7 @@ namespace CourseProgect_Planeta35.Pages
                  u.Role.Name.ToLower().Contains(search))
             ).ToList();
 
-            UsersList.ItemsSource = filtered;
+            UsersList.ItemsSource = new ObservableCollection<User>(filtered);
         }
 
         private void StartBackgroundAnimation()
@@ -104,16 +108,6 @@ namespace CourseProgect_Planeta35.Pages
             brush.BeginAnimation(RadialGradientBrush.CenterProperty, centerAnim);
         }
 
-        private void LoadUsers()
-        {
-            Users.Clear();
-            var userEntities = _dbContext.Users
-                .ToList();
-
-            foreach (var u in userEntities)
-                Users.Add(u);
-        }
-
         private void AddUser_Click(object sender, RoutedEventArgs e)
         {
             var addWindow = new UserAddWindow(_dbContext);
@@ -121,7 +115,7 @@ namespace CourseProgect_Planeta35.Pages
 
             if (addWindow.ShowDialog() == true)
             {
-                Users.Add(addWindow.ResultUser);
+                ReloadUsers();
             }
         }
 
@@ -134,9 +128,23 @@ namespace CourseProgect_Planeta35.Pages
 
                 if (editWindow.ShowDialog() == true)
                 {
-                    int idx = Users.IndexOf(user);
-                    Users[idx] = editWindow.ResultUser;
+                    ReloadUsers();
                 }
+            }
+        }
+
+        private void ReloadUsers()
+        {
+            _allUsers.Clear();
+
+            var users = _dbContext.Users
+                .Include(u => u.Role)
+                .Include(u => u.Department)
+                .ToList();
+
+            foreach (var user in users)
+            {
+                _allUsers.Add(user);
             }
         }
 
@@ -176,7 +184,8 @@ namespace CourseProgect_Planeta35.Pages
 
                 _dbContext.Users.Add(newUser);
                 _dbContext.SaveChanges();
-                Users.Add(newUser);
+
+                ReloadUsers();
             }
             else
             {
@@ -202,7 +211,8 @@ namespace CourseProgect_Planeta35.Pages
                 {
                     _dbContext.Users.Remove(user);
                     _dbContext.SaveChanges();
-                    Users.Remove(user);
+
+                    ReloadUsers();
                 }
             }
         }

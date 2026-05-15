@@ -124,11 +124,6 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-
-        <DropShadowEffect x:Key="ShadowEffect"
-                           BlurRadius="25"
-                           ShadowDepth="0"
-                           Opacity="0.25"/>
     </Page.Resources>
 
     <!-- 🌿 BACKGROUND -->
@@ -188,8 +183,7 @@
                 <Border Width="70"
                         Height="70"
                         CornerRadius="18"
-                        Background="#3E5C4C"
-                        Effect="{StaticResource ShadowEffect}">
+                        Background="#3E5C4C">
                     <TextBlock Text="📦"
                                FontSize="34"
                                Foreground="White"
@@ -209,17 +203,13 @@
                            HorizontalAlignment="Center"/>
             </StackPanel>
 
-            <!-- GLASS CARD -->
             <Border Background="#CC1E2320"
                     CornerRadius="18"
                     Padding="20"
                     BorderBrush="#2F3A33"
-                    BorderThickness="1"
-                    Effect="{StaticResource ShadowEffect}">
+                    BorderThickness="1">
 
                 <StackPanel>
-
-                    <!-- TABS -->
                     <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Center"
                                 Margin="0 0 0 15">
@@ -238,7 +228,6 @@
                                       Checked="RegisterTab_Checked"/>
                     </StackPanel>
 
-                    <!-- NAME -->
                     <StackPanel x:Name="RegisterNameField"
                                 Visibility="Collapsed"
                                 Margin="0 0 0 10">
@@ -253,7 +242,6 @@
                                  BorderBrush="#2F3A33"/>
                     </StackPanel>
 
-                    <!-- EMAIL -->
                     <TextBlock Text="Email" Foreground="White"/>
                     <TextBox x:Name="EmailBox"
                              Height="30"
@@ -263,7 +251,6 @@
                              Foreground="White"
                              BorderBrush="#2F3A33"/>
 
-                    <!-- PASSWORD -->
                     <TextBlock Text="Пароль" Foreground="White"/>
                     <PasswordBox x:Name="PasswordBox"
                                  Height="30"
@@ -273,14 +260,12 @@
                                  Foreground="White"
                                  BorderBrush="#2F3A33"/>
 
-                    <!-- ERROR -->
                     <TextBlock x:Name="ErrorText"
-                               Foreground="#FF6B6B"
+                               Foreground="Red"
                                Margin="0 0 0 10"
                                Visibility="Collapsed"
                                TextAlignment="Center"/>
 
-                    <!-- BUTTONS -->
                     <ToggleButton Content="Продолжить"
                                   Background="#3E5C4C"
                                   Foreground="White"

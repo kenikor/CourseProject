@@ -104,17 +104,17 @@
 
                             <!-- Dropdown -->
                             <Popup x:Name="Popup"
-                           Placement="Bottom"
-                           AllowsTransparency="True"
-                           Focusable="False"
-                           IsOpen="{TemplateBinding IsDropDownOpen}"
-                           PopupAnimation="Fade">
+                                   Placement="Bottom"
+                                   AllowsTransparency="True"
+                                   Focusable="False"
+                                   IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   PopupAnimation="Fade">
 
                                 <Border Background="#1C2621"
-                                BorderBrush="#3E5C4C"
-                                BorderThickness="1"
-                                CornerRadius="10"
-                                Margin="0,5,0,0">
+                                        BorderBrush="#3E5C4C"
+                                        BorderThickness="1"
+                                        CornerRadius="10"
+                                        Margin="0,5,0,0">
 
                                     <ScrollViewer>
 
@@ -133,19 +133,19 @@
                             <!-- Hover -->
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="Border"
-                                Property="BorderBrush"
-                                Value="#3E5C4C"/>
+                                        Property="BorderBrush"
+                                        Value="#3E5C4C"/>
                             </Trigger>
 
                             <!-- Focus -->
                             <Trigger Property="IsKeyboardFocusWithin" Value="True">
                                 <Setter TargetName="Border"
-                                Property="BorderBrush"
-                                Value="#8B9B4C"/>
+                                        Property="BorderBrush"
+                                        Value="#8B9B4C"/>
 
                                 <Setter TargetName="Border"
-                                Property="Background"
-                                Value="#1C2621"/>
+                                        Property="Background"
+                                        Value="#1C2621"/>
                             </Trigger>
 
                         </ControlTemplate.Triggers>
@@ -170,9 +170,9 @@
                     <ControlTemplate TargetType="ComboBoxItem">
 
                         <Border x:Name="Bg"
-                        Background="{TemplateBinding Background}"
-                        CornerRadius="6"
-                        Margin="4">
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="6"
+                                Margin="4">
 
                             <ContentPresenter VerticalAlignment="Center"/>
 
@@ -182,14 +182,14 @@
 
                             <Trigger Property="IsHighlighted" Value="True">
                                 <Setter TargetName="Bg"
-                                Property="Background"
-                                Value="#24352C"/>
+                                        Property="Background"
+                                        Value="#24352C"/>
                             </Trigger>
 
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter TargetName="Bg"
-                                Property="Background"
-                                Value="#3E5C4C"/>
+                                        Property="Background"
+                                        Value="#3E5C4C"/>
                             </Trigger>
 
                         </ControlTemplate.Triggers>

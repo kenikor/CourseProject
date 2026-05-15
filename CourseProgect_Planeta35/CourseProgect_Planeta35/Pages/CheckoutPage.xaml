@@ -180,26 +180,26 @@
                                 Height="40"
                                 FontSize="14"
                                 Style="{StaticResource MainButton}"
-                                Click="Card_Click"
-                                Background="#3E5C4C"/>
+                                Background="#3E5C4C"
+                                Click="Card_Click"/>
 
                         <Button Content="Счёт"
                                 Width="120"
                                 Height="40"
                                 FontSize="14"
                                 Style="{StaticResource MainButton}"
-                                Click="Invoice_Click"
                                 Background="#3E5C4C"
-                                Margin="10,0,0,0"/>
+                                Margin="10,0,0,0"
+                                Click="Invoice_Click"/>
 
                         <Button Content="Наличные"
                                 Width="120"
                                 Height="40"
                                 FontSize="14"
                                 Style="{StaticResource MainButton}"
-                                Click="Cash_Click"
                                 Background="#3E5C4C"
-                                Margin="10,0,0,0"/>
+                                Margin="10,0,0,0"
+                                Click="Cash_Click"/>
 
                     </StackPanel>
 
@@ -217,10 +217,14 @@
                         <TextBlock Text="Имя держателя" Foreground="White"/>
                         <TextBox x:Name="CardHolder"
                                  Margin="0,5"
+                                 PreviewTextInput="CardHolder_PreviewTextInput"
+                                 TextChanged="CardHolder_TextChanged"
                                  Style="{StaticResource ModernTextBox}"/>
 
                         <TextBlock Text="MM/YY" Foreground="White"/>
                         <TextBox x:Name="Expiry"
+                                 PreviewTextInput="Expiry_PreviewTextInput"
+                                 TextChanged="Expiry_TextChanged"
                                  Margin="0,5"
                                  Style="{StaticResource ModernTextBox}"/>
 
@@ -229,7 +233,7 @@
                                  Margin="0,5"
                                  MaxLength="3"
                                  Style="{StaticResource ModernTextBox}"
-                                 PreviewTextInput="DigitsOnly_PreviewTextInput"
+                                 PreviewTextInput="CVV_PreviewTextInput"
                                  DataObject.Pasting="DigitsOnly_Pasting"/>
 
                     </StackPanel>

@@ -93,15 +93,9 @@ namespace CourseProgect_Planeta35.Pages
                 $"{DepartmentsList.Items.Count} подразделений";
         }
 
-        private void AddDepartmentCard(
-            int id,
-            string name,
-            string description,
-            string color)
+        private void AddDepartmentCard(int id, string name, string description, string color)
         {
-            Brush accent =
-                (Brush)new BrushConverter()
-                .ConvertFromString(color);
+            Brush accent = (Brush)new BrushConverter().ConvertFromString(color);
 
             Border card = new Border
             {
@@ -111,7 +105,6 @@ namespace CourseProgect_Planeta35.Pages
 
             Grid root = new Grid();
 
-            // LEFT STRIPE
             Border stripe = new Border
             {
                 Width = 8,
@@ -119,35 +112,18 @@ namespace CourseProgect_Planeta35.Pages
                 CornerRadius = new CornerRadius(20, 0, 0, 20),
                 Background = accent
             };
-
             root.Children.Add(stripe);
 
-            // CONTENT
             Grid content = new Grid
             {
-                Margin = new Thickness(22, 18, 18, 18)
+                Margin = new Thickness(22, 16, 18, 12)
             };
 
-            content.RowDefinitions.Add(
-                new RowDefinition
-                {
-                    Height = GridLength.Auto
-                });
+            content.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            content.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            content.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
-            content.RowDefinitions.Add(
-                new RowDefinition());
-
-            content.RowDefinitions.Add(
-                new RowDefinition
-                {
-                    Height = GridLength.Auto
-                });
-
-            StackPanel header = new StackPanel
-            {
-                Orientation = Orientation.Horizontal
-            };
-
+            StackPanel header = new StackPanel { Orientation = Orientation.Horizontal };
             Ellipse dot = new Ellipse
             {
                 Width = 14,
@@ -155,7 +131,6 @@ namespace CourseProgect_Planeta35.Pages
                 Fill = accent,
                 VerticalAlignment = VerticalAlignment.Center
             };
-
             TextBlock title = new TextBlock
             {
                 Text = name,
@@ -165,104 +140,83 @@ namespace CourseProgect_Planeta35.Pages
                 Foreground = Brushes.White,
                 VerticalAlignment = VerticalAlignment.Center
             };
-
             header.Children.Add(dot);
             header.Children.Add(title);
+            Grid.SetRow(header, 0); 
 
             TextBlock desc = new TextBlock
             {
                 Text = description,
-
-                Margin = new Thickness(0, 14, 0, 0),
-
-                Foreground =
-                    (Brush)new BrushConverter()
-                    .ConvertFromString("#C7D2CB"),
-
+                Margin = new Thickness(0, 10, 0, 15),
+                Foreground = (Brush)new BrushConverter().ConvertFromString("#C7D2CB"),
                 FontSize = 13,
-
-                TextWrapping = TextWrapping.Wrap
+                TextWrapping = TextWrapping.Wrap,
+                VerticalAlignment = VerticalAlignment.Top
             };
-
             Grid.SetRow(desc, 1);
 
             Border footer = new Border
             {
-                Background =
-                    (Brush)new BrushConverter()
-                    .ConvertFromString("#273029"),
-
+                Background = (Brush)new BrushConverter().ConvertFromString("#273029"),
                 CornerRadius = new CornerRadius(10),
-
-                Padding = new Thickness(8, 5, 8, 5),
-
-                HorizontalAlignment =
-                    HorizontalAlignment.Left
+                Padding = new Thickness(10, 6, 10, 6),
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Bottom
             };
 
+            StackPanel footerContent = new StackPanel { Orientation = Orientation.Horizontal };
+            Ellipse statusDot = new Ellipse
+            {
+                Width = 8,
+                Height = 8,
+                Fill = accent,
+                Margin = new Thickness(0, 0, 6, 0),
+                VerticalAlignment = VerticalAlignment.Center
+            };
             TextBlock footerText = new TextBlock
             {
                 Text = "Активно",
-
                 Foreground = accent,
-
                 FontWeight = FontWeights.SemiBold,
-
-                FontSize = 12
+                FontSize = 12,
+                VerticalAlignment = VerticalAlignment.Center
             };
-
-            footer.Child = footerText;
+            footerContent.Children.Add(statusDot);
+            footerContent.Children.Add(footerText);
+            footer.Child = footerContent;
 
             Grid.SetRow(footer, 2);
 
             Button delete = new Button
             {
                 Content = "🗑",
-
                 Width = 32,
                 Height = 32,
-
                 Background = Brushes.Transparent,
-
                 BorderThickness = new Thickness(0),
-
                 Foreground = Brushes.White,
-
                 Cursor = Cursors.Hand,
-
-                HorizontalAlignment =
-                    HorizontalAlignment.Right,
-
-                VerticalAlignment =
-                    VerticalAlignment.Top
+                HorizontalAlignment = HorizontalAlignment.Right,
+                VerticalAlignment = VerticalAlignment.Top,
+                Margin = new Thickness(0, 6, 6, 0) 
             };
 
             delete.Click += (s, e) =>
             {
                 int deptId = (int)card.Tag;
-
                 using (var db = new AppDbContext())
                 {
-                    var entity =
-                        db.Departments
-                        .FirstOrDefault(d => d.Id == deptId);
-
+                    var entity = db.Departments.FirstOrDefault(d => d.Id == deptId);
                     if (entity != null)
                     {
                         db.Departments.Remove(entity);
-
                         db.SaveChanges();
                     }
                 }
-
                 DepartmentsList.Items.Remove(card);
-
                 UpdateCount();
             };
 
-            // =========================
-            // BUILD
-            // =========================
             content.Children.Add(header);
             content.Children.Add(desc);
             content.Children.Add(footer);
