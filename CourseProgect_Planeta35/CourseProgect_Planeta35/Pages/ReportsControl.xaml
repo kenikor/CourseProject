@@ -16,11 +16,11 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="bg"
-                        Background="{TemplateBinding Background}"
-                        CornerRadius="10"
-                        Padding="{TemplateBinding Padding}">
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="10"
+                                Padding="{TemplateBinding Padding}">
                             <ContentPresenter HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"/>
+                                              VerticalAlignment="Center"/>
                         </Border>
 
                         <ControlTemplate.Triggers>
@@ -66,10 +66,10 @@
                         <Grid>
 
                             <Border x:Name="Border"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="8"/>
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="8"/>
 
                             <Grid Margin="10,0">
 
@@ -86,17 +86,17 @@
 
                                 <!-- Arrow -->
                                 <ToggleButton Grid.Column="1"
-                                      Focusable="False"
-                                      IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
-                                      Background="Transparent"
-                                      BorderThickness="0"
-                                      Cursor="Hand">
+                                              Focusable="False"
+                                              IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                              Background="Transparent"
+                                              BorderThickness="0"
+                                              Cursor="Hand">
 
                                     <TextBlock Text="▼"
-                                       FontSize="10"
-                                       Foreground="White"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"/>
+                                               FontSize="10"
+                                               Foreground="White"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
 
                                 </ToggleButton>
 
@@ -345,43 +345,116 @@
 
             <!-- DATA GRID CARD -->
             <Border Grid.Row="2"
-                    Background="#1E2421"
-                    CornerRadius="14"
-                    Padding="10"
-                    BorderBrush="#2F3B33"
+                    Background="#1B201D"
+                    CornerRadius="18"
+                    Padding="12"
+                    BorderBrush="#313A34"
                     BorderThickness="1">
 
                 <DataGrid x:Name="DataGridPreview"
                           AutoGenerateColumns="False"
                           IsReadOnly="True"
-                          Background="#2F3B33"
-                          Foreground="White"
+                          Background="Transparent"
+                          Foreground="Black"
                           GridLinesVisibility="None"
                           HeadersVisibility="Column"
-                          RowBackground="#232B26"
-                          AlternatingRowBackground="#1E2421"
-                          BorderThickness="0">
+                          BorderThickness="0"
+                          RowHeight="42"
+                          ColumnHeaderHeight="42"
+                          CanUserResizeRows="False"
+                          SelectionMode="Single"
+                          SelectionUnit="FullRow">
 
-                    <DataGrid.ColumnHeaderStyle>
+                    <!-- Убираем мерзкий дефолт -->
+                    <DataGrid.Resources>
+
+                        <!-- HEADER -->
                         <Style TargetType="DataGridColumnHeader">
-                            <Setter Property="Background" Value="#EAEAEA"/>
-                            <Setter Property="Foreground" Value="#2F3B33"/>
+                            <Setter Property="Background" Value="#2D3731"/>
+                            <Setter Property="Foreground" Value="#F5F5F5"/>
                             <Setter Property="FontWeight" Value="SemiBold"/>
-                            <Setter Property="Padding" Value="6"/>
+                            <Setter Property="FontSize" Value="14"/>
+                            <Setter Property="Padding" Value="12,0"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
                         </Style>
-                    </DataGrid.ColumnHeaderStyle>
+
+                        <!-- ROW -->
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="Background" Value="#222924"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Margin" Value="0,0,0,4"/>
+
+                            <Style.Triggers>
+
+                                <!-- Hover -->
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#2B342E"/>
+                                </Trigger>
+
+                                <!-- Selected -->
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="#4D8B6A"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                </Trigger>
+
+                            </Style.Triggers>
+                        </Style>
+
+                        <!-- CELL -->
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Padding" Value="12,0"/>
+                            <Setter Property="FontSize" Value="13"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="DataGridCell">
+                                        <Border Background="{TemplateBinding Background}"
+                                        CornerRadius="8"
+                                        Padding="{TemplateBinding Padding}">
+                                            <ContentPresenter VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+
+                        </Style>
+
+                    </DataGrid.Resources>
 
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Название" Binding="{Binding Asset.Name}" Width="*"/>
-                        <DataGridTextColumn Header="Категория" Binding="{Binding Asset.Category.Name}" Width="*"/>
-                        <DataGridTextColumn Header="Подразделение" Binding="{Binding Asset.Department.Name}" Width="*"/>
-                        <DataGridTextColumn Header="Ответственный" Binding="{Binding Asset.Responsible.FullName}" Width="*"/>
-                        <DataGridTextColumn Header="Серийный №" Binding="{Binding Asset.InventoryNumber}" Width="*"/>
-                        <DataGridTextColumn Header="Статус" Binding="{Binding Asset.Status}" Width="*"/>
+
+                        <DataGridTextColumn Header="Название"
+                                    Binding="{Binding Asset.Name}"
+                                    Width="2*"/>
+
+                        <DataGridTextColumn Header="Категория"
+                                    Binding="{Binding Asset.Category.Name}"
+                                    Width="*"/>
+
+                        <DataGridTextColumn Header="Подразделение"
+                                    Binding="{Binding Asset.Department.Name}"
+                                    Width="*"/>
+
+                        <DataGridTextColumn Header="Ответственный"
+                                    Binding="{Binding Asset.Responsible.FullName}"
+                                    Width="*"/>
+
+                        <DataGridTextColumn Header="Серийный №"
+                                    Binding="{Binding Asset.InventoryNumber}"
+                                    Width="*"/>
+
+                        <DataGridTextColumn Header="Статус"
+                                    Binding="{Binding Asset.Status}"
+                                    Width="*"/>
+
                     </DataGrid.Columns>
 
                 </DataGrid>
-
             </Border>
 
             <!-- FOOTER -->

@@ -3,6 +3,7 @@ using CourseProgect_Planeta35.Models;
 using CourseProgect_Planeta35.Services;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using iTextSharp.text.pdf.draw;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
 using OfficeOpenXml;
@@ -88,18 +89,28 @@ namespace CourseProgect_Planeta35.Controls
         }
 
         private void AddInfo(
-        PdfPCell container,
-        string label,
-        string value,
-        iTextSharp.text.Font font)
+            PdfPCell container,
+            string label,
+            string value,
+            iTextSharp.text.Font font)
         {
-            Paragraph p = new Paragraph
+            if (string.IsNullOrWhiteSpace(value))
+                value = "-";
+
+            var p = new Paragraph
             {
-                SpacingAfter = 6
+                SpacingAfter = 4
             };
 
-            p.Add(new Chunk(label + ": ", new iTextSharp.text.Font(font.BaseFont, 12, iTextSharp.text.Font.BOLD)));
-            p.Add(new Chunk(value ?? "-", font));
+            p.Add(new Chunk(
+                label + ": ",
+                new iTextSharp.text.Font(
+                    font.BaseFont,
+                    11,
+                    iTextSharp.text.Font.BOLD,
+                    BaseColor.BLACK)));
+
+            p.Add(new Chunk(value, font));
 
             container.AddElement(p);
         }
@@ -117,15 +128,23 @@ namespace CourseProgect_Planeta35.Controls
 
             try
             {
-                var assets = DataGridPreview.ItemsSource as List<AssetViewModel>;
+                var assets = DataGridPreview.ItemsSource.Cast<AssetViewModel>().ToList();
+
+                if (assets == null || !assets.Any())
+                {
+                    MessageBox.Show("Нет данных для экспорта");
+                    return;
+                }
 
                 using var fs = new FileStream(dlg.FileName, FileMode.Create);
 
-                var document = new Document(PageSize.A4, 40, 40, 50, 50);
+                var document = new Document(PageSize.A4, 25, 25, 30, 30);
 
                 var writer = PdfWriter.GetInstance(document, fs);
 
                 writer.PageEvent = new PdfFooter();
+
+                writer.ViewerPreferences = PdfWriter.PageLayoutSinglePage;
 
                 document.Open();
 
@@ -138,16 +157,45 @@ namespace CourseProgect_Planeta35.Controls
                     BaseFont.IDENTITY_H,
                     BaseFont.EMBEDDED);
 
-                var titleFont = new iTextSharp.text.Font(baseFont, 26, iTextSharp.text.Font.BOLD, new BaseColor(33, 37, 41));
-                var sectionFont = new iTextSharp.text.Font(baseFont, 16, iTextSharp.text.Font.BOLD, BaseColor.BLACK);
-                var textFont = new iTextSharp.text.Font(baseFont, 12, iTextSharp.text.Font.NORMAL, new BaseColor(60, 60, 60));
-                var smallFont = new iTextSharp.text.Font(baseFont, 10, iTextSharp.text.Font.ITALIC, BaseColor.GRAY);
+                var titleFont = new iTextSharp.text.Font(
+                    baseFont,
+                    18,
+                    iTextSharp.text.Font.BOLD,
+                    new BaseColor(25, 25, 25));
 
-                Paragraph title = new Paragraph("PLANETA 35\nОТЧЕТ ПО ИМУЩЕСТВУ", titleFont)
+                var sectionFont = new iTextSharp.text.Font(
+                    baseFont,
+                    13,
+                    iTextSharp.text.Font.BOLD,
+                    new BaseColor(40, 40, 40));
+
+                var textFont = new iTextSharp.text.Font(
+                    baseFont,
+                    10,
+                    iTextSharp.text.Font.NORMAL,
+                    new BaseColor(70, 70, 70));
+
+                var smallFont = new iTextSharp.text.Font(
+                    baseFont,
+                    8,
+                    iTextSharp.text.Font.ITALIC,
+                    BaseColor.GRAY);
+
+                Paragraph title = new Paragraph
                 {
                     Alignment = Element.ALIGN_CENTER,
-                    SpacingAfter = 10
+                    SpacingAfter = 4
                 };
+
+                title.Add(new Chunk("PLANETA 35\n", titleFont));
+
+                title.Add(new Chunk(
+                    "Отчет по имуществу",
+                    new iTextSharp.text.Font(
+                        baseFont,
+                        11,
+                        iTextSharp.text.Font.NORMAL,
+                        BaseColor.GRAY)));
 
                 document.Add(title);
 
@@ -165,68 +213,99 @@ namespace CourseProgect_Planeta35.Controls
                 {
                     var asset = vm.Asset;
 
-                    PdfPTable card = new PdfPTable(1)
+                    PdfPTable card = new PdfPTable(2)
                     {
                         WidthPercentage = 100,
-                        SpacingAfter = 25
+                        SpacingAfter = 10
                     };
+
+                    card.SetWidths(new float[] { 85, 15 });
 
                     PdfPCell container = new PdfPCell
                     {
-                        BorderWidth = 1,
-                        BorderColor = new BaseColor(220, 220, 220),
-                        Padding = 20,
+                        BorderWidth = 0.7f,
+                        BorderColor = new BaseColor(210, 210, 210),
+                        Padding = 10,
                         BackgroundColor = BaseColor.WHITE
                     };
 
                     Paragraph assetTitle = new Paragraph(
                         asset.Name ?? "Без названия",
-                        sectionFont);
+                        sectionFont
+                    );
 
-                    assetTitle.SpacingAfter = 10;
+                    assetTitle.SpacingAfter = 8;
 
                     container.AddElement(assetTitle);
 
-                    BaseColor statusColor = BaseColor.GRAY;
+                    BaseColor statusColor = BaseColor.WHITE;
+
+                    iTextSharp.text.Font statusFont = new iTextSharp.text.Font(smallFont);
 
                     switch (asset.Status)
                     {
-                        case "Активен":
+                        case "В наличии":
                             statusColor = new BaseColor(46, 204, 113);
+                            statusFont.Color = BaseColor.WHITE;
                             break;
 
-                        case "На ремонте":
+                        case "На обслуживании":
                             statusColor = new BaseColor(241, 196, 15);
+                            statusFont.Color = BaseColor.WHITE;
                             break;
 
-                        case "Списан":
+                        case "Списано":
                             statusColor = new BaseColor(231, 76, 60);
+                            statusFont.Color = BaseColor.WHITE;
+                            break;
+
+                        case "Отсутствует":
+                            statusColor = new BaseColor(230, 126, 34);
+                            statusFont.Color = BaseColor.WHITE;
+                            break;
+
+                        case "Все":
+                        default:
+                            statusColor = BaseColor.GRAY;
+                            statusFont.Color = BaseColor.WHITE;
                             break;
                     }
 
                     PdfPTable statusTable = new PdfPTable(1);
 
-                    PdfPCell statusCell = new PdfPCell(new Phrase(asset.Status ?? "Неизвестно", textFont))
+                    BaseFont statusBaseFont = smallFont.BaseFont;
+                    float fontSize = smallFont.Size;
+
+                    iTextSharp.text.Font whiteFont = new iTextSharp.text.Font(baseFont, fontSize, iTextSharp.text.Font.BOLD, BaseColor.WHITE);
+
+                    PdfPCell statusCell = new PdfPCell(
+                        new Phrase(asset.Status ?? "Неизвестно", whiteFont))
                     {
                         BackgroundColor = statusColor,
                         HorizontalAlignment = Element.ALIGN_CENTER,
-                        Padding = 8,
+                        VerticalAlignment = Element.ALIGN_MIDDLE,
+                        PaddingTop = 4,
+                        PaddingBottom = 4,
                         Border = iTextSharp.text.Rectangle.NO_BORDER
                     };
 
+                    statusTable.WidthPercentage = 100;
+                    statusTable.SpacingBefore = 5;
+                    statusTable.SpacingAfter = 5;
+
                     statusTable.AddCell(statusCell);
 
-                    statusTable.WidthPercentage = 30;
+                    statusTable.WidthPercentage = 18;
 
                     container.AddElement(statusTable);
-
-                    container.AddElement(new Paragraph("\n"));
 
                     AddInfo(container, "Описание", asset.Description, textFont);
                     AddInfo(container, "Категория", asset.Category?.Name, textFont);
                     AddInfo(container, "Подразделение", asset.Department?.Name, textFont);
                     AddInfo(container, "Ответственный", asset.Responsible?.FullName, textFont);
                     AddInfo(container, "Инвентарный номер", asset.InventoryNumber, textFont);
+
+                    card.AddCell(container);
 
                     try
                     {
@@ -244,21 +323,35 @@ namespace CourseProgect_Planeta35.Controls
 
                         var qrImage = iTextSharp.text.Image.GetInstance(qrBytes);
 
-                        qrImage.ScaleAbsolute(90, 90);
+                        qrImage.ScaleAbsolute(55, 55);
 
                         qrImage.Alignment = Element.ALIGN_RIGHT;
 
-                        container.AddElement(new Paragraph("\nQR-код объекта:", smallFont));
-                        container.AddElement(qrImage);
+                        PdfPCell qrCell = new PdfPCell
+                        {
+                            Border = iTextSharp.text.Rectangle.NO_BORDER,
+                            VerticalAlignment = Element.ALIGN_MIDDLE,
+                            HorizontalAlignment = Element.ALIGN_CENTER
+                        };
+
+                        qrCell.AddElement(qrImage);
+
+                        card.AddCell(qrCell);
                     }
-                    catch
+                    catch(Exception ex)
                     {
-
+                        MessageBox.Show("QR error: " + ex.Message);
                     }
-
-                    card.AddCell(container);
-
+                    
                     document.Add(card);
+
+                    LineSeparator line = new LineSeparator
+                    {
+                        LineColor = new BaseColor(230, 230, 230),
+                        Percentage = 100
+                    };
+
+                    document.Add(new Chunk(line));
                 }
 
                 Paragraph footer = new Paragraph(

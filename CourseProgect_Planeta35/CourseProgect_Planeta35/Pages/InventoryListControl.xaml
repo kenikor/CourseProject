@@ -69,10 +69,10 @@
                         <Grid>
 
                             <Border x:Name="Border"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="8"/>
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="8"/>
 
                             <Grid Margin="10,0">
 
@@ -83,24 +83,24 @@
 
                                 <!-- Selected -->
                                 <ContentPresenter Grid.Column="0"
-                                          VerticalAlignment="Center"
-                                          HorizontalAlignment="Left"
-                                          Content="{TemplateBinding SelectionBoxItem}"
-                                          ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"/>
+                                                  VerticalAlignment="Center"
+                                                  HorizontalAlignment="Left"
+                                                  Content="{TemplateBinding SelectionBoxItem}"
+                                                  ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"/>
 
                                 <!-- Arrow -->
                                 <ToggleButton Grid.Column="1"
-                                      Focusable="False"
-                                      IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
-                                      Background="Transparent"
-                                      BorderThickness="0"
-                                      Cursor="Hand">
+                                              Focusable="False"
+                                              IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                              Background="Transparent"
+                                              BorderThickness="0"
+                                              Cursor="Hand">
 
                                     <TextBlock Text="▼"
-                                       FontSize="10"
-                                       Foreground="White"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"/>
+                                               FontSize="10"
+                                               Foreground="White"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
 
                                 </ToggleButton>
 
@@ -108,17 +108,17 @@
 
                             <!-- Dropdown -->
                             <Popup x:Name="Popup"
-                           Placement="Bottom"
-                           AllowsTransparency="True"
-                           Focusable="False"
-                           IsOpen="{TemplateBinding IsDropDownOpen}"
-                           PopupAnimation="Fade">
+                                   Placement="Bottom"
+                                   AllowsTransparency="True"
+                                   Focusable="False"
+                                   IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   PopupAnimation="Fade">
 
                                 <Border Background="#1C2621"
-                                BorderBrush="#3E5C4C"
-                                BorderThickness="1"
-                                CornerRadius="10"
-                                Margin="0,5,0,0">
+                                        BorderBrush="#3E5C4C"
+                                        BorderThickness="1"
+                                        CornerRadius="10"
+                                        Margin="0,5,0,0">
 
                                     <ScrollViewer>
 
@@ -137,19 +137,19 @@
                             <!-- Hover -->
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="Border"
-                                Property="BorderBrush"
-                                Value="#3E5C4C"/>
+                                        Property="BorderBrush"
+                                        Value="#3E5C4C"/>
                             </Trigger>
 
                             <!-- Focus -->
                             <Trigger Property="IsKeyboardFocusWithin" Value="True">
                                 <Setter TargetName="Border"
-                                Property="BorderBrush"
-                                Value="#8B9B4C"/>
+                                        Property="BorderBrush"
+                                        Value="#8B9B4C"/>
 
                                 <Setter TargetName="Border"
-                                Property="Background"
-                                Value="#1C2621"/>
+                                        Property="Background"
+                                        Value="#1C2621"/>
                             </Trigger>
 
                         </ControlTemplate.Triggers>
@@ -174,9 +174,9 @@
                     <ControlTemplate TargetType="ComboBoxItem">
 
                         <Border x:Name="Bg"
-                        Background="{TemplateBinding Background}"
-                        CornerRadius="6"
-                        Margin="4">
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="6"
+                                Margin="4">
 
                             <ContentPresenter VerticalAlignment="Center"/>
 
@@ -186,14 +186,14 @@
 
                             <Trigger Property="IsHighlighted" Value="True">
                                 <Setter TargetName="Bg"
-                                Property="Background"
-                                Value="#24352C"/>
+                                        Property="Background"
+                                        Value="#24352C"/>
                             </Trigger>
 
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter TargetName="Bg"
-                                Property="Background"
-                                Value="#3E5C4C"/>
+                                        Property="Background"
+                                        Value="#3E5C4C"/>
                             </Trigger>
 
                         </ControlTemplate.Triggers>
@@ -267,18 +267,18 @@
                     <StackPanel Margin="0 0 12 0">
 
                         <TextBlock Text="Поиск"
-                   Foreground="#BFCBC2"
-                   Margin="0 0 0 4"/>
+                                   Foreground="#BFCBC2"
+                                   Margin="0 0 0 4"/>
 
                         <TextBox x:Name="SearchBox"
-                 Width="300"
-                 Height="36"
-                 Background="#2A322D"
-                 Foreground="White"
-                 BorderThickness="0"
-                 VerticalContentAlignment="Center"
-                 Padding="10 0"
-                 TextChanged="SearchBox_TextChanged"/>
+                                 Width="300"
+                                 Height="36"
+                                 Background="#2A322D"
+                                 Foreground="White"
+                                 BorderThickness="0"
+                                 VerticalContentAlignment="Center"
+                                 Padding="10 0"
+                                 TextChanged="SearchBox_TextChanged"/>
 
                     </StackPanel>
 
@@ -286,17 +286,17 @@
                     <StackPanel Margin="0 0 12 0">
 
                         <TextBlock Text="Категория"
-                   Foreground="#BFCBC2"
-                   Margin="0 0 0 4"/>
+                                   Foreground="#BFCBC2"
+                                   Margin="0 0 0 4"/>
 
                         <ComboBox x:Name="CategoryFilter"
-                  Width="180"
-                  Height="36"
-                  Style="{StaticResource DarkComboBox}"
-                  Background="#2A322D"
-                  Foreground="White"
-                  BorderThickness="0"
-                  SelectionChanged="CategoryFilter_SelectionChanged"/>
+                                  Width="180"
+                                  Height="36"
+                                  Style="{StaticResource DarkComboBox}"
+                                  Background="#2A322D"
+                                  Foreground="White"
+                                  BorderThickness="0"
+                                  SelectionChanged="CategoryFilter_SelectionChanged"/>
 
                     </StackPanel>
 
@@ -304,17 +304,17 @@
                     <StackPanel Margin="0 0 12 0">
 
                         <TextBlock Text="Статус"
-                   Foreground="#BFCBC2"
-                   Margin="0 0 0 4"/>
+                                   Foreground="#BFCBC2"
+                                   Margin="0 0 0 4"/>
 
                         <ComboBox x:Name="StatusFilter"
-                  Width="180"
-                  Height="36"
-                  Style="{StaticResource DarkComboBox}"
-                  Background="#2A322D"
-                  Foreground="White"
-                  BorderThickness="0"
-                  SelectionChanged="StatusFilter_SelectionChanged">
+                                  Width="180"
+                                  Height="36"
+                                  Style="{StaticResource DarkComboBox}"
+                                  Background="#2A322D"
+                                  Foreground="White"
+                                  BorderThickness="0"
+                                  SelectionChanged="StatusFilter_SelectionChanged">
 
                             <ComboBoxItem Content="Все"/>
                             <ComboBoxItem Content="В наличии"/>

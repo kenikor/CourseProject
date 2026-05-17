@@ -146,8 +146,7 @@
             <StackPanel Margin="22">
 
                 <!-- 🧠 HEADER -->
-                <TextBlock Text="Панель управления системой активов"
-                           FontSize="14"
+                <TextBlock FontSize="14"
                            Foreground="#C9D1C9"
                            FontWeight="SemiBold"
                            Margin="0,4,0,0">

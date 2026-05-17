@@ -54,9 +54,9 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="ToggleButton">
                         <Border x:Name="bg"
-                        Background="{TemplateBinding Background}"
-                        CornerRadius="8"
-                        Padding="10">
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="8"
+                                Padding="10">
                             <ContentPresenter HorizontalAlignment="Left"/>
                         </Border>
 
@@ -69,7 +69,7 @@
 
                             <!-- Active -->
                             <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="bg" Property="Background" Value="#8B9B4C"/>
+                                <Setter TargetName="bg" Property="Background" Value="#2B3A31"/>
                                 <Setter Property="Foreground" Value="White"/>
                             </Trigger>
 
