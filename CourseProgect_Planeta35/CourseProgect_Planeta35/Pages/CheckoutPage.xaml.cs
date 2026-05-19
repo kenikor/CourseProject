@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Navigation;
 
 namespace CourseProgect_Planeta35.Pages
 {
@@ -21,7 +22,6 @@ namespace CourseProgect_Planeta35.Pages
 
             _cart = cart;
             CurrentUser = user;
-            _cart.Clear();
             LoadSummary();
         }
 
@@ -76,13 +76,18 @@ namespace CourseProgect_Planeta35.Pages
                 $"Заказ оформлен!\n\nНомер заказа: {orderNumber}",
                 "Успешно",
                 MessageBoxButton.OK,
-                MessageBoxImage.Information);
+                MessageBoxImage.Information
+            );
 
             _cart.Clear();
-
             AddressBox.Text = "";
-
             LoadSummary();
+
+            var navService = NavigationService.GetNavigationService(this);
+            if (navService != null && navService.CanGoBack)
+            {
+                navService.GoBack();
+            }
         }
 
         private void CVV_PreviewTextInput(object sender, TextCompositionEventArgs e)

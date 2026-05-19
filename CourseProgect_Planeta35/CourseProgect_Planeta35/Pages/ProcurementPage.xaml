@@ -439,40 +439,52 @@
 
                     <!-- LIST -->
                     <ListBox x:Name="CartListBox"
-                             Background="Transparent"
-                             BorderThickness="0">
-
+         Background="Transparent"
+         BorderThickness="0">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-
                                 <Border Background="#2A322D"
-                                        CornerRadius="10"
-                                        Padding="8"
-                                        Margin="0 6">
-
+                    CornerRadius="10"
+                    Padding="12,8"
+                    Margin="0,4"
+                    Width="240">
                                     <StackPanel>
+                                        <Grid Margin="0,0,0,6">
+                                            <TextBlock Text="{Binding Item.Name}"
+                                   Foreground="White"
+                                   FontWeight="SemiBold"
+                                   TextWrapping="Wrap"
+                                   MaxWidth="180"
+                                   HorizontalAlignment="Left"/>
 
-                                        <TextBlock Text="{Binding Item.Name}"
-                                                   Foreground="White"
-                                                   FontWeight="SemiBold"/>
+                                            <Button Content="✕" 
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top"
+                                Background="Transparent"
+                                Foreground="#FF6B6B"
+                                BorderThickness="0"
+                                FontWeight="Bold"
+                                Cursor="Hand"
+                                Click="RemoveFromCart_Click"
+                                Tag="{Binding Item.Id}"/>
+                                        </Grid>
 
-                                        <StackPanel Orientation="Horizontal">
-
+                                        <Grid>
                                             <TextBlock Text="{Binding Quantity, StringFormat={}x{0}}"
-                                                       Foreground="#BFCBC2"/>
+                                   Foreground="#BFCBC2"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Center"/>
 
                                             <TextBlock Text="{Binding Subtotal, StringFormat={}{0:N0} ₽}"
-                                                       Foreground="#8B9B4C"
-                                                       HorizontalAlignment="Right"/>
-                                        </StackPanel>
-
+                                   Foreground="#8B9B4C"
+                                   FontWeight="SemiBold"
+                                   HorizontalAlignment="Right"
+                                   VerticalAlignment="Center"/>
+                                        </Grid>
                                     </StackPanel>
-
                                 </Border>
-
                             </DataTemplate>
                         </ListBox.ItemTemplate>
-
                     </ListBox>
 
                 </DockPanel>

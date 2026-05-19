@@ -6,37 +6,32 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace CourseProgect_Planeta35.Pages
 {
-    /// <summary>
-    /// Логика взаимодействия для ProcurementPage.xaml
-    /// </summary>
     public partial class ProcurementPage : UserControl
     {
         private List<ProcurementItem> _allItems;
         public ObservableCollection<CartItem> Cart { get; set; } = new ObservableCollection<CartItem>();
+
         public ProcurementPage(User user)
         {
             InitializeComponent();
             LoadData();
             LoadFilters();
             ApplyFilters();
-
             OpenCart();
+
+            this.Loaded += OnPageLoaded;
         }
-        
+
+        private void OnPageLoaded(object sender, RoutedEventArgs e)
+        {
+            UpdateCartUI();
+        }
+
         private void OpenCart()
         {
             CartColumn.Width = new GridLength(300);
@@ -86,6 +81,25 @@ namespace CourseProgect_Planeta35.Pages
                     existing.Quantity++;
                 else
                     Cart.Add(new CartItem { Item = item, Quantity = 1 });
+
+                UpdateCartUI();
+            }
+        }
+
+        private void RemoveFromCart_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = sender as Button;
+            if (btn?.Tag == null) return;
+
+            string itemId = btn.Tag.ToString();
+            var target = Cart.FirstOrDefault(c => c.Item.Id == itemId);
+
+            if (target != null)
+            {
+                if (target.Quantity > 1)
+                    target.Quantity--;
+                else
+                    Cart.Remove(target);
 
                 UpdateCartUI();
             }

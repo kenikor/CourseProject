@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Planeta35_Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+536644c8d4d43156c5cda6b710385ed0c3c9eaff")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1d50bbb805136e360ba6db1b45eb195d749e2993")]
 [assembly: System.Reflection.AssemblyProductAttribute("Planeta35_Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Planeta35_Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
